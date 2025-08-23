@@ -58,11 +58,12 @@ void process_line(char* input, ssize_t len)
   if (err < 0)
   {
     printf("Error %d in interpreter_interpret\n", err);
+    interpreter_clean(&interpreter);
     expr_free(expr);
     return;
   }
 
-  haplo_interpreter_clean(&interpreter);
+  interpreter_clean(&interpreter);
   expr_free(expr);
   return;
 }

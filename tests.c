@@ -34,7 +34,7 @@
 void test_parser_1()
 {
 
-  printf("Now running: Test 1\n");
+  printf("Now running: Test Parser 1\n");
   int err;
   char* input = "( c ( a b ) )";
   
@@ -67,17 +67,17 @@ void test_parser_1()
 
   expr_free(expr);
 
-  printf("OK Test 1\n");
+  printf("OK Test Parser 1\n");
   return;
 
  test1_failed:
-  printf("ERR Test 1\n");
+  printf("ERR Test Parser 1\n");
   return;
 }
 
 void test_parser_2()
 {
-  printf("Now running: Test 2\n");
+  printf("Now running: Test Parser 2\n");
   int err;
   char* input = "( + ( 1 ( * ( 2 3 ) ) ) )";
   
@@ -110,13 +110,45 @@ void test_parser_2()
 
   expr_free(expr);
 
-  printf("OK Test 2\n");
+  printf("OK Test Parser 2\n");
   return;
 
  test2_failed:
-  printf("ERR Test 2\n");
+  printf("ERR Test Parser 2\n");
   return;
 }
+
+void test_parser_3()
+{
+  printf("Now running: Test Parser 3\n");
+  int err;
+  char* input = "( 1 2 3 )";
+
+  printf("malformed expression: %s\n", input);
+  
+  Parser_t parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test2_failed;
+  }
+
+  Expr_t *expr = parser_parse(&parser);
+  if (expr != NULL || parser.error == 0)
+  {
+    printf("Error parser_parse should have returned an error\n");
+    goto test2_failed;
+  }
+
+  printf("OK Test Parser 3\n");
+  return;
+
+ test2_failed:
+  printf("ERR Test Parser 3\n");
+  return;
+}
+
 
 void test_interpreter_1()
 {
@@ -179,6 +211,7 @@ int main(void)
 
   test_parser_1();
   test_parser_2();
+  test_parser_3();
   test_interpreter_1();
   
   printf("Tests done.\n");

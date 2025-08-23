@@ -30,6 +30,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <setjmp.h>
 
 // --- Macros ---
 
@@ -45,11 +46,10 @@
   #define Parser_t HaploParser_t
 #endif // HAPLO_NO_PREFIX
 
-#define HAPLO_PARSER_PANIC() \
+#define HAPLO_PARSER_ERROR() \
   do { \
-    fprintf(stderr, "PARSER PANIC! File %s, line %d\n", __FILE__, __LINE__); \
-    haplo_parser_dump(parser); \
-    exit(1); \
+    fprintf(stderr, "Parser Error! File %s, line %d\n", __FILE__, __LINE__); \
+    longjmp(parser->jump_buf, 1);                                            \
   } while(0)
 
 // --- Types ---
@@ -70,7 +70,8 @@ struct HaploParser {
   unsigned int pos;
   unsigned int line;
   unsigned int column;
-  int error; 
+  int error;
+  jmp_buf jump_buf;
 };
 
 typedef struct HaploParser HaploParser_t;

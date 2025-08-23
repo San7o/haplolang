@@ -25,7 +25,7 @@
 
 NAME=haplo
 
-CFLAGS=-Wall -Werror -Wpedantic
+CFLAGS=-Wall -Werror -Wpedantic -ggdb
 CC=gcc
 
 LIB_OBJ=parser.o\

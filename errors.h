@@ -43,5 +43,6 @@
 #define HAPLO_ERROR_PARSER_NULL                  13
 #define HAPLO_ERROR_PARSER_INPUT_NULL            14
 #define HAPLO_ERROR_STACK_EMPTY                  15
+#define HAPLO_ERROR_PARSER_NEXT_TOKEN            16
 
 #endif // _HAPLO_ERRORS_H_
