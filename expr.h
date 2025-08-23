@@ -39,21 +39,12 @@
   #define Expr_t HaploExpr_t
 #endif // HAPLO_NO_PREFIX
 
+#define MAX_ATOM_SIZE 100
+
 // --- Types ---
 
-// TODO: use Slice
-/*
-struct HaploSlice
-{
-  char* data;
-  int from;
-  int to;
-}
-
-typedef HaploSlice HaploAtom;
-*/
-
-typedef char HaploAtom;
+// Heap allocated
+typedef char* HaploAtom;
 
 struct HaploExpr {
   bool is_atom;

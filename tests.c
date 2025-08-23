@@ -29,12 +29,13 @@
 #include <stdio.h>
 #include <string.h>
 
+// Activate debug printing
+#define DEBUG_PRINT 0
+
 // --- Tests ---
 
 int test_parser_1()
 {
-
-  printf("Now running: Test Parser 1\n");
   int err;
   char* input = "( c ( a ( b ) ) )";
   
@@ -55,8 +56,12 @@ int test_parser_1()
 
   char str[50] = {0};
   expr_string(expr, str);
-  printf("original: %s\n", input);
-  printf("ast:      %s\n", str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("original: %s\n", input);
+    printf("ast:      %s\n", str);
+  }
 
   if (strcmp(input, str) != 0)
   {
@@ -77,7 +82,6 @@ int test_parser_1()
 
 int test_parser_2()
 {
-  printf("Now running: Test Parser 2\n");
   int err;
   char* input = "( + ( 1 ( * ( 2 ( 3 ) ) ) ) )";
   
@@ -98,8 +102,12 @@ int test_parser_2()
 
   char str[50] = {0};
   expr_string(expr, str);
-  printf("original: %s\n", input);
-  printf("ast:      %s\n", str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("original: %s\n", input);
+    printf("ast:      %s\n", str);
+  }
 
   if (strcmp(input, str) != 0)
   {
@@ -120,11 +128,13 @@ int test_parser_2()
 
 int test_parser_3()
 {
-  printf("Now running: Test Parser 3\n");
   int err;
   char* input = "(( 1 2 3 )";
 
-  printf("malformed expression: %s\n", input);
+  if (DEBUG_PRINT)
+  {
+    printf("malformed expression: %s\n", input);
+  }
   
   Parser_t parser = {0};
   err = parser_init(&parser, input, strlen(input));
@@ -149,10 +159,8 @@ int test_parser_3()
   return -1;
 }
 
-
 int test_parser_4()
 {
-  printf("Now running: Test Parser 4\n");
   int err;
   char* input = "( + 2 3 )";
   char* expected_ast = "( + ( 2 ( 3 ) ) )";
@@ -165,6 +173,11 @@ int test_parser_4()
     goto test_parser4_failed;
   }
 
+  if (DEBUG_PRINT)
+  {
+    printf("original:     %s\n", input);
+  }
+  
   Expr_t *expr = parser_parse(&parser);  
   if (expr == NULL)
   {
@@ -174,9 +187,12 @@ int test_parser_4()
 
   char str[50] = {0};
   expr_string(expr, str);
-  printf("original:     %s\n", input);
-  printf("expected ast: %s\n", expected_ast);
-  printf("ast:          %s\n", str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("expected ast: %s\n", expected_ast);
+    printf("ast:          %s\n", str);
+  }
 
   if (strcmp(str, expected_ast) != 0)
   {
@@ -187,19 +203,51 @@ int test_parser_4()
 
   expr_free(expr);
   
-  printf("OK Test Parser 3\n");
+  printf("OK Test Parser 4\n");
   return 0;
 
  test_parser4_failed:
-  printf("ERR Test Parser 3\n");
+  printf("ERR Test Parser 4\n");
+  return -1;
+}
+
+int test_parser_5()
+{
+  int err;
+  char* input = "( print \"Hello, World! )";
+
+  Parser_t parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_parser4_failed;
+  }
+
+  if (DEBUG_PRINT)
+  {
+    printf("original:     %s\n", input);
+  }
+  
+  Expr_t *expr = parser_parse(&parser);  
+  if (expr != NULL || parser.error != -HAPLO_ERROR_PARSER_STRING_LITERAL_END)
+  {
+    printf("Error parser_parse returned the wrong error\n");
+    goto test_parser4_failed;
+  }
+  
+  printf("OK Test Parser 5\n");
+  return 0;
+
+ test_parser4_failed:
+  printf("ERR Test Parser 5\n");
   return -1;
 }
 
 int test_interpreter_1()
 {
-  printf("Now running: Test Interpreter 1\n");
   int err;
-  char* input = "( p ( + ( 1 ( 2 ) ) ) )";
+  char* input = "( print ( + ( 1 ( 2 ) ) ) )";
   
   Parser_t parser = {0};
   err = parser_init(&parser, input, strlen(input));
@@ -218,8 +266,12 @@ int test_interpreter_1()
 
   char str[50] = {0};
   expr_string(expr, str);
-  printf("original: %s\n", input);
-  printf("ast:      %s\n", str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("original: %s\n", input);
+    printf("ast:      %s\n", str);
+  }
 
   if (strcmp(input, str) != 0)
   {
@@ -260,6 +312,7 @@ int main(void)
   out += test_parser_2();
   out += test_parser_3();
   out += test_parser_4();
+  out += test_parser_5();
   out += test_interpreter_1();
   
   printf("Tests done.\n");

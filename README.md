@@ -9,9 +9,8 @@ my main motivation is purely recreational.
 
 The current implementation was developed in two sittings: first the
 parser and then the interpreter + cli program. Some functions are
-implemented for basic math operations and printing, symbols are
-currently limited to being only one character per symbol and you
-cannot define functions or variables yet.
+implemented for basic math operations and printing, you cannot define
+functions or variables yet.
 
 Everything is implemented in C. The project is composed of:
 
@@ -24,20 +23,18 @@ You can use the interactive interpreter by running the `haplo` cli:
 ```
 $ ./haplo
 The Haplolang interpreter by Giovanni Santini
-> # p stands for print
-> ( p 1 )
-1
-> ( p ( + 1 2 )
-3 
-> ( p ( + 1 ( * 2 3 ) ) )
-7
+> # Hello, this is a comment
+> ( print "Hello, World!" )
+"Hello, World!"
+> ( print ( + 69 420 ) )
+489
 ```
 
 You can also interpret a file:
 
 ```
 $ ./haplo sample.haplo 
-7
+"Hello, World!"
 ```
 
 ## Building

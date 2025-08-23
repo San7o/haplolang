@@ -57,8 +57,8 @@ char* error_string(int error)
     return "ERROR_STACK_EMPTY";
   case HAPLO_ERROR_PARSER_NEXT_TOKEN:
     return "ERROR_PARSER_NEXT_TOKEN";
-  default:
-    return "ERROR_UNKNOWN";
+  case HAPLO_ERROR_PARSER_STRING_LITERAL_END:
+    return "ERROR_PARSER_STRING_LITERAL_END";
   }
 
   return "ERROR_UNKNOWN";

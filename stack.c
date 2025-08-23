@@ -36,7 +36,7 @@ int haplo_stack_init(HaploStack_t *stack)
   return 0;
 }
 
-int haplo_stack_pop(HaploStack_t *stack, int *value)
+int haplo_stack_pop(HaploStack_t *stack, HaploStackType *value)
 {
   if (stack == NULL) return -HAPLO_ERROR_STACK_NULL;
   if (stack->top == NULL) return -HAPLO_ERROR_STACK_EMPTY;
@@ -49,7 +49,7 @@ int haplo_stack_pop(HaploStack_t *stack, int *value)
   return 0;
 }
 
-int haplo_stack_push(HaploStack_t *stack, int value)
+int haplo_stack_push(HaploStack_t *stack, HaploStackType value)
 {
   if (stack == NULL) return -HAPLO_ERROR_STACK_NULL;
 

@@ -43,6 +43,7 @@
 #define HAPLO_ERROR_PARSER_INPUT_NULL            13
 #define HAPLO_ERROR_STACK_EMPTY                  14
 #define HAPLO_ERROR_PARSER_NEXT_TOKEN            15
+#define HAPLO_ERROR_PARSER_STRING_LITERAL_END    16
 
 char* error_string(int error);
 

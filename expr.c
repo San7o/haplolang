@@ -29,12 +29,17 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 void haplo_expr_free(HaploExpr_t *expr)
 {
   if (expr == NULL) return;
 
-  if (expr->is_atom) return;
+  if (expr->is_atom)
+  {
+    if (expr->atom != NULL) free(expr->atom);
+    return;
+  }
   haplo_expr_free(expr->first);
   haplo_expr_free(expr->second);
   
@@ -49,7 +54,7 @@ void haplo_expr_print_rec(HaploExpr_t *expr)
   
   if (expr->is_atom)
   {
-    printf("%c", expr->atom);
+    printf("%s", expr->atom);
   }
   else {
     printf("( ");
@@ -76,10 +81,10 @@ void haplo_expr_string_rec(HaploExpr_t *expr, char *str)
 {
   if (expr == NULL) return;
   
-  if (expr->is_atom)
+  if (expr->is_atom && expr->atom != NULL)
   {
-    char buf[100];
-    sprintf(buf, "%c", expr->atom);
+    char buf[MAX_ATOM_SIZE];
+    sprintf(buf, "%s", expr->atom);
     strcat(str, buf);
   }
   else {

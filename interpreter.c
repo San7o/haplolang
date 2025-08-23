@@ -28,6 +28,8 @@
 
 #include <stddef.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 int haplo_interpreter_init(HaploInterpreter_t *interpreter)
 {
@@ -42,65 +44,107 @@ int haplo_interpreter_interpret(HaploInterpreter_t *interpreter, HaploExpr_t *ex
 {
   if (interpreter == NULL) return -HAPLO_ERROR_INTERPRETER_NULL;
   if (expr == NULL) return -HAPLO_ERROR_EXPR_NULL;
-  int err, a, b;
+  int err;
   
   if (expr->is_atom)
   {
-    // May be an integer or a function name (single char)
-    // TODO: may be a string
-    // TODO: may be a multiple digit number
-    if (expr->atom >= '0' && expr->atom <= '9')
+
+    if (strcmp(expr->atom, "+") == 0)
     {
-      haplo_stack_push(&interpreter->stack, expr->atom - '0');
-    } else {
-      switch (expr->atom)
+      HaploAtom a, b;
+      err = haplo_stack_pop(&interpreter->stack, &a);
+      if (err < 0) return err;
+      err = haplo_stack_pop(&interpreter->stack, &b);
+      if (err < 0) return err;
+
+      long a_num = strtol(a, NULL, 10);
+      long b_num = strtol(b, NULL, 10);
+      
+      long sum = a_num + b_num;
+
+      char* sum_buff = (char*) malloc(32);
+      sprintf(sum_buff, "%ld", sum);
+      haplo_stack_push(&interpreter->stack, sum_buff);
+      
+      free(a);
+      free(b);
+    }
+    else if (strcmp(expr->atom, "-") == 0)
+    {
+      HaploAtom a, b;
+      err = haplo_stack_pop(&interpreter->stack, &a);
+      if (err < 0) return err;
+      err = haplo_stack_pop(&interpreter->stack, &b);
+      if (err < 0) return err;
+
+      long a_num = strtol(a, NULL, 10);
+      long b_num = strtol(b, NULL, 10);
+      
+      long diff = a_num - b_num;
+
+      char* diff_buff = (char*) malloc(32);
+      sprintf(diff_buff, "%ld", diff);
+      haplo_stack_push(&interpreter->stack, diff_buff);
+      
+      free(a);
+      free(b);
+    }
+    else if (strcmp(expr->atom, "*") == 0)
+    {
+      HaploAtom a, b;
+      err = haplo_stack_pop(&interpreter->stack, &a);
+      if (err < 0) return err;
+      err = haplo_stack_pop(&interpreter->stack, &b);
+      if (err < 0) return err;
+
+      long a_num = strtol(a, NULL, 10);
+      long b_num = strtol(b, NULL, 10);
+      
+      long prod = a_num * b_num;
+
+      char* prod_buff = (char*) malloc(32);
+      sprintf(prod_buff, "%ld", prod);
+      haplo_stack_push(&interpreter->stack, prod_buff);
+      
+      free(a);
+      free(b);
+    }
+    else if (strcmp(expr->atom, "/") == 0)
+    {
+      HaploAtom a, b;
+      err = haplo_stack_pop(&interpreter->stack, &a);
+      if (err < 0) return err;
+      err = haplo_stack_pop(&interpreter->stack, &b);
+      if (err < 0) return err;
+
+      long a_num = strtol(a, NULL, 10);
+      long b_num = strtol(b, NULL, 10);
+      
+      long quot = a_num * b_num;
+
+      char* quot_buff = (char*) malloc(32);
+      sprintf(quot_buff, "%ld", quot);
+      haplo_stack_push(&interpreter->stack, quot_buff);
+      
+      free(a);
+      free(b);
+    }
+    else if (strcmp(expr->atom, "print") == 0)
+    {
+      HaploAtom val;
+      err = haplo_stack_pop(&interpreter->stack, &val);
+      printf("%s\n", val);
+      free(val);
+    } else  {
+      // Try to convert the Atom to a number
+      char endptr[32]; 
+      strtol(expr->atom, (char**) &endptr, 10);
+      if (strcmp(expr->atom, "") != 0 && strcmp(endptr, "") != 0)
       {
-      case '+': ;
-        int sum;
-        err = haplo_stack_pop(&interpreter->stack, &a);
-        if (err < 0) return err;
-        err = haplo_stack_pop(&interpreter->stack, &b);
-        if (err < 0) return err;
-        
-        sum = a + b;
-        haplo_stack_push(&interpreter->stack, sum);
-        break;
-      case '-': ;
-        int diff;
-        err = haplo_stack_pop(&interpreter->stack, &a);
-        if (err < 0) return err;
-        err = haplo_stack_pop(&interpreter->stack, &b);
-        if (err < 0) return err;
-        
-        diff = a - b;
-        haplo_stack_push(&interpreter->stack, diff);
-        break;
-      case '*': ;
-        int prod;
-        err = haplo_stack_pop(&interpreter->stack, &a);
-        if (err < 0) return err;
-        err = haplo_stack_pop(&interpreter->stack, &b);
-        if (err < 0) return err;
-        
-        prod = a * b;
-        haplo_stack_push(&interpreter->stack, prod);
-        break;
-      case '/': ;
-        int quot;
-        err = haplo_stack_pop(&interpreter->stack, &a);
-        if (err < 0) return err;
-        err = haplo_stack_pop(&interpreter->stack, &b);
-        if (err < 0) return err;
-        
-        quot = a / b;
-        haplo_stack_push(&interpreter->stack, quot);
-        break;
-      case 'p': ; // p for print
-        int val;
-        err = haplo_stack_pop(&interpreter->stack, &val);
-        printf("%d\n", val);
-        break;
-      default:
+        HaploAtom new_atom = malloc(strlen(expr->atom));
+        strcpy(new_atom, expr->atom);
+        haplo_stack_push(&interpreter->stack, new_atom);
+      } else {     
         return -HAPLO_ERROR_INTERPRETER_UNKNOWN_FUNCTION;
       }
     }

@@ -35,9 +35,11 @@
 // --- Macros ---
 
 #ifdef HAPLO_NO_PREFIX
+  #define token_string haplo_token_string
   #define parser_init haplo_parser_init
   #define parser_trim_left haplo_parser_trim_left
   #define parser_next_token haplo_parser_next_token
+  #define parser_atom_len haplo_parser_atom_len
   #define parser_peek_next_token haplo_parser_peek_next_token
   #define parser_dump haplo_parser_dump
   #define parser_check_error haplo_parser_check_error
@@ -80,9 +82,15 @@ typedef struct HaploParser HaploParser_t;
 
 // -- Functions --
 
+char* haplo_token_string(enum HaploToken token);
 int haplo_parser_init(HaploParser_t *parser, char *input, size_t len);
 void haplo_parser_trim_left(HaploParser_t *parser);
+int haplo_parser_atom_len(char* input, int input_size);
+// If the next token is an ATOM (set it parser->last_token), an atom
+// is allocated in the heap. The user is responsible to free it.
 int haplo_parser_next_token(HaploParser_t *parser);
+// If the next token is an ATOM (set it parser->last_token), an atom
+// is allocated in the heap. The user is responsible to free it.
 int haplo_parser_peek_next_token(HaploParser_t *parser);
 int haplo_parser_dump(HaploParser_t *parser);
 bool haplo_parser_check_error(HaploParser_t *parser);

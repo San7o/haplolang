@@ -46,7 +46,7 @@
 
 // --- Types ---
 
-typedef int HaploStackType;
+typedef char* HaploStackType;
 
 struct HaploList {
   struct HaploList *next;
@@ -64,8 +64,8 @@ typedef struct HaploStack HaploStack_t;
 // --- Functions ---
 
 int haplo_stack_init(HaploStack_t *stack);
-int haplo_stack_pop(HaploStack_t *stack, int *value);
-int haplo_stack_push(HaploStack_t *stack, int value);
+int haplo_stack_pop(HaploStack_t *stack, HaploStackType *value);
+int haplo_stack_push(HaploStack_t *stack, HaploStackType value);
 bool haplo_stack_empty(HaploStack_t *stack);
 void haplo_stack_free(HaploStack_t *stack);
 
