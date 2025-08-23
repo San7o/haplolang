@@ -113,8 +113,8 @@ int haplo_parser_dump(HaploParser_t *parser)
 {
   if (parser == NULL) return -HAPLO_ERROR_PARSER_NULL;
   
-  fprintf(stderr, "Parser dump: error: %d, pos: %d, line: %d, column: %d, last_token: %c\n",
-          parser->error, parser->pos, parser->line, parser->column, parser->last_atom);
+  fprintf(stderr, "Parser dump: error: %s, pos: %d, line: %d, column: %d, last_token: %c\n",
+          error_string(parser->error), parser->pos, parser->line, parser->column, parser->last_atom);
   
   return 0;
 }

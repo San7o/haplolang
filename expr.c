@@ -28,7 +28,6 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
 
 void haplo_expr_free(HaploExpr_t *expr)

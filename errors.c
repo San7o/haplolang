@@ -1,0 +1,65 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2025 Giovanni Santini
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
+
+#include "errors.h"
+
+char* error_string(int error)
+{
+  switch(-error)
+  {
+  case HAPLO_ERROR_PARSER_INPUT_EMPTY:
+    return "ERROR_PARSER_INPUT_EMPTY";
+  case HAPLO_ERROR_PARSER_END_OF_INPUT:
+    return "ERROR_PARSER_END_OF_INPUT";
+  case HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED:
+    return "ERROR_PARSER_TOKEN_UNRECOGNIZED";
+  case HAPLO_ERROR_MALFORMED_PARENTHESIS:
+    return "ERROR_MALFORMED_PARENTHESIS";
+  case HAPLO_ERROR_PARSER_MISSING_OPEN:
+    return "ERROR_PARSER_MISSING_OPEN";
+  case HAPLO_ERROR_PARSER_MISSING_CLOSE:
+    return "ERROR_PARSER_MISSING_CLOSE";
+  case HAPLO_ERROR_INTERPRETER_UNKNOWN_FUNCTION:
+    return "ERROR_INTERPRETER_UNKNOWN_FUNCTION";
+  case HAPLO_ERROR_STACK_NULL:
+    return "ERROR_STACK_NULL";
+  case HAPLO_ERROR_INTERPRETER_NULL:
+    return "ERROR_INTERPRETER_NULL";
+  case HAPLO_ERROR_EXPR_NULL:
+    return "ERROR_EXPR_NULL";
+  case HAPLO_ERROR_PARSER_NULL:
+    return "ERROR_PARSER_NULL";
+  case HAPLO_ERROR_PARSER_INPUT_NULL:
+    return "ERROR_PARSER_INPUT_NULL";
+  case HAPLO_ERROR_STACK_EMPTY:
+    return "ERROR_STACK_EMPTY";
+  case HAPLO_ERROR_PARSER_NEXT_TOKEN:
+    return "ERROR_PARSER_NEXT_TOKEN";
+  default:
+    return "ERROR_UNKNOWN";
+  }
+
+  return "ERROR_UNKNOWN";
+}

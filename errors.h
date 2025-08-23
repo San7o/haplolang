@@ -28,21 +28,22 @@
 
 // --- Errors ---
 
+// Remember to update error_string when adding a new error
 #define HAPLO_ERROR_PARSER_INPUT_EMPTY           1
 #define HAPLO_ERROR_PARSER_END_OF_INPUT          2
 #define HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED    3
-#define HAPLO_ERROR_PARSER_MISPLACED_DOT         4
-#define HAPLO_ERROR_PARSER_MISSING_DOT           5
-#define HAPLO_ERROR_MALFORMED_PARENTHESIS        6
-#define HAPLO_ERROR_PARSER_MISSING_OPEN          7
-#define HAPLO_ERROR_PARSER_MISSING_CLOSE         8
-#define HAPLO_ERROR_INTERPRETER_UNKNOWN_FUNCTION 9
-#define HAPLO_ERROR_STACK_NULL                   10
-#define HAPLO_ERROR_INTERPRETER_NULL             11
-#define HAPLO_ERROR_EXPR_NULL                    12
-#define HAPLO_ERROR_PARSER_NULL                  13
-#define HAPLO_ERROR_PARSER_INPUT_NULL            14
-#define HAPLO_ERROR_STACK_EMPTY                  15
-#define HAPLO_ERROR_PARSER_NEXT_TOKEN            16
+#define HAPLO_ERROR_MALFORMED_PARENTHESIS        4
+#define HAPLO_ERROR_PARSER_MISSING_OPEN          5
+#define HAPLO_ERROR_PARSER_MISSING_CLOSE         6
+#define HAPLO_ERROR_INTERPRETER_UNKNOWN_FUNCTION 7
+#define HAPLO_ERROR_STACK_NULL                   8
+#define HAPLO_ERROR_INTERPRETER_NULL             9
+#define HAPLO_ERROR_EXPR_NULL                    10
+#define HAPLO_ERROR_PARSER_NULL                  12
+#define HAPLO_ERROR_PARSER_INPUT_NULL            13
+#define HAPLO_ERROR_STACK_EMPTY                  14
+#define HAPLO_ERROR_PARSER_NEXT_TOKEN            15
+
+char* error_string(int error);
 
 #endif // _HAPLO_ERRORS_H_

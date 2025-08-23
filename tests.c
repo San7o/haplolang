@@ -31,7 +31,7 @@
 
 // --- Tests ---
 
-void test_parser_1()
+int test_parser_1()
 {
 
   printf("Now running: Test Parser 1\n");
@@ -68,14 +68,14 @@ void test_parser_1()
   expr_free(expr);
 
   printf("OK Test Parser 1\n");
-  return;
+  return 0;
 
  test1_failed:
   printf("ERR Test Parser 1\n");
-  return;
+  return -1;
 }
 
-void test_parser_2()
+int test_parser_2()
 {
   printf("Now running: Test Parser 2\n");
   int err;
@@ -111,14 +111,14 @@ void test_parser_2()
   expr_free(expr);
 
   printf("OK Test Parser 2\n");
-  return;
+  return 0;
 
  test2_failed:
   printf("ERR Test Parser 2\n");
-  return;
+  return -1;
 }
 
-void test_parser_3()
+int test_parser_3()
 {
   printf("Now running: Test Parser 3\n");
   int err;
@@ -142,15 +142,15 @@ void test_parser_3()
   }
 
   printf("OK Test Parser 3\n");
-  return;
+  return 0;
 
  test2_failed:
   printf("ERR Test Parser 3\n");
-  return;
+  return -1;
 }
 
 
-void test_interpreter_1()
+int test_interpreter_1()
 {
   printf("Now running: Test Interpreter 1\n");
   int err;
@@ -198,23 +198,25 @@ void test_interpreter_1()
   expr_free(expr);
   
   printf("OK Test Interpreter 1\n");
-  return;
+  return 0;
 
  interpreter1_failed:
   printf("ERR Test Interpreter 1\n");
-  return;
+  return -1;
 }
 
 int main(void)
 {
+  int out = 0;
+  
   printf("Running tests...\n");
 
-  test_parser_1();
-  test_parser_2();
-  test_parser_3();
-  test_interpreter_1();
+  out += test_parser_1();
+  out += test_parser_2();
+  out += test_parser_3();
+  out += test_interpreter_1();
   
   printf("Tests done.\n");
-  
-  return 0;
+
+  return out;
 }

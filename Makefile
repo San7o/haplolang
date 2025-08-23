@@ -31,7 +31,8 @@ CC=gcc
 LIB_OBJ=parser.o\
         expr.o\
         interpreter.o\
-        stack.o
+        stack.o\
+        errors.o
 TEST_OBJ=tests.o
 CLI_OBJ=haplo.o
 
