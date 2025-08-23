@@ -48,7 +48,6 @@ int haplo_interpreter_interpret(HaploInterpreter_t *interpreter, HaploExpr_t *ex
   
   if (expr->is_atom)
   {
-
     if (strcmp(expr->atom, "+") == 0)
     {
       HaploAtom a, b;
