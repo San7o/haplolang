@@ -43,14 +43,14 @@ int test_parser_1()
   if (err < 0)
   {
     printf("Error %d after parser_init\n", err);
-    goto test1_failed;
+    goto test_parser1_failed;
   }
 
   Expr_t *expr = parser_parse(&parser);
   if (expr == NULL)
   {
     printf("Error parser_parse returned a null expression\n");
-    goto test1_failed;
+    goto test_parser1_failed;
   }
 
   char str[50] = {0};
@@ -62,7 +62,7 @@ int test_parser_1()
   {
     printf("Error reconstructed expression does not match original\n");
     expr_free(expr);
-    goto test1_failed;
+    goto test_parser1_failed;
   }
 
   expr_free(expr);
@@ -70,7 +70,7 @@ int test_parser_1()
   printf("OK Test Parser 1\n");
   return 0;
 
- test1_failed:
+ test_parser1_failed:
   printf("ERR Test Parser 1\n");
   return -1;
 }
@@ -86,14 +86,14 @@ int test_parser_2()
   if (err < 0)
   {
     printf("Error %d after parser_init\n", err);
-    goto test2_failed;
+    goto test_parser2_failed;
   }
 
   Expr_t *expr = parser_parse(&parser);
   if (expr == NULL)
   {
     printf("Error parser_parse returned a null expression\n");
-    goto test2_failed;
+    goto test_parser2_failed;
   }
 
   char str[50] = {0};
@@ -105,7 +105,7 @@ int test_parser_2()
   {
     printf("Error reconstructed expression does not match original\n");
     expr_free(expr);
-    goto test2_failed;
+    goto test_parser2_failed;
   }
 
   expr_free(expr);
@@ -113,7 +113,7 @@ int test_parser_2()
   printf("OK Test Parser 2\n");
   return 0;
 
- test2_failed:
+ test_parser2_failed:
   printf("ERR Test Parser 2\n");
   return -1;
 }
@@ -131,20 +131,20 @@ int test_parser_3()
   if (err < 0)
   {
     printf("Error %d after parser_init\n", err);
-    goto test2_failed;
+    goto test_parser3_failed;
   }
 
   Expr_t *expr = parser_parse(&parser);
   if (expr != NULL || parser.error == 0)
   {
     printf("Error parser_parse should have returned an error\n");
-    goto test2_failed;
+    goto test_parser3_failed;
   }
 
   printf("OK Test Parser 3\n");
   return 0;
 
- test2_failed:
+ test_parser3_failed:
   printf("ERR Test Parser 3\n");
   return -1;
 }
@@ -161,14 +161,14 @@ int test_interpreter_1()
   if (err < 0)
   {
     printf("Error %d after parser_init\n", err);
-    goto interpreter1_failed;
+    goto test_interpreter1_failed;
   }
 
   Expr_t *expr = parser_parse(&parser);
   if (expr == NULL)
   {
     printf("Error parser_parse returned a null expression\n");
-    goto interpreter1_failed;
+    goto test_interpreter1_failed;
   }
 
   char str[50] = {0};
@@ -181,7 +181,7 @@ int test_interpreter_1()
     printf("Error reconstructed expression does not match original\n");
       
     expr_free(expr);
-    goto interpreter1_failed;
+    goto test_interpreter1_failed;
   }
 
   Interpreter_t interpreter = {0};
@@ -191,7 +191,7 @@ int test_interpreter_1()
   {
     printf("Error %d in interpreter_interpret\n", err);
     expr_free(expr);
-    goto interpreter1_failed;
+    goto test_interpreter1_failed;
   }
 
   haplo_interpreter_clean(&interpreter);
@@ -200,7 +200,7 @@ int test_interpreter_1()
   printf("OK Test Interpreter 1\n");
   return 0;
 
- interpreter1_failed:
+ test_interpreter1_failed:
   printf("ERR Test Interpreter 1\n");
   return -1;
 }

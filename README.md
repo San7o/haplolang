@@ -37,7 +37,7 @@ $ ./haplo sample.haplo
 
 ## Building
 
-Simply build the library:
+Build the library:
 
 ```bash
 make lib
@@ -54,4 +54,10 @@ Build and run the tests:
 
 ```
 make check
+```
+
+Clean object files:
+
+```
+make clean
 ```
