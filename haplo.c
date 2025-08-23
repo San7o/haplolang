@@ -52,7 +52,10 @@ void process_line(char* input, ssize_t len)
   Expr_t *expr = parser_parse(&parser);
   if (expr == NULL)
   {
-    fprintf(stderr, "Error parser_parse returned a null expression\n");
+    if (parser.error != 0)
+    {
+      fprintf(stderr, "Error parser_parse returned a null expression\n");
+    }
     return;
   }
 

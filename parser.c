@@ -97,6 +97,51 @@ int haplo_parser_next_token(HaploParser_t *parser)
   case ')':
     parser->last_token = CLOSE;
     return 0;
+  case '#':
+    parser->last_token = COMMENT;
+    return 0;
+  default:
+    // TODO: get slice
+    parser->last_token = ATOM;
+    parser->last_atom = input;
+    return 0;
+  }
+
+  parser->last_token = NONE;
+  parser->error = -HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED;
+  return -1;
+}
+
+
+int haplo_parser_peek_next_token(HaploParser_t *parser)
+{
+  if (parser == NULL) return -HAPLO_ERROR_PARSER_NULL;
+  parser->error = 0;
+  
+  if (parser->input == NULL)
+  {
+    parser->error = -HAPLO_ERROR_PARSER_INPUT_EMPTY;
+    return -1;
+  }
+
+  haplo_parser_trim_left(parser);
+  
+  if (parser->pos >= parser->input_len)
+  {
+    parser->error = -HAPLO_ERROR_PARSER_END_OF_INPUT;
+    return -1;
+  }
+
+  char input = parser->input[parser->pos];
+  
+  switch(input)
+  {
+  case '(':
+    parser->last_token = OPEN;
+    return 0;
+  case ')':
+    parser->last_token = CLOSE;
+    return 0;
   default:
     // TODO: get slice
     parser->last_token = ATOM;
@@ -126,7 +171,7 @@ bool haplo_parser_check_error(HaploParser_t *parser)
 }
 
 
-HaploExpr_t *haplo_parser_parse_rec(HaploParser_t *parser)
+HaploExpr_t *haplo_parser_parse_rec(HaploParser_t *parser, bool is_paranthesized)
 {
   if (parser == NULL) return NULL;  
   parser->error = 0;
@@ -149,9 +194,11 @@ HaploExpr_t *haplo_parser_parse_rec(HaploParser_t *parser)
     };
     break;
   case OPEN:
-    expr->first = haplo_parser_parse_rec(parser);
+    expr->first = haplo_parser_parse_rec(parser, true);
     break;
-  case CLOSE: return NULL;
+  case CLOSE:
+    free(expr);
+    return NULL;
   default:
     parser->error = -HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED;
     HAPLO_PARSER_ERROR();
@@ -159,33 +206,51 @@ HaploExpr_t *haplo_parser_parse_rec(HaploParser_t *parser)
 
   // Optional second expression
   
-  if (haplo_parser_next_token(parser) < 0)
+  if (haplo_parser_peek_next_token(parser) < 0)
     HAPLO_PARSER_ERROR();
-
-  if (parser->last_token == CLOSE)
-  {
-    expr->second = NULL;
-    return expr;
-  }
 
   switch (parser->last_token)
   {
   case ATOM:
-    expr->second = malloc(sizeof(HaploExpr_t));
-    *expr->second = (HaploExpr_t){
-      .is_atom = true,
-      .atom = parser->last_atom,
-    };
+    expr->second = haplo_parser_parse_rec(parser, false);
     break;
+    
   case OPEN:
-    expr->second = haplo_parser_parse_rec(parser);
+    if (haplo_parser_next_token(parser) < 0)
+      HAPLO_PARSER_ERROR();
+    expr->second = haplo_parser_parse_rec(parser, true);
     break;
+    
+  case CLOSE:
+    if (!is_paranthesized)
+    {
+      expr->second = NULL;
+      return expr;
+    }    
+    if (haplo_parser_next_token(parser) < 0)
+      HAPLO_PARSER_ERROR();
+    expr->second = NULL;
+    return expr;
+    
   default:
     parser->error = -HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED;
     HAPLO_PARSER_ERROR();
   }
 
-  parser->error = -HAPLO_ERROR_MALFORMED_PARENTHESIS;
+  // Paranthesized expressions must end with a closing parenthesis
+  if (haplo_parser_peek_next_token(parser) < 0)
+    HAPLO_PARSER_ERROR();
+  if (is_paranthesized)
+  {
+    if (parser->last_token != CLOSE)
+    {
+      parser->error = -HAPLO_ERROR_MALFORMED_PARENTHESIS;
+      HAPLO_PARSER_ERROR();
+    }
+    if (haplo_parser_next_token(parser) < 0)
+      HAPLO_PARSER_ERROR();
+  }
+  
   return expr;
 }
 
@@ -198,7 +263,6 @@ HaploExpr_t *haplo_parser_parse(HaploParser_t *parser)
   HaploExpr_t *expr;
   expr = malloc(sizeof(HaploExpr_t));
 
-
   if (setjmp(parser->jump_buf)) {
     // The parser jumps here when encountering an error
     haplo_parser_dump(parser);
@@ -206,26 +270,22 @@ HaploExpr_t *haplo_parser_parse(HaploParser_t *parser)
     return NULL;
   }
 
-  
   if (haplo_parser_next_token(parser) < 0)
     HAPLO_PARSER_ERROR();
 
+  if (parser->last_token == COMMENT)
+  {
+    haplo_expr_free(expr);
+    return NULL;
+  }
+  
   if (parser->last_token != OPEN)
   {
     parser->error = -HAPLO_ERROR_PARSER_MISSING_OPEN;
     HAPLO_PARSER_ERROR();
   }
   
-  expr = haplo_parser_parse_rec(parser);
+  expr = haplo_parser_parse_rec(parser, true);
   
-  if (haplo_parser_next_token(parser) < 0)
-    HAPLO_PARSER_ERROR();
-
-  if (parser->last_token != CLOSE)
-  {
-    parser->error = -HAPLO_ERROR_PARSER_MISSING_CLOSE;
-    HAPLO_PARSER_ERROR();
-  }
-
   return expr;
 }

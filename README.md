@@ -24,8 +24,13 @@ You can use the interactive interpreter by running the `haplo` cli:
 ```
 $ ./haplo
 The Haplolang interpreter by Giovanni Santini
-> ( p ( + ( 1 2 ) )
+> # p stands for print
+> ( p 1 )
+1
+> ( p ( + 1 2 )
 3 
+> ( p ( + 1 ( * 2 3 ) ) )
+7
 ```
 
 You can also interpret a file:

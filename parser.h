@@ -38,6 +38,7 @@
   #define parser_init haplo_parser_init
   #define parser_trim_left haplo_parser_trim_left
   #define parser_next_token haplo_parser_next_token
+  #define parser_peek_next_token haplo_parser_peek_next_token
   #define parser_dump haplo_parser_dump
   #define parser_check_error haplo_parser_check_error
   #define parser_parse haplo_parser_parse
@@ -57,8 +58,9 @@
 enum HaploToken {
   OPEN = 0,  // '('
   CLOSE,     // ')'
-  ATOM,     // any other ASCII char except
-            // spaces, newlines and tabs
+  ATOM,      // any other ASCII char except
+             // spaces, newlines and tabs
+  COMMENT,   // '#'
   NONE,
 };
 
@@ -81,6 +83,7 @@ typedef struct HaploParser HaploParser_t;
 int haplo_parser_init(HaploParser_t *parser, char *input, size_t len);
 void haplo_parser_trim_left(HaploParser_t *parser);
 int haplo_parser_next_token(HaploParser_t *parser);
+int haplo_parser_peek_next_token(HaploParser_t *parser);
 int haplo_parser_dump(HaploParser_t *parser);
 bool haplo_parser_check_error(HaploParser_t *parser);
 HaploExpr_t *haplo_parser_parse(HaploParser_t *parser);

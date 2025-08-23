@@ -67,7 +67,7 @@ clean:
 	rm ${LIB_OBJ} ${TEST_OBJ} ${HAPLO_OBJ} 2>/dev/null || :
 
 distclean:
-	rm lib${NAME}.a
+	rm lib${NAME}.a ${NAME} ${NAME}_tests 2>/dev/null || :
 
 # --- Misc ---
 

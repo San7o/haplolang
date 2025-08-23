@@ -36,7 +36,7 @@ int test_parser_1()
 
   printf("Now running: Test Parser 1\n");
   int err;
-  char* input = "( c ( a b ) )";
+  char* input = "( c ( a ( b ) ) )";
   
   Parser_t parser = {0};
   err = parser_init(&parser, input, strlen(input));
@@ -79,7 +79,7 @@ int test_parser_2()
 {
   printf("Now running: Test Parser 2\n");
   int err;
-  char* input = "( + ( 1 ( * ( 2 3 ) ) ) )";
+  char* input = "( + ( 1 ( * ( 2 ( 3 ) ) ) ) )";
   
   Parser_t parser = {0};
   err = parser_init(&parser, input, strlen(input));
@@ -122,7 +122,7 @@ int test_parser_3()
 {
   printf("Now running: Test Parser 3\n");
   int err;
-  char* input = "( 1 2 3 )";
+  char* input = "(( 1 2 3 )";
 
   printf("malformed expression: %s\n", input);
   
@@ -150,11 +150,56 @@ int test_parser_3()
 }
 
 
+int test_parser_4()
+{
+  printf("Now running: Test Parser 4\n");
+  int err;
+  char* input = "( + 2 3 )";
+  char* expected_ast = "( + ( 2 ( 3 ) ) )";
+
+  Parser_t parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_parser4_failed;
+  }
+
+  Expr_t *expr = parser_parse(&parser);  
+  if (expr == NULL)
+  {
+    printf("Error parser_parse returned a null expression\n");
+    goto test_parser4_failed;
+  }
+
+  char str[50] = {0};
+  expr_string(expr, str);
+  printf("original:     %s\n", input);
+  printf("expected ast: %s\n", expected_ast);
+  printf("ast:          %s\n", str);
+
+  if (strcmp(str, expected_ast) != 0)
+  {
+    printf("Error reconstructed expression does not match original\n");
+    expr_free(expr);
+    goto test_parser4_failed;
+  }
+
+  expr_free(expr);
+  
+  printf("OK Test Parser 3\n");
+  return 0;
+
+ test_parser4_failed:
+  printf("ERR Test Parser 3\n");
+  return -1;
+}
+
 int test_interpreter_1()
 {
   printf("Now running: Test Interpreter 1\n");
   int err;
-  char* input = "( p ( + ( 1 2 ) ) )";
+  char* input = "( p ( + ( 1 ( 2 ) ) ) )";
   
   Parser_t parser = {0};
   err = parser_init(&parser, input, strlen(input));
@@ -214,6 +259,7 @@ int main(void)
   out += test_parser_1();
   out += test_parser_2();
   out += test_parser_3();
+  out += test_parser_4();
   out += test_interpreter_1();
   
   printf("Tests done.\n");
