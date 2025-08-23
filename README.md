@@ -19,11 +19,20 @@ Everything is implemented in C. The project is composed of:
 - `haplo`: cli-based interpreter
 - `haplo_tests`: unit tests
 
+You can use the interactive interpreter by running the `haplo` cli:
+
 ```
 $ ./haplo
 The Haplolang interpreter by Giovanni Santini
 > ( p ( + ( 1 2 ) )
 3 
+```
+
+You can also interpret a file:
+
+```
+$ ./haplo sample.haplo 
+7
 ```
 
 ## Building
