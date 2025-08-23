@@ -22,9 +22,8 @@ Everything is implemented in C. The project is composed of:
 ```
 $ ./haplo
 The Haplolang interpreter by Giovanni Santini
-> ( p . ( + . ( 1 . 2 ) )
-3
-> 
+> ( p ( + ( 1 2 ) )
+3 
 ```
 
 ## Building

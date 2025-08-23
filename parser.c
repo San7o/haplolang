@@ -97,9 +97,6 @@ int haplo_parser_next_token(HaploParser_t *parser)
   case ')':
     parser->last_token = CLOSE;
     return 0;
-  case '.':
-    parser->last_token = DOT;
-    return 0;
   default:
     // TODO: get slice
     parser->last_token = ATOM;
@@ -155,9 +152,6 @@ HaploExpr_t *haplo_parser_parse_rec(HaploParser_t *parser)
     expr->first = haplo_parser_parse_rec(parser);
     break;
   case CLOSE: return NULL;
-  case DOT:
-    parser->error = -HAPLO_ERROR_PARSER_MISPLACED_DOT;
-    HAPLO_PARSER_PANIC();
   default:
     parser->error = -HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED;
     HAPLO_PARSER_PANIC();
@@ -174,17 +168,6 @@ HaploExpr_t *haplo_parser_parse_rec(HaploParser_t *parser)
     return expr;
   }
 
-  if (parser->last_token != DOT)
-  {
-    parser->error = -HAPLO_ERROR_PARSER_MISPLACED_DOT;
-    HAPLO_PARSER_PANIC();
-  }
-  
-  // Second expression
-
-  if (haplo_parser_next_token(parser) < 0)
-    HAPLO_PARSER_PANIC();
-
   switch (parser->last_token)
   {
   case ATOM:
@@ -197,10 +180,6 @@ HaploExpr_t *haplo_parser_parse_rec(HaploParser_t *parser)
   case OPEN:
     expr->second = haplo_parser_parse_rec(parser);
     break;
-  case CLOSE: return expr;
-  case DOT:
-    parser->error = -HAPLO_ERROR_PARSER_MISPLACED_DOT;
-    HAPLO_PARSER_PANIC();
   default:
     parser->error = -HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED;
     HAPLO_PARSER_PANIC();

@@ -57,7 +57,6 @@
 enum HaploToken {
   OPEN = 0,  // '('
   CLOSE,     // ')'
-  DOT,       // '.'
   ATOM,     // any other ASCII char except
             // spaces, newlines and tabs
   NONE,

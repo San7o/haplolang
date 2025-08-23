@@ -57,7 +57,7 @@ void haplo_expr_print_rec(HaploExpr_t *expr)
     haplo_expr_print_rec(expr->first);
     if (expr->second != NULL)
     {
-      printf(" . ");
+      printf(" ");
       haplo_expr_print_rec(expr->second);
     }
     printf(" )");
@@ -88,7 +88,7 @@ void haplo_expr_string_rec(HaploExpr_t *expr, char *str)
     haplo_expr_string_rec(expr->first, str);
     if (expr->second != NULL)
     {
-      strcat(str, " . ");
+      strcat(str, " ");
       haplo_expr_string_rec(expr->second, str);
     }
     strcat(str, " )\0");

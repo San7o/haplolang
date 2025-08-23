@@ -36,7 +36,7 @@ void test_parser_1()
 
   printf("Now running: Test 1\n");
   int err;
-  char* input = "( c . ( a . b ) )";
+  char* input = "( c ( a b ) )";
   
   Parser_t parser = {0};
   err = parser_init(&parser, input, strlen(input));
@@ -79,7 +79,7 @@ void test_parser_2()
 {
   printf("Now running: Test 2\n");
   int err;
-  char* input = "( + . ( 1 . ( * . ( 2 . 3 ) ) ) )";
+  char* input = "( + ( 1 ( * ( 2 3 ) ) ) )";
   
   Parser_t parser = {0};
   err = parser_init(&parser, input, strlen(input));
@@ -122,7 +122,7 @@ void test_interpreter_1()
 {
   printf("Now running: Test Interpreter 1\n");
   int err;
-  char* input = "( p . ( + . ( 1 . 2 ) ) )";
+  char* input = "( p ( + ( 1 2 ) ) )";
   
   Parser_t parser = {0};
   err = parser_init(&parser, input, strlen(input));
