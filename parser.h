@@ -27,6 +27,7 @@
 #define _HAPLO_PARSER_H_
 
 #include "expr.h"
+#include "lexer.h"
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -35,16 +36,12 @@
 // --- Macros ---
 
 #ifdef HAPLO_NO_PREFIX
-  #define token_string haplo_token_string
   #define parser_init haplo_parser_init
-  #define parser_trim_left haplo_parser_trim_left
-  #define parser_next_token haplo_parser_next_token
-  #define parser_atom_len haplo_parser_atom_len
-  #define parser_peek_next_token haplo_parser_peek_next_token
   #define parser_dump haplo_parser_dump
+  #define parser_next_token haplo_parser_next_token
+  #define parser_peek_next_token haplo_parser_peek_next_token
   #define parser_check_error haplo_parser_check_error
   #define parser_parse haplo_parser_parse
-  #define Token HaploToken
   #define Parser HaploParser
   #define Parser_t HaploParser_t
 #endif // HAPLO_NO_PREFIX
@@ -56,15 +53,6 @@
   } while(0)
 
 // --- Types ---
-
-enum HaploToken {
-  OPEN = 0,  // '('
-  CLOSE,     // ')'
-  ATOM,      // any other ASCII char except
-             // spaces, newlines and tabs
-  COMMENT,   // '#'
-  NONE,
-};
 
 struct HaploParser {
   char* input;
@@ -82,18 +70,19 @@ typedef struct HaploParser HaploParser_t;
 
 // -- Functions --
 
-char* haplo_token_string(enum HaploToken token);
 int haplo_parser_init(HaploParser_t *parser, char *input, size_t len);
-void haplo_parser_trim_left(HaploParser_t *parser);
-int haplo_parser_atom_len(char* input, int input_size);
-// If the next token is an ATOM (set it parser->last_token), an atom
-// is allocated in the heap. The user is responsible to free it.
-int haplo_parser_next_token(HaploParser_t *parser);
-// If the next token is an ATOM (set it parser->last_token), an atom
-// is allocated in the heap. The user is responsible to free it.
-int haplo_parser_peek_next_token(HaploParser_t *parser);
 int haplo_parser_dump(HaploParser_t *parser);
 bool haplo_parser_check_error(HaploParser_t *parser);
+// Returns 0 on success, or a negative integer on error representing
+// the error code.  If the next token is an ATOM (set in
+// parser->last_token), the atom value is allocated in the heap. The
+// user is responsible to free it.
+int haplo_parser_next_token(HaploParser_t *parser);
+// Returns 0 on success, or a negative integer on error representing
+// the error code.  If the next token is an ATOM (set in
+// parser->last_token), the atom value is allocated in the heap. The
+// user is responsible to free it.
+int haplo_parser_peek_next_token(HaploParser_t *parser);
 HaploExpr_t *haplo_parser_parse(HaploParser_t *parser);
 
 #endif // _HAPLO_PARSER_H_

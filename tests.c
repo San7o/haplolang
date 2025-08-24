@@ -34,6 +34,154 @@
 
 // --- Tests ---
 
+int test_lexer_1()
+{
+  {
+    char *input = "  ( 123";
+    int expected_val = 2;
+    int trimmed = lexer_trim_left(input, strlen(input), NULL, NULL);
+    if (trimmed != expected_val)
+    {
+      printf("Error lexer_trim_left on \"%s\", expected %d, got %d",
+             input, expected_val, trimmed);
+      goto test_lexer1_failed;
+    }
+  }
+
+  {
+    char *input = "    123";
+    int expected_val = 4;
+    int trimmed = lexer_trim_left(input, strlen(input), NULL, NULL);
+    if (trimmed != expected_val)
+    {
+      printf("Error lexer_trim_left on \"%s\", expected %d, got %d",
+             input, expected_val, trimmed);
+      goto test_lexer1_failed;
+    }
+  }
+
+  {
+    char *input = "  \n  \t  \n\n 123";
+    int expected_val =11;
+    int trimmed = lexer_trim_left(input, strlen(input), NULL, NULL);
+    if (trimmed != expected_val)
+    {
+      printf("Error lexer_trim_left on \"%s\", expected %d, got %d",
+             input, expected_val, trimmed);
+      goto test_lexer1_failed;
+    }
+  }
+
+  printf("OK Test Lexer 1\n");
+  return 0;
+
+ test_lexer1_failed:
+  printf("ERR Test Lexer 1\n");
+  return -1;
+}
+
+
+int test_lexer_2()
+{
+  {
+    char *input = "( 123";
+    int token_len = 0;
+    
+    int expected_token_len = 1;
+    enum Token expected_token = OPEN;
+    int token = lexer_next_token(input, strlen(input), &token_len, NULL);
+    if (token != expected_token)
+    {
+      printf("Error lexer_next_token on \"%s\", expected %d, got %d",
+             input, expected_token, token);
+      goto test_lexer2_failed;
+    }
+    if (token_len != expected_token_len)
+    {
+      printf("Error lexer_next_token on \"%s\", expected token len %d, got %d",
+             input, expected_token_len, token_len);
+      goto test_lexer2_failed;
+    }
+  }
+
+  {
+    char *input = ") 123";
+    int token_len = 0;
+    
+    int expected_token_len = 1;
+    enum Token expected_token = CLOSE;
+    int token = lexer_next_token(input, strlen(input), &token_len, NULL);
+    if (token != expected_token)
+    {
+      printf("Error lexer_next_token on \"%s\", expected %d, got %d",
+             input, expected_token, token);
+      goto test_lexer2_failed;
+    }
+    if (token_len != expected_token_len)
+    {
+      printf("Error lexer_next_token on \"%s\", expected token len %d, got %d",
+             input, expected_token_len, token_len);
+      goto test_lexer2_failed;
+    }
+  }
+
+  {
+    char *input = "# 123";
+    int token_len = 0;
+    
+    int expected_token_len = 1;
+    enum Token expected_token = COMMENT;
+    int token = lexer_next_token(input, strlen(input), &token_len, NULL);
+    if (token != expected_token)
+    {
+      printf("Error lexer_next_token on \"%s\", expected %d, got %d",
+             input, expected_token, token);
+      goto test_lexer2_failed;
+    }
+    if (token_len != expected_token_len)
+    {
+      printf("Error lexer_next_token on \"%s\", expected token len %d, got %d",
+             input, expected_token_len, token_len);
+      goto test_lexer2_failed;
+    }
+  }
+
+  {
+    char *input = "123";
+    int token_len = 0;
+    
+    int expected_token_len = 3;
+    enum Token expected_token = ATOM;
+    char* atom = NULL;
+    int token = lexer_next_token(input, strlen(input), &token_len, &atom);
+    if (token != expected_token)
+    {
+      printf("Error lexer_next_token on \"%s\", expected %d, got %d",
+             input, expected_token, token);
+      goto test_lexer2_failed;
+    }
+    if (token_len != expected_token_len)
+    {
+      printf("Error lexer_next_token on \"%s\", expected token len %d, got %d",
+             input, expected_token_len, token_len);
+      goto test_lexer2_failed;
+    }
+    if (atom == NULL || strcmp(atom, input) != 0)
+    {
+      printf("Error lexer_next_token on \"%s\", expected atom value %s, got %s",
+             input, input, atom);
+      goto test_lexer2_failed;
+    }
+  }
+
+  printf("OK Test Lexer 2\n");
+  return 0;
+
+ test_lexer2_failed:
+  printf("ERR Test Lexer 2\n");
+  return -1;
+}
+
 int test_parser_1()
 {
   int err;
@@ -391,6 +539,8 @@ int main(void)
   
   printf("Running tests...\n");
 
+  out += test_lexer_1();
+  out += test_lexer_2();
   out += test_parser_1();
   out += test_parser_2();
   out += test_parser_3();

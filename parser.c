@@ -27,25 +27,6 @@
 #include "errors.h"
 
 #include <stdlib.h>
-#include <string.h>
-
-char* haplo_token_string(enum HaploToken token)
-{
-  switch(token)
-  {
-  case OPEN:
-    return "OPEN";
-  case CLOSE:
-    return "CLOSE";
-  case ATOM:
-    return "ATOM";
-  case COMMENT:
-    return "COMMENT";
-  case NONE:
-    return "NONE";
-  }
-  return "TOKEN_UNRECOGNIZED";
-}
 
 int haplo_parser_init(HaploParser_t *parser, char *input, size_t len)
 {
@@ -66,65 +47,6 @@ int haplo_parser_init(HaploParser_t *parser, char *input, size_t len)
   return 0;
 }
 
-void haplo_parser_trim_left(HaploParser_t *parser)
-{
-  if (parser == NULL) return;
-  
-  while(parser->pos <= parser->input_len &&
-        (parser->input[parser->pos] == ' ' ||
-         parser->input[parser->pos] == '\n' ||
-         parser->input[parser->pos] == '\t'))
-  {
-    if (parser->input[parser->pos] == '\n') {
-      parser->line++;
-      parser->column = 0;
-    } else {
-      parser->column++;
-    }
-    parser->pos++;
-  }
-
-  return;
-}
-
-int haplo_parser_atom_len(char* input, int input_size)
-{
-  if (input == NULL || input_size == 0) return 0;
-
-  int len = 0;
-  int i = 0;
-  
-  if (input[0] == '"') {
-
-    i++;
-    len++;
-    
-    while (input[i] != '"' && i < input_size) {
-      i++;
-      len++;
-    }
-    if (i == input_size)
-    {
-      return -HAPLO_ERROR_PARSER_STRING_LITERAL_END;
-    }
-    len++;
-  }
-  else {
-    while (input[i] != ' ' &&
-           input[i] != '\n' &&
-           input[i] != '\t' &&
-           input[i] != '(' &&
-           input[i] != ')' &&
-           input[i] != '#' &&
-           i < input_size)
-      {
-        i++;
-        len++;
-      }
-  }
-  return len;
-}
-
 int haplo_parser_next_token(HaploParser_t *parser)
 {
   if (parser == NULL) return -HAPLO_ERROR_PARSER_NULL;
@@ -132,60 +54,24 @@ int haplo_parser_next_token(HaploParser_t *parser)
   parser->last_token = NONE;
   parser->last_atom = NULL;
   
-  if (parser->input == NULL)
+  parser->pos += haplo_lexer_trim_left(parser->input + parser->pos,
+                                        parser->input_len - parser->pos,
+                                        &parser->line,
+                                        &parser->column);
+  int token_len = 0;
+  int ret = haplo_lexer_next_token(parser->input + parser->pos,
+                                   parser->input_len - parser->pos,
+                                   &token_len,
+                                   &parser->last_atom);
+  if (ret < 0)
   {
-    parser->error = -HAPLO_ERROR_PARSER_INPUT_EMPTY;
+    parser->error = ret;
     return -1;
   }
-
-  haplo_parser_trim_left(parser);
   
-  if (parser->pos >= parser->input_len)
-  {
-    parser->error = -HAPLO_ERROR_PARSER_END_OF_INPUT;
-    return -1;
-  }
-
-  char input = parser->input[parser->pos];
-  
-  switch(input)
-  {
-  case '(':
-    parser->last_token = OPEN;
-    parser->column++;
-    parser->pos++;
-    return 0;
-  case ')':
-    parser->last_token = CLOSE;
-    parser->column++;
-    parser->pos++;
-    return 0;
-  case '#':
-    parser->last_token = COMMENT;
-    parser->column++;
-    parser->pos++;
-    return 0;
-  default:
-    parser->last_token = ATOM;
-    int ret = haplo_parser_atom_len(parser->input + parser->pos,
-                                    parser->input_len - parser->pos);
-    if (ret < 0)
-    {
-      parser->error = ret;
-      return -1;
-    }
-    
-    parser->last_atom = (HaploAtom) malloc(ret + 1);
-    strncpy(parser->last_atom, parser->input + parser->pos, ret);
-    parser->last_atom[ret] = '\0';
-    parser->column += ret;
-    parser->pos += ret;
-    return 0;
-  }
-
-  parser->last_token = NONE;
-  parser->error = -HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED;
-  return -1;
+  parser->last_token = ret;
+  parser->pos += token_len;
+  return 0;
 }
 
 int haplo_parser_peek_next_token(HaploParser_t *parser)
@@ -195,52 +81,23 @@ int haplo_parser_peek_next_token(HaploParser_t *parser)
   parser->last_token = NONE;
   parser->last_atom = NULL;
   
-  if (parser->input == NULL)
+  parser->pos += haplo_lexer_trim_left(parser->input + parser->pos,
+                                        parser->input_len - parser->pos,
+                                        &parser->line,
+                                        &parser->column);
+  
+  int ret = haplo_lexer_next_token(parser->input + parser->pos,
+                                   parser->input_len - parser->pos,
+                                   NULL,
+                                   &parser->last_atom);
+  if (ret < 0)
   {
-    parser->error = -HAPLO_ERROR_PARSER_INPUT_EMPTY;
+    parser->error = ret;
     return -1;
   }
-
-  haplo_parser_trim_left(parser);
   
-  if (parser->pos >= parser->input_len)
-  {
-    parser->error = -HAPLO_ERROR_PARSER_END_OF_INPUT;
-    return -1;
-  }
-
-  char input = parser->input[parser->pos];
-  
-  switch(input)
-  {
-  case '(':
-    parser->last_token = OPEN;
-    return 0;
-  case ')':
-    parser->last_token = CLOSE;
-    return 0;
-  case '#':
-    parser->last_token = COMMENT;
-    return 0;
-  default:
-    parser->last_token = ATOM;
-    int ret = haplo_parser_atom_len(parser->input + parser->pos,
-                                    parser->input_len - parser->pos);
-    if (ret < 0)
-    {
-      parser->error = ret;
-      return -1;
-    }
-    
-    parser->last_atom = (HaploAtom) malloc(ret + 1);
-    strncpy(parser->last_atom, parser->input + parser->pos, ret);
-    parser->last_atom[ret] = '\0';
-    return 0;
-  }
-
-  parser->last_token = NONE;
-  parser->error = -HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED;
-  return -1;
+  parser->last_token = ret;
+  return 0;
 }
 
 int haplo_parser_dump(HaploParser_t *parser)
@@ -304,7 +161,7 @@ HaploExpr_t *haplo_parser_parse_rec(HaploParser_t *parser, bool is_paranthesized
     if (parser->last_token == ATOM && parser->last_atom != NULL)
       free(parser->last_atom);
 
-    if (parser->error != -HAPLO_ERROR_PARSER_END_OF_INPUT)
+    if (parser->error != -HAPLO_ERROR_LEXER_END_OF_INPUT)
     {
       haplo_expr_free(expr);
       HAPLO_PARSER_ERROR();

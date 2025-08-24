@@ -29,9 +29,7 @@ char* error_string(int error)
 {
   switch(-error)
   {
-  case HAPLO_ERROR_PARSER_INPUT_EMPTY:
-    return "ERROR_PARSER_INPUT_EMPTY";
-  case HAPLO_ERROR_PARSER_END_OF_INPUT:
+  case HAPLO_ERROR_LEXER_END_OF_INPUT:
     return "ERROR_PARSER_END_OF_INPUT";
   case HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED:
     return "ERROR_PARSER_TOKEN_UNRECOGNIZED";
@@ -53,6 +51,8 @@ char* error_string(int error)
     return "ERROR_PARSER_NULL";
   case HAPLO_ERROR_PARSER_INPUT_NULL:
     return "ERROR_PARSER_INPUT_NULL";
+  case HAPLO_ERROR_LEXER_INPUT_NULL:
+    return "ERROR_LEXER_INPUT_NULL";
   case HAPLO_ERROR_STACK_EMPTY:
     return "ERROR_STACK_EMPTY";
   case HAPLO_ERROR_PARSER_NEXT_TOKEN:

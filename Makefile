@@ -29,6 +29,7 @@ CFLAGS=-Wall -Werror -Wpedantic -ggdb
 CC=gcc
 
 LIB_OBJ=parser.o\
+        lexer.o\
         expr.o\
         interpreter.o\
         stack.o\
