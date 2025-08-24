@@ -50,21 +50,21 @@ int haplo_interpreter_interpret(HaploInterpreter_t *interpreter, HaploExpr_t *ex
   {
     switch(expr->atom.type)
     {
-    case STRING: ;
+    case HAPLO_ATOM_STRING: ;
       HaploAtom_t string_atom = (HaploAtom_t){
-        .type = STRING,
+        .type = HAPLO_ATOM_STRING,
       };
       string_atom.string = malloc(strlen(expr->atom.string));
       strcpy(string_atom.string, expr->atom.string);
       haplo_stack_push(&interpreter->stack, string_atom);
       break;
-    case INTEGER:
+    case HAPLO_ATOM_INTEGER:
       haplo_stack_push(&interpreter->stack, expr->atom);
       break;
-    case BOOL:
+    case HAPLO_ATOM_BOOL:
       haplo_stack_push(&interpreter->stack, expr->atom);
       break;
-    case SYMBOL:
+    case HAPLO_ATOM_SYMBOL:
       if (strcmp(expr->atom.symbol, "+") == 0)
       {
         HaploAtom_t a, b;
@@ -73,11 +73,11 @@ int haplo_interpreter_interpret(HaploInterpreter_t *interpreter, HaploExpr_t *ex
         err = haplo_stack_pop(&interpreter->stack, &b);
         if (err < 0) return err;
 
-        if (a.type != INTEGER || b.type != INTEGER)
+        if (a.type != HAPLO_ATOM_INTEGER || b.type != HAPLO_ATOM_INTEGER)
           return -HAPLO_ERROR_INTERPRETER_INVALID_TYPE;
 
         HaploAtom_t sum_atom = (HaploAtom_t){
-          .type = INTEGER,
+          .type = HAPLO_ATOM_INTEGER,
           .integer = a.integer + b.integer,
         };
         haplo_stack_push(&interpreter->stack, sum_atom);
@@ -90,11 +90,11 @@ int haplo_interpreter_interpret(HaploInterpreter_t *interpreter, HaploExpr_t *ex
         err = haplo_stack_pop(&interpreter->stack, &b);
         if (err < 0) return err;
 
-        if (a.type != INTEGER || b.type != INTEGER)
+        if (a.type != HAPLO_ATOM_INTEGER || b.type != HAPLO_ATOM_INTEGER)
           return -HAPLO_ERROR_INTERPRETER_INVALID_TYPE;
 
         HaploAtom_t diff_atom = (HaploAtom_t){
-          .type = INTEGER,
+          .type = HAPLO_ATOM_INTEGER,
           .integer = a.integer - b.integer,
         };
         haplo_stack_push(&interpreter->stack, diff_atom);
@@ -107,11 +107,11 @@ int haplo_interpreter_interpret(HaploInterpreter_t *interpreter, HaploExpr_t *ex
         err = haplo_stack_pop(&interpreter->stack, &b);
         if (err < 0) return err;
 
-        if (a.type != INTEGER || b.type != INTEGER)
+        if (a.type != HAPLO_ATOM_INTEGER || b.type != HAPLO_ATOM_INTEGER)
           return -HAPLO_ERROR_INTERPRETER_INVALID_TYPE;
 
         HaploAtom_t prod_atom = (HaploAtom_t){
-          .type = INTEGER,
+          .type = HAPLO_ATOM_INTEGER,
           .integer = a.integer * b.integer,
         };
         haplo_stack_push(&interpreter->stack, prod_atom);
@@ -124,11 +124,11 @@ int haplo_interpreter_interpret(HaploInterpreter_t *interpreter, HaploExpr_t *ex
         err = haplo_stack_pop(&interpreter->stack, &b);
         if (err < 0) return err;
 
-        if (a.type != INTEGER || b.type != INTEGER)
+        if (a.type != HAPLO_ATOM_INTEGER || b.type != HAPLO_ATOM_INTEGER)
           return -HAPLO_ERROR_INTERPRETER_INVALID_TYPE;
 
         HaploAtom_t quot_atom = (HaploAtom_t){
-          .type = INTEGER,
+          .type = HAPLO_ATOM_INTEGER,
           .integer = a.integer / b.integer,
         };
         haplo_stack_push(&interpreter->stack, quot_atom);
@@ -172,3 +172,10 @@ void haplo_interpreter_clean(HaploInterpreter_t *interpreter)
   haplo_stack_free(&interpreter->stack);
   return;
 }
+
+/*
+int haplo_interpreter_interpret(HaploInterpreter_t *interpreter, HaploExpr_t *expr)
+{
+  return 0;
+}
+*/

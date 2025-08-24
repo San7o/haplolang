@@ -41,11 +41,11 @@
 // --- Types ---
 
 enum HaploToken {
-  OPEN = 0,  // '('
-  CLOSE,     // ')'
-  ATOM,      // see struct HaploAtom in atom.h
-  COMMENT,   // '#'
-  NONE,
+  HAPLO_LEX_OPEN = 0,  // '('
+  HAPLO_LEX_CLOSE,     // ')'
+  HAPLO_LEX_ATOM,      // see struct HaploAtom in atom.h
+  HAPLO_LEX_COMMENT,   // '#'
+  HAPLO_LEX_NONE,
 };
 
 // --- Functions ---

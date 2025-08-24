@@ -35,8 +35,8 @@
   #define Interpreter HaploInterpreter
   #define Interpreter_t HaploInterpreter_t
   #define interpreter_init haplo_interpreter_init
-  #define interpreter_interpret haplo_interpreter_interpret
   #define interpreter_clean haplo_interpreter_clean
+  #define interpreter_interpret haplo_interpreter_interpret
 #endif // HAPLO_NO_PREFIX
 
 // --- Types ---
@@ -50,7 +50,7 @@ typedef struct HaploInterpreter HaploInterpreter_t;
 // --- Functions ---
 
 int haplo_interpreter_init(HaploInterpreter_t *interpreter);
-int haplo_interpreter_interpret(HaploInterpreter_t *interpreter, HaploExpr_t *expr);
 void haplo_interpreter_clean(HaploInterpreter_t *interpreter);
+int haplo_interpreter_interpret(HaploInterpreter_t *interpreter, HaploExpr_t *expr);
 
 #endif // _HAPLO_INTERPRETER_H_

@@ -32,10 +32,10 @@ void haplo_atom_free(HaploAtom_t atom)
 {
   switch(atom.type)
   {
-  case STRING:
+  case HAPLO_ATOM_STRING:
     free(atom.string);
     return;
-  case SYMBOL:
+  case HAPLO_ATOM_SYMBOL:
     free(atom.symbol);
     return;
   default:
@@ -48,16 +48,16 @@ void haplo_atom_string(HaploAtom_t atom, char buf[MAX_ATOM_SIZE])
 {
   switch(atom.type)
   {
-  case STRING:
+  case HAPLO_ATOM_STRING:
     sprintf(buf, "\"%s\"", atom.string);
     break;
-  case INTEGER:
+  case HAPLO_ATOM_INTEGER:
     sprintf(buf, "%ld", atom.integer);
     break;
-  case BOOL:
+  case HAPLO_ATOM_BOOL:
     sprintf(buf, "%s", atom.boolean ? "true" : "false");
     break;
-  case SYMBOL:
+  case HAPLO_ATOM_SYMBOL:
     sprintf(buf, "%s", atom.symbol);
     break;
   }

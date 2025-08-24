@@ -41,10 +41,10 @@
 // --- Types ---
 
 enum HaploAtomType {
-  STRING = 0,    // "Hello World"
-  INTEGER,       // 69, -420
-  BOOL,          // true, false
-  SYMBOL,        // print, +
+  HAPLO_ATOM_STRING = 0,    // "Hello World"
+  HAPLO_ATOM_INTEGER,       // 69, -420
+  HAPLO_ATOM_BOOL,          // true, false
+  HAPLO_ATOM_SYMBOL,        // print, +
 };
 
 struct HaploAtom {

@@ -33,15 +33,15 @@ char* haplo_lexer_token_string(enum HaploToken token)
 {
   switch(token)
   {
-  case OPEN:
+  case HAPLO_LEX_OPEN:
     return "OPEN";
-  case CLOSE:
+  case HAPLO_LEX_CLOSE:
     return "CLOSE";
-  case ATOM:
+  case HAPLO_LEX_ATOM:
     return "ATOM";
-  case COMMENT:
+  case HAPLO_LEX_COMMENT:
     return "COMMENT";
-  case NONE:
+  case HAPLO_LEX_NONE:
     return "NONE";
   }
   return "TOKEN_UNRECOGNIZED";
@@ -118,26 +118,26 @@ int haplo_lexer_next_token(char* input, int input_size,
   {
   case '(':
     if (token_len != NULL) *token_len = 1;
-    return OPEN;
+    return HAPLO_LEX_OPEN;
   case ')':
     if (token_len != NULL) *token_len = 1;
-    return CLOSE;
+    return HAPLO_LEX_CLOSE;
   case '#':
     if (token_len != NULL) *token_len = 1;
-    return COMMENT;
-  case '"': ; // Atom of type STRING
+    return HAPLO_LEX_COMMENT;
+  case '"': ; // Atom of type HAPLO_ATOM_STRING
     int ret = haplo_lexer_atom_len(input, input_size);
     if (ret < 0) return ret;
     if (ret < 2) return -HAPLO_ERROR_LEXER_ATOM_STRING_SIZE;
     if (token_len != NULL) *token_len = ret;
     if (atom != NULL)
     {
-      atom->type = STRING;
+      atom->type = HAPLO_ATOM_STRING;
       atom->string = (char *) malloc(ret - 1);
       strncpy(atom->string, input + 1, ret - 2); // Ignore the '"'
       atom->string[ret-1] = '\0';
     }
-    return ATOM;
+    return HAPLO_LEX_ATOM;
   default: ; // Atom may be INTEGER, BOOL or SYMBOL
     ret = haplo_lexer_atom_len(input, input_size);
     if (ret < 0) return ret;
@@ -147,15 +147,15 @@ int haplo_lexer_next_token(char* input, int input_size,
       // Check for BOOL
       if (strncmp(input, "true", ret) == 0)
       {
-        atom->type = BOOL;
+        atom->type = HAPLO_ATOM_BOOL;
         atom->boolean = true;
-        return ATOM;
+        return HAPLO_LEX_ATOM;
       }
       else if (strncmp(input, "false", ret) == 0)
       {
-        atom->type = BOOL;
+        atom->type = HAPLO_ATOM_BOOL;
         atom->boolean = false;
-        return ATOM;
+        return HAPLO_LEX_ATOM;
       }
       // Check for INTEGER
       else {
@@ -163,19 +163,19 @@ int haplo_lexer_next_token(char* input, int input_size,
         long integer = strtol(input, &endptr, 10);
         if (endptr == input + ret)
         {
-          atom->type = INTEGER;
+          atom->type = HAPLO_ATOM_INTEGER;
           atom->integer = integer;
-          return ATOM;
+          return HAPLO_LEX_ATOM;
         }
       }
       
       // Otherwise Atom is SYMBOL
-      atom->type = SYMBOL;
+      atom->type = HAPLO_ATOM_SYMBOL;
       atom->symbol = (char *) malloc(ret + 1);
       strncpy(atom->symbol, input, ret);
       atom->symbol[ret] = '\0';
     }
-    return ATOM;
+    return HAPLO_LEX_ATOM;
   }
 
   return -HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED;

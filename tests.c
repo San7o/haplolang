@@ -88,7 +88,7 @@ int test_lexer_2()
     int token_len = 0;
     
     int expected_token_len = 1;
-    enum Token expected_token = OPEN;
+    enum Token expected_token = HAPLO_LEX_OPEN;
     int token = lexer_next_token(input, strlen(input), &token_len, NULL);
     if (token != expected_token)
     {
@@ -109,7 +109,7 @@ int test_lexer_2()
     int token_len = 0;
     
     int expected_token_len = 1;
-    enum Token expected_token = CLOSE;
+    enum Token expected_token = HAPLO_LEX_CLOSE;
     int token = lexer_next_token(input, strlen(input), &token_len, NULL);
     if (token != expected_token)
     {
@@ -130,7 +130,7 @@ int test_lexer_2()
     int token_len = 0;
     
     int expected_token_len = 1;
-    enum Token expected_token = COMMENT;
+    enum Token expected_token = HAPLO_LEX_COMMENT;
     int token = lexer_next_token(input, strlen(input), &token_len, NULL);
     if (token != expected_token)
     {
@@ -151,7 +151,7 @@ int test_lexer_2()
     int token_len = 0;
     
     int expected_token_len = 3;
-    enum Token expected_token = ATOM;
+    enum Token expected_token = HAPLO_LEX_ATOM;
     long int expected_atom = 123;
     Atom_t atom;
     int token = lexer_next_token(input, strlen(input), &token_len, &atom);
@@ -167,7 +167,7 @@ int test_lexer_2()
              input, expected_token_len, token_len);
       goto test_lexer2_failed;
     }
-    if (atom.type != INTEGER || atom.integer != expected_atom)
+    if (atom.type != HAPLO_ATOM_INTEGER || atom.integer != expected_atom)
     {
       printf("Error lexer_next_token on \"%s\", expected atom value %ld, got %ld",
              input, expected_atom, atom.integer);
