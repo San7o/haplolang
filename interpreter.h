@@ -32,11 +32,11 @@
 // --- Macros ---
 
 #ifdef HAPLO_NO_PREFIX
+  #define Interpreter HaploInterpreter
+  #define Interpreter_t HaploInterpreter_t
   #define interpreter_init haplo_interpreter_init
   #define interpreter_interpret haplo_interpreter_interpret
   #define interpreter_clean haplo_interpreter_clean
-  #define Interpreter HaploInterpreter
-  #define Interpreter_t HaploInterpreter_t
 #endif // HAPLO_NO_PREFIX
 
 // --- Types ---

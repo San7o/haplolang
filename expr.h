@@ -26,33 +26,30 @@
 #ifndef _HAPLO_EXPR_H_
 #define _HAPLO_EXPR_H_
 
+#include "atom.h"
+
 #include <stdbool.h>
 
 // --- Macros ---
 
 #ifdef HAPLO_NO_PREFIX
-  #define expr_free haplo_expr_free
-  #define expr_print haplo_expr_print
-  #define expr_string haplo_expr_string
   #define Atom HaploAtom
   #define Expr HaploExpr
   #define Expr_t HaploExpr_t
+  #define expr_free haplo_expr_free
+  #define expr_print haplo_expr_print
+  #define expr_string haplo_expr_string
 #endif // HAPLO_NO_PREFIX
 
-#define MAX_ATOM_SIZE 100
-
 // --- Types ---
-
-// Heap allocated
-typedef char* HaploAtom;
 
 struct HaploExpr {
   bool is_atom;
   union {
-    HaploAtom atom;
+    HaploAtom_t atom;
     struct {
-      struct HaploExpr* first;
-      struct HaploExpr* second;
+      struct HaploExpr* head;
+      struct HaploExpr* tail;
     };
   };
 };

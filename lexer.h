@@ -26,14 +26,16 @@
 #ifndef _HAPLO_LEXER_H_
 #define _HAPLO_LEXER_H_
 
+#include "atom.h"
+
 // --- Macros ---
 
 #ifdef HAPLO_NO_PREFIX
-  #define token_string haplo_token_string
-  #define atom_len haplo_atom_len
+  #define Token HaploToken
+  #define lexer_token_string haplo_lexer_token_string
+  #define lexer_atom_len haplo_lexer_atom_len
   #define lexer_trim_left haplo_lexer_trim_left
   #define lexer_next_token haplo_lexer_next_token
-  #define Token HaploToken
 #endif // HAPLO_NO_PREFIX
 
 // --- Types ---
@@ -41,16 +43,17 @@
 enum HaploToken {
   OPEN = 0,  // '('
   CLOSE,     // ')'
-  ATOM,      // any other ASCII char except
-             // spaces, newlines and tabs
+  ATOM,      // see struct HaploAtom in atom.h
   COMMENT,   // '#'
   NONE,
 };
 
 // --- Functions ---
 
-char* haplo_token_string(enum HaploToken token);
-int haplo_atom_len(char* input, int input_size);
+// Returns the string representation of a token enum
+char* haplo_lexer_token_string(enum HaploToken token);
+// Returns the length of an atom
+int haplo_lexer_atom_len(char* input, int input_size);
 
 // Returns the number of trimmed characters from input. If line and /
 // or column are specified, their values will be incremented
@@ -61,10 +64,10 @@ int haplo_lexer_trim_left(char* input, int input_size,
 // On success, returns a non-negative integer representing an
 // HaploToken.  On failure, returns a negative integer with the error
 // value.  If token_len is specified, its value will be set to the
-// length of the token. If token_value is specified and the type of
-// token is ATOM, a new Atom will be allocated and the user will be
-// responsible to free it.
+// length of the token. If atom is specified and the type of token is
+// ATOM, a new Atom will be allocated and the user will be responsible
+// to free it using haplo_atom_free.
 int haplo_lexer_next_token(char* input, int input_size,
-                           int *token_len, char **token_value);
+                           int* token_len, HaploAtom_t *atom);
 
 #endif // _HAPLO_LEXER_H_

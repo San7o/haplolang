@@ -23,49 +23,46 @@
  *
  */
 
-#ifndef _HAPLO_STACK_H_
-#define _HAPLO_STACK_H_
-
-#include "errors.h"
-#include "atom.h"
+#ifndef _HAPLO_ATOM_H
+#define _HAPLO_ATOM_H
 
 #include <stdbool.h>
 
 // --- Macros ---
 
 #ifdef HAPLO_NO_PREFIX
-  #define List HaploList
-  #define List_t HaploList_t
-  #define Stack HaploStack
-  #define Stack_t HaploStack_t
-  #define stack_init haplo_stack_init
-  #define stack_pop haplo_stack_pop
-  #define stack_push haplo_stack_push
-  #define stack_empty haplo_stack_empty
-  #define stack_free haplo_stack_free
+  #define Atom HaploAtom
+  #define Atom_t HaploAtom_t
+  #define atom_free haplo_atom_free
 #endif // HAPLO_NO_PREFIX
+
+#define MAX_ATOM_SIZE 100
 
 // --- Types ---
 
-struct HaploList {
-  struct HaploList *next;
-  HaploAtom_t val;
+enum HaploAtomType {
+  STRING = 0,    // "Hello World"
+  INTEGER,       // 69, -420
+  BOOL,          // true, false
+  SYMBOL,        // print, +
 };
 
-typedef struct HaploList HaploList_t;
-
-struct HaploStack {
-  HaploList_t *top;
+struct HaploAtom {
+  enum HaploAtomType type;
+  union {
+    char* string;
+    long int integer;
+    bool boolean;
+    char* symbol;
+  };
 };
 
-typedef struct HaploStack HaploStack_t;
+typedef struct HaploAtom HaploAtom_t;
 
-// --- Functions ---
+// --- Functios ---
 
-int haplo_stack_init(HaploStack_t *stack);
-int haplo_stack_pop(HaploStack_t *stack, HaploAtom_t *value);
-int haplo_stack_push(HaploStack_t *stack, HaploAtom_t value);
-bool haplo_stack_empty(HaploStack_t *stack);
-void haplo_stack_free(HaploStack_t *stack);
+void haplo_atom_free(HaploAtom_t atom);
+// Writes to buff the string representation of the atom.
+void haplo_atom_string(HaploAtom_t atom, char buf[MAX_ATOM_SIZE]);
 
-#endif // _HAPLO_STACK_H_
+#endif // _HAPLO_ATOM_H

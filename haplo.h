@@ -28,9 +28,12 @@
 
 // --- Headers ---
 
+#include "errors.h"
+#include "atom.h"
+#include "lexer.h"
 #include "parser.h"
 #include "expr.h"
+#include "stack.h"
 #include "interpreter.h"
-#include "errors.h"
 
 #endif // _HAPLO_HAPLO_H_

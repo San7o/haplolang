@@ -152,7 +152,8 @@ int test_lexer_2()
     
     int expected_token_len = 3;
     enum Token expected_token = ATOM;
-    char* atom = NULL;
+    long int expected_atom = 123;
+    Atom_t atom;
     int token = lexer_next_token(input, strlen(input), &token_len, &atom);
     if (token != expected_token)
     {
@@ -166,10 +167,10 @@ int test_lexer_2()
              input, expected_token_len, token_len);
       goto test_lexer2_failed;
     }
-    if (atom == NULL || strcmp(atom, input) != 0)
+    if (atom.type != INTEGER || atom.integer != expected_atom)
     {
-      printf("Error lexer_next_token on \"%s\", expected atom value %s, got %s",
-             input, input, atom);
+      printf("Error lexer_next_token on \"%s\", expected atom value %ld, got %ld",
+             input, expected_atom, atom.integer);
       goto test_lexer2_failed;
     }
   }
@@ -507,7 +508,7 @@ int test_interpreter_1()
   if (strcmp(input, str) != 0)
   {
     printf("Error reconstructed expression does not match original\n");
-      
+
     expr_free(expr);
     goto test_interpreter1_failed;
   }

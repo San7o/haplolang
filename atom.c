@@ -23,49 +23,43 @@
  *
  */
 
-#ifndef _HAPLO_STACK_H_
-#define _HAPLO_STACK_H_
-
-#include "errors.h"
 #include "atom.h"
 
-#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-// --- Macros ---
+void haplo_atom_free(HaploAtom_t atom)
+{
+  switch(atom.type)
+  {
+  case STRING:
+    free(atom.string);
+    return;
+  case SYMBOL:
+    free(atom.symbol);
+    return;
+  default:
+    return;
+  }
+  return;
+}
 
-#ifdef HAPLO_NO_PREFIX
-  #define List HaploList
-  #define List_t HaploList_t
-  #define Stack HaploStack
-  #define Stack_t HaploStack_t
-  #define stack_init haplo_stack_init
-  #define stack_pop haplo_stack_pop
-  #define stack_push haplo_stack_push
-  #define stack_empty haplo_stack_empty
-  #define stack_free haplo_stack_free
-#endif // HAPLO_NO_PREFIX
-
-// --- Types ---
-
-struct HaploList {
-  struct HaploList *next;
-  HaploAtom_t val;
-};
-
-typedef struct HaploList HaploList_t;
-
-struct HaploStack {
-  HaploList_t *top;
-};
-
-typedef struct HaploStack HaploStack_t;
-
-// --- Functions ---
-
-int haplo_stack_init(HaploStack_t *stack);
-int haplo_stack_pop(HaploStack_t *stack, HaploAtom_t *value);
-int haplo_stack_push(HaploStack_t *stack, HaploAtom_t value);
-bool haplo_stack_empty(HaploStack_t *stack);
-void haplo_stack_free(HaploStack_t *stack);
-
-#endif // _HAPLO_STACK_H_
+void haplo_atom_string(HaploAtom_t atom, char buf[MAX_ATOM_SIZE])
+{
+  switch(atom.type)
+  {
+  case STRING:
+    sprintf(buf, "\"%s\"", atom.string);
+    break;
+  case INTEGER:
+    sprintf(buf, "%ld", atom.integer);
+    break;
+  case BOOL:
+    sprintf(buf, "%s", atom.boolean ? "true" : "false");
+    break;
+  case SYMBOL:
+    sprintf(buf, "%s", atom.symbol);
+    break;
+  }
+  return;
+}

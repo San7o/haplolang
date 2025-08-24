@@ -64,7 +64,7 @@ void process_line(char* input, ssize_t len)
   err = interpreter_interpret(&interpreter, expr);
   if (err < 0)
   {
-    fprintf(stderr, "Error %d in interpreter_interpret\n", err);
+    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(err));
     interpreter_clean(&interpreter);
     expr_free(expr);
     return;

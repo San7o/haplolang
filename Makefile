@@ -28,7 +28,8 @@ NAME=haplo
 CFLAGS=-Wall -Werror -Wpedantic -ggdb
 CC=gcc
 
-LIB_OBJ=parser.o\
+LIB_OBJ=atom.o\
+        parser.o\
         lexer.o\
         expr.o\
         interpreter.o\

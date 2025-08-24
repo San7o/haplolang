@@ -44,6 +44,10 @@
 #define HAPLO_ERROR_PARSER_NEXT_TOKEN            13
 #define HAPLO_ERROR_PARSER_STRING_LITERAL_END    14
 #define HAPLO_ERROR_PARSER_NULL                  15
+#define HAPLO_ERROR_LEXER_ATOM_STRING_SIZE       16
+#define HAPLO_ERROR_INTERPRETER_INVALID_TYPE     17
+
+// --- Functions ---
 
 char* error_string(int error);
 

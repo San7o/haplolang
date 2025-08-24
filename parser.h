@@ -26,6 +26,7 @@
 #ifndef _HAPLO_PARSER_H_
 #define _HAPLO_PARSER_H_
 
+#include "atom.h"
 #include "expr.h"
 #include "lexer.h"
 
@@ -36,14 +37,14 @@
 // --- Macros ---
 
 #ifdef HAPLO_NO_PREFIX
+  #define Parser HaploParser
+  #define Parser_t HaploParser_t
   #define parser_init haplo_parser_init
   #define parser_dump haplo_parser_dump
   #define parser_next_token haplo_parser_next_token
   #define parser_peek_next_token haplo_parser_peek_next_token
   #define parser_check_error haplo_parser_check_error
   #define parser_parse haplo_parser_parse
-  #define Parser HaploParser
-  #define Parser_t HaploParser_t
 #endif // HAPLO_NO_PREFIX
 
 #define HAPLO_PARSER_ERROR() \
@@ -58,7 +59,7 @@ struct HaploParser {
   char* input;
   size_t input_len;
   enum HaploToken last_token;
-  HaploAtom last_atom;
+  HaploAtom_t last_atom;
   unsigned int pos;
   unsigned int line;
   unsigned int column;

@@ -37,11 +37,11 @@ void haplo_expr_free(HaploExpr_t *expr)
 
   if (expr->is_atom)
   {
-    if (expr->atom != NULL) free(expr->atom);
+    haplo_atom_free(expr->atom);
     return;
   }
-  haplo_expr_free(expr->first);
-  haplo_expr_free(expr->second);
+  haplo_expr_free(expr->head);
+  haplo_expr_free(expr->tail);
   
   return;
 }
@@ -54,15 +54,17 @@ void haplo_expr_print_rec(HaploExpr_t *expr)
   
   if (expr->is_atom)
   {
-    printf("%s", expr->atom);
+    char buf[MAX_ATOM_SIZE] = {0};
+    haplo_atom_string(expr->atom, buf);
+    printf("%s", buf);
   }
   else {
     printf("( ");
-    haplo_expr_print_rec(expr->first);
-    if (expr->second != NULL)
+    haplo_expr_print_rec(expr->head);
+    if (expr->tail != NULL)
     {
       printf(" ");
-      haplo_expr_print_rec(expr->second);
+      haplo_expr_print_rec(expr->tail);
     }
     printf(" )");
   }
@@ -81,19 +83,19 @@ void haplo_expr_string_rec(HaploExpr_t *expr, char *str)
 {
   if (expr == NULL) return;
   
-  if (expr->is_atom && expr->atom != NULL)
+  if (expr->is_atom)
   {
-    char buf[MAX_ATOM_SIZE];
-    sprintf(buf, "%s", expr->atom);
+    char buf[MAX_ATOM_SIZE] = {0};
+    haplo_atom_string(expr->atom, buf);
     strcat(str, buf);
   }
   else {
     strcat(str, "( \0");
-    haplo_expr_string_rec(expr->first, str);
-    if (expr->second != NULL)
+    haplo_expr_string_rec(expr->head, str);
+    if (expr->tail != NULL)
     {
       strcat(str, " ");
-      haplo_expr_string_rec(expr->second, str);
+      haplo_expr_string_rec(expr->tail, str);
     }
     strcat(str, " )\0");
   }

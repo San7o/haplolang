@@ -36,7 +36,7 @@ int haplo_stack_init(HaploStack_t *stack)
   return 0;
 }
 
-int haplo_stack_pop(HaploStack_t *stack, HaploStackType *value)
+int haplo_stack_pop(HaploStack_t *stack, HaploAtom_t *value)
 {
   if (stack == NULL) return -HAPLO_ERROR_STACK_NULL;
   if (stack->top == NULL) return -HAPLO_ERROR_STACK_EMPTY;
@@ -49,7 +49,7 @@ int haplo_stack_pop(HaploStack_t *stack, HaploStackType *value)
   return 0;
 }
 
-int haplo_stack_push(HaploStack_t *stack, HaploStackType value)
+int haplo_stack_push(HaploStack_t *stack, HaploAtom_t value)
 {
   if (stack == NULL) return -HAPLO_ERROR_STACK_NULL;
 
@@ -78,6 +78,7 @@ void haplo_list_free_rec(HaploList_t *list)
 {
   if (list == NULL) return;
   haplo_list_free_rec(list->next);
+  haplo_atom_free(list->val);
   free(list);
   
   return;

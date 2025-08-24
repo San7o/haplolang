@@ -25,12 +25,11 @@
 
 #include "errors.h"
 #include "lexer.h"
-#include "expr.h"
 
 #include <string.h>
 #include <stdlib.h>
 
-char* haplo_token_string(enum HaploToken token)
+char* haplo_lexer_token_string(enum HaploToken token)
 {
   switch(token)
   {
@@ -48,7 +47,7 @@ char* haplo_token_string(enum HaploToken token)
   return "TOKEN_UNRECOGNIZED";
 }
 
-int haplo_atom_len(char* input, int input_size)
+int haplo_lexer_atom_len(char* input, int input_size)
 {
   if (input == NULL || input_size == 0) return 0;
 
@@ -110,7 +109,7 @@ int haplo_lexer_trim_left(char* input, int input_size,
 }
 
 int haplo_lexer_next_token(char* input, int input_size,
-                           int *token_len, char **token_value)
+                           int *token_len, HaploAtom_t *atom)
 {
   if (input == NULL) return -HAPLO_ERROR_LEXER_INPUT_NULL;
   if (input_size == 0) return -HAPLO_ERROR_LEXER_END_OF_INPUT;
@@ -126,15 +125,55 @@ int haplo_lexer_next_token(char* input, int input_size,
   case '#':
     if (token_len != NULL) *token_len = 1;
     return COMMENT;
-  default: ;
-    int ret = haplo_atom_len(input, input_size);
+  case '"': ; // Atom of type STRING
+    int ret = haplo_lexer_atom_len(input, input_size);
+    if (ret < 0) return ret;
+    if (ret < 2) return -HAPLO_ERROR_LEXER_ATOM_STRING_SIZE;
+    if (token_len != NULL) *token_len = ret;
+    if (atom != NULL)
+    {
+      atom->type = STRING;
+      atom->string = (char *) malloc(ret - 1);
+      strncpy(atom->string, input + 1, ret - 2); // Ignore the '"'
+      atom->string[ret-1] = '\0';
+    }
+    return ATOM;
+  default: ; // Atom may be INTEGER, BOOL or SYMBOL
+    ret = haplo_lexer_atom_len(input, input_size);
     if (ret < 0) return ret;
     if (token_len != NULL) *token_len = ret;
-    if (token_value != NULL)
+    if (atom != NULL)
     {
-      *token_value = (HaploAtom) malloc(ret + 1);
-      strncpy(*token_value, input, ret);
-      (*token_value)[ret] = '\0';
+      // Check for BOOL
+      if (strncmp(input, "true", ret) == 0)
+      {
+        atom->type = BOOL;
+        atom->boolean = true;
+        return ATOM;
+      }
+      else if (strncmp(input, "false", ret) == 0)
+      {
+        atom->type = BOOL;
+        atom->boolean = false;
+        return ATOM;
+      }
+      // Check for INTEGER
+      else {
+        char *endptr = NULL;
+        long integer = strtol(input, &endptr, 10);
+        if (endptr == input + ret)
+        {
+          atom->type = INTEGER;
+          atom->integer = integer;
+          return ATOM;
+        }
+      }
+      
+      // Otherwise Atom is SYMBOL
+      atom->type = SYMBOL;
+      atom->symbol = (char *) malloc(ret + 1);
+      strncpy(atom->symbol, input, ret);
+      atom->symbol[ret] = '\0';
     }
     return ATOM;
   }
