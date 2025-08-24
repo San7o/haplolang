@@ -24,9 +24,9 @@ You can use the interactive interpreter by running the `haplo` cli:
 $ ./haplo
 The Haplolang interpreter by Giovanni Santini
 > # Hello, this is a comment
-> ( print "Hello, World!" )
+> print "Hello, World!"
 "Hello, World!"
-> ( print ( + 69 420 ) )
+> print ( + 69 420 )
 489
 ```
 

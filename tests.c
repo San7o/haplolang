@@ -292,6 +292,41 @@ int test_parser_6()
   return -1;
 }
 
+
+int test_parser_7()
+{
+  int err;
+  char* input = "# This is a comment";
+
+  if (DEBUG_PRINT)
+  {
+    printf("original:     %s\n", input);
+  }
+  
+  Parser_t parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_parser2_failed;
+  }
+  
+  Expr_t *expr = parser_parse(&parser);
+  if (expr != NULL)
+  {
+    printf("Error parser_parse should return null\n");
+    expr_free(expr);
+    goto test_parser2_failed;
+  }
+
+  printf("OK Test Parser 7\n");
+  return 0;
+
+ test_parser2_failed:
+  printf("ERR Test Parser 7\n");
+  return -1;
+}
+
 int test_interpreter_1()
 {
   int err;
@@ -362,6 +397,7 @@ int main(void)
   out += test_parser_4();
   out += test_parser_5();
   out += test_parser_6();
+  out += test_parser_7();
   out += test_interpreter_1();
   
   printf("Tests done.\n");
