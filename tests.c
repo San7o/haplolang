@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 
-// Activate debug printing
+// Enable debug printing
 #define DEBUG_PRINT 0
 
 // --- Tests ---
@@ -244,6 +244,54 @@ int test_parser_5()
   return -1;
 }
 
+int test_parser_6()
+{
+  int err;
+  char* input = "print \"Hello, World!\"";
+  char* expected_ast = "( print ( \"Hello, World!\" ) )";
+  
+  Parser_t parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_parser2_failed;
+  }
+
+  Expr_t *expr = parser_parse(&parser);
+  if (expr == NULL)
+  {
+    printf("Error parser_parse returned a null expression\n");
+    goto test_parser2_failed;
+  }
+
+  char str[50] = {0};
+  expr_string(expr, str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("original:     %s\n", input);
+    printf("expected_ast: %s\n", expected_ast);
+    printf("ast:          %s\n", str);
+  }
+
+  if (strcmp(expected_ast, str) != 0)
+  {
+    printf("Error reconstructed expression does not match the expected\n");
+    expr_free(expr);
+    goto test_parser2_failed;
+  }
+
+  expr_free(expr);
+
+  printf("OK Test Parser 6\n");
+  return 0;
+
+ test_parser2_failed:
+  printf("ERR Test Parser 6\n");
+  return -1;
+}
+
 int test_interpreter_1()
 {
   int err;
@@ -313,6 +361,7 @@ int main(void)
   out += test_parser_3();
   out += test_parser_4();
   out += test_parser_5();
+  out += test_parser_6();
   out += test_interpreter_1();
   
   printf("Tests done.\n");
