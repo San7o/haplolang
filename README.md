@@ -42,10 +42,22 @@ empty
 
 ## Building
 
-Build the library:
+Build the library, just run `make`:
 
 ```bash
-make
+$ time make
+gcc -Wall -Werror -Wpedantic -ggdb -c atom.c -o atom.o
+gcc -Wall -Werror -Wpedantic -ggdb -c parser.c -o parser.o
+gcc -Wall -Werror -Wpedantic -ggdb -c lexer.c -o lexer.o
+gcc -Wall -Werror -Wpedantic -ggdb -c expr.c -o expr.o
+gcc -Wall -Werror -Wpedantic -ggdb -c interpreter.c -o interpreter.o
+gcc -Wall -Werror -Wpedantic -ggdb -c value.c -o value.o
+gcc -Wall -Werror -Wpedantic -ggdb -c errors.c -o errors.o
+ar rcs libhaplo.a atom.o parser.o lexer.o expr.o interpreter.o value.o errors.o
+
+real    0m0.171s
+user    0m0.125s
+sys     0m0.044s
 ```
 
 Build and run the tests:
