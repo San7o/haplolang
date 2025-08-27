@@ -33,17 +33,15 @@
 #ifdef HAPLO_NO_PREFIX
   #define ValueType HaploValueType
   #define Value HaploValue
-  #define Value_t HaploValue_t
   #define ValueList HaploValueList
-  #define ValueList_t HaploValueList_t
   #define value_string haplo_value_string
   #define value_list_len haplo_value_list_len
   #define value_list_print haplo_value_list_print
   #define value_list_free haplo_value_list_free
+  #define value_free haplo_value_free
+  #define value_deep_copy haplo_value_deep_copy
   #define value_type_string haplo_value_type_string
 #endif
-
-#define HAPLO_VAL_MAX_STRING_LEN 1024
 
 // --- Types ---
 
@@ -81,12 +79,18 @@ typedef struct HaploValueList {
 // --- Functions ---
 
 HaploValueList *haplo_value_list_push_front(HaploValue value,
-                                              HaploValueList *list);
+                                            HaploValueList *list);
+HaploValueList *haplo_value_list_push_back(HaploValue value,
+                                           HaploValueList *list);
 // Returns the length of the list
 int haplo_value_list_len(HaploValueList *list);
 void haplo_value_list_free(HaploValueList *list);
 void haplo_value_list_print(HaploValueList *list);
 char* haplo_value_type_string(enum HaploValueType type);
-void haplo_value_string(HaploValue value, char buf[HAPLO_VAL_MAX_STRING_LEN]);
+HaploValue haplo_value_deep_copy(HaploValue value);
+void haplo_value_free(HaploValue value);
+// Returns the number of bytes written to buf. At most buf_len bytes
+// will be written.
+int haplo_value_string(HaploValue value, char* buf, int buf_len);
 
 #endif // _HAPLO_VALUE_H_

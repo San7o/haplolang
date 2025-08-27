@@ -63,11 +63,12 @@ void process_line(char* input, ssize_t len)
   interpreter_init(&interpreter);
   Value val = interpreter_interpret(&interpreter, expr);
   
-  char buf[HAPLO_VAL_MAX_STRING_LEN] = {0};
+  char buf[1024] = {0};
   
-  haplo_value_string(val, buf);
+  haplo_value_string(val, buf, 1024);
   printf("%s\n", buf);
 
+  haplo_value_free(val);
   interpreter_clean(&interpreter);
   expr_free(expr);
   return;

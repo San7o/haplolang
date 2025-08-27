@@ -47,45 +47,38 @@ void haplo_interpreter_clean(HaploInterpreter *interpreter)
 
 HaploValue haplo_interpreter_eval_atom(HaploAtom atom)
 {
+  HaploValue new_value = {0};
   switch(atom.type)
   {
   case HAPLO_ATOM_STRING: ;
     char* new_string = (char*) malloc(strlen(atom.string));
     strcpy(new_string, atom.string);
-    return (HaploValue) {
-      .type = HAPLO_VAL_STRING,
-      .string = new_string,
-    };
+    new_value.type = HAPLO_VAL_STRING;
+    new_value.string = new_string;
+    break;
   case HAPLO_ATOM_INTEGER:
-    return (HaploValue) {
-      .type = HAPLO_VAL_INTEGER,
-      .integer = atom.integer,
-    };
+    new_value.type = HAPLO_VAL_INTEGER;
+    new_value.integer = atom.integer;
     break;
   case HAPLO_ATOM_FLOAT:
-    return (HaploValue) {
-      .type = HAPLO_VAL_FLOAT,
-      .floating_point = atom.floating_point,
-    };
+    new_value.type = HAPLO_VAL_FLOAT;
+    new_value.floating_point = atom.floating_point;
     break;
   case HAPLO_ATOM_BOOL:
-    return (HaploValue) {
-      .type = HAPLO_VAL_BOOL,
-      .boolean = atom.boolean,
-    };
+    new_value.type = HAPLO_VAL_BOOL;
+    new_value.boolean = atom.boolean;
+    break;
   case HAPLO_ATOM_SYMBOL: ;
     char* new_symbol = (char*) malloc(strlen(atom.symbol));
     strcpy(new_symbol, atom.symbol);
-    return (HaploValue) {
-      .type = HAPLO_VAL_FUNC,
-      .function = new_symbol,
-    };
+    new_value.type = HAPLO_VAL_FUNC;
+    new_value.function = new_symbol;
+    break;
   default:
-    return (HaploValue) {
-      .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_INVALID_ATOM,
-    };      
+    new_value.type = HAPLO_VAL_ERROR;
+    new_value.error = -HAPLO_ERROR_INTERPRETER_INVALID_ATOM;
   }
+  return new_value;
 }
 
 HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
@@ -132,10 +125,11 @@ HaploValueList *haplo_interpreter_interpret_tail(HaploInterpreter *interpreter,
     haplo_value_list_free(tail);
     return haplo_value_list_push_front(head, NULL);
   }
-  
+
   return haplo_value_list_push_front(head, tail);
 }
 
+// Should not free args here
 HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
                                     HaploValue value,
                                     HaploValueList* args)
@@ -310,15 +304,26 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
     HaploValue val;
     val = args->val;
     
-    char buf[HAPLO_VAL_MAX_STRING_LEN] = {0};
-    haplo_value_string(val, buf);
+    char buf[1024] = {0};
+    haplo_value_string(val, &buf[0], 1024);
     printf("%s\n", buf);
   }
   else if (strcmp(value.function, "list") == 0)
   {
-    // TODO: iterate over the old list and append items to the new list
-    // TODO: update the printing function to correctly print list values
-    printf("TODO\n");
+    HaploValueList* new_list = NULL;
+    HaploValue new_value = {0};
+    HaploValueList* this = args;
+    while (this != NULL)
+    {
+      new_value = haplo_value_deep_copy(this->val);
+      new_list = haplo_value_list_push_front(new_value, new_list);
+      this = this->next;
+    }
+    
+    return (HaploValue) {
+      .type = HAPLO_VAL_LIST,
+      .list = new_list,
+    };
   }
   else {
     return (HaploValue) {

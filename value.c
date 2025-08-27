@@ -28,6 +28,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 HaploValueList *haplo_value_list_push_front(HaploValue value,
                                               HaploValueList *list)
@@ -46,6 +47,25 @@ HaploValueList *haplo_value_list_push_front(HaploValue value,
   return new_list;
 }
 
+// TODO: implement this
+HaploValueList *haplo_value_list_push_back(HaploValue value,
+                                           HaploValueList *list)
+{
+  HaploValueList *new_list =
+    (HaploValueList*) malloc(sizeof(HaploValueList));
+  new_list->val = value;
+    
+  if (list == NULL)
+  {
+    new_list->next = NULL;
+    return new_list;
+  }
+
+  list->next = new_list;
+  new_list->next = list;
+  return new_list;
+}
+
 int haplo_value_list_len(HaploValueList *list)
 {
   if (list == NULL) return 0;
@@ -57,8 +77,8 @@ void haplo_value_list_print(HaploValueList *list)
   if (list == NULL)
     return;
 
-  char buf[HAPLO_VAL_MAX_STRING_LEN] = {0};
-  haplo_value_string(list->val, buf);
+  char buf[1024] = {0};
+  haplo_value_string(list->val, &buf[0], 1024);
   printf("  %s: %s\n", haplo_value_type_string(list->val.type), buf);
   
   haplo_value_list_print(list->next);
@@ -70,23 +90,29 @@ void haplo_value_list_free(HaploValueList *list)
   if (list == NULL)
     return;
 
-  switch(list->val.type)
+  haplo_value_free(list->val);
+
+  haplo_value_list_free(list->next);
+  free(list);
+  return;
+}
+
+void haplo_value_free(HaploValue value)
+{
+  switch(value.type)
   {
   case HAPLO_VAL_STRING:
-    if (list->val.string != NULL) free(list->val.string);
+    if (value.string != NULL) free(value.string);
     break;
   case HAPLO_VAL_FUNC:
-    if (list->val.function != NULL) free(list->val.function);
+    if (value.function != NULL) free(value.function);
     break;
   case HAPLO_VAL_LIST:
-    if (list->val.list != NULL) haplo_value_list_free(list->val.list);
+    if (value.list != NULL) haplo_value_list_free(value.list);
     break;
   default:
     break;
   }
-
-  haplo_value_list_free(list->next);
-  free(list);
   return;
 }
 
@@ -114,34 +140,73 @@ char* haplo_value_type_string(enum HaploValueType type)
   return "HAPLO_VAL_UNKNOWN_VALUE";
 }
 
-void haplo_value_string(HaploValue value, char buf[HAPLO_VAL_MAX_STRING_LEN])
+HaploValue haplo_value_deep_copy(HaploValue value)
 {
+  HaploValue new_value = {0};
   switch(value.type)
   {
   case HAPLO_VAL_INTEGER:
-    sprintf(buf, "%ld", value.integer);
-    break;
+    return value;
   case HAPLO_VAL_FLOAT:
-    sprintf(buf, "%f", value.floating_point);
-    break;
-  case HAPLO_VAL_STRING:
-    sprintf(buf, "\"%s\"", value.string);
+    return value;
+  case HAPLO_VAL_STRING: ;
+    char* new_string = (char*) malloc(strlen(value.string));
+    strcpy(new_string, value.string);
+    new_value.type = HAPLO_VAL_STRING;
+    new_value.string = new_string;
     break;
   case HAPLO_VAL_BOOL:
-    sprintf(buf, "%s", value.boolean ? "true" : "false");
-    break;
-  case HAPLO_VAL_FUNC:
-    sprintf(buf, "%s", value.function);
+    return value;
+  case HAPLO_VAL_FUNC: ;
+    char* new_func = (char*) malloc(strlen(value.function));
+    strcpy(new_func, value.function);
+    new_value.type = HAPLO_VAL_FUNC;
+    new_value.function = new_func;
     break;
   case HAPLO_VAL_LIST:
-    sprintf(buf, "list");
-    break;
+    return value; // TODO: may need to deepcopy list
   case HAPLO_VAL_EMPTY:
-    sprintf(buf, "empty");
-    break;
+    return value;
   case HAPLO_VAL_ERROR:
-    sprintf(buf, "%s", haplo_error_string(value.error));
-    break;
+    return value;
   }
-  return;
+  return new_value;
+}
+
+int haplo_value_string(HaploValue value, char* buf, int buf_len)
+{
+  if (buf_len <= 0) return 0;
+  
+  switch(value.type)
+  {
+  case HAPLO_VAL_INTEGER:
+    return snprintf(buf, buf_len, "%ld", value.integer);
+  case HAPLO_VAL_FLOAT:
+    return snprintf(buf, buf_len, "%f", value.floating_point);
+  case HAPLO_VAL_STRING:
+    return snprintf(buf, buf_len, "\"%s\"", value.string);
+  case HAPLO_VAL_BOOL:
+    return snprintf(buf, buf_len, "%s", value.boolean ? "true" : "false");
+  case HAPLO_VAL_FUNC:
+    return snprintf(buf, buf_len, "%s", value.function);
+  case HAPLO_VAL_LIST: ;
+    HaploValueList *this = value.list;
+    int offset = 0;
+    offset += snprintf(buf, buf_len, "list: ");
+    while (this != NULL)
+    {
+      offset += haplo_value_string(this->val, buf + offset, buf_len - offset);
+      if (this->next != NULL)
+      {
+        offset += snprintf(buf + offset, buf_len - offset, ", ");
+      }
+      this = this->next;
+    }
+    return offset;
+  case HAPLO_VAL_EMPTY:
+    return snprintf(buf, buf_len, "empty");
+  case HAPLO_VAL_ERROR:
+    return snprintf(buf, buf_len, "%s", haplo_error_string(value.error));
+  }
+  return 0;
 }
