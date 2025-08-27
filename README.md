@@ -20,7 +20,7 @@ Everything is implemented in C. The project is composed of:
 
 You can use the interactive interpreter by running the `haplo` cli:
 
-```
+```python
 $ ./haplo
 The Haplolang interpreter by Giovanni Santini
 > # Hello, this is a comment
@@ -32,7 +32,7 @@ The Haplolang interpreter by Giovanni Santini
 
 You can also interpret a file:
 
-```
+```python
 $ ./haplo sample.haplo 
 "Hello, World!"
 ```
@@ -71,7 +71,7 @@ The language is strictly typed. The default value types are `integer`,
 evaluate a value that is not a function, you will get back the same
 value:
 
-```
+```python
 > "Hello World"  # A string
 "Hello World"
 > 123            # An integer
@@ -83,10 +83,10 @@ value:
 Functions are particular names that can be called and will return a
 value. For example, the function `+` takes two integers and returns an
 integer value representing the sum of the two arguments, while the
-function `print` takes a value, the prints it and returns an `empty`
+function `print` takes a value, then prints it and returns an `empty`
 value.
 
-```
+```python
 > + 68.1 0.9
 69.000000
 > print "Nice"
@@ -96,7 +96,7 @@ empy
 
 You nest function calls using s-expressions, like lisp.
 
-```
+```lisp
 $ cat sample2.haplo 
 (print
  (*
@@ -111,7 +111,7 @@ Parenthesys may be omitted, in which case the expression will be
 considered right associative. For example, these are all equal
 expressions:
 
-```
+```lisp
 > + 4 * 2 3
 10
 > ( + 4 ( * 2 3 ) ) )
@@ -122,7 +122,7 @@ expressions:
 
 The grammas is as follows:
 
-```
+```ebnf
 EXPR    ::= EXPR EXPR
           | ( EXPR EXPR )
           | ATOM
