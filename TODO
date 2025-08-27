@@ -1,7 +1,6 @@
   TODO
 =========
 
-- Change the evaluation schema to use ( func . args ), left to right
 - Implement lists and list-functions (like append)
 - Declare variables
 - Declare functions
