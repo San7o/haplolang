@@ -25,7 +25,7 @@
 
 #include "errors.h"
 
-char* error_string(int error)
+char* haplo_error_string(int error)
 {
   switch(-error)
   {
@@ -63,6 +63,10 @@ char* error_string(int error)
     return "ERROR_LEXER_ATOM_STRING_SIZE";
   case HAPLO_ERROR_INTERPRETER_INVALID_TYPE:
     return "ERROR_INTERPRETER_INVALID_TYPE";
+  case HAPLO_ERROR_INTERPRETER_NOT_FUNCTION:
+    return "ERROR_INTERPRETER_NOT_FUNCTION";
+  case HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS:
+    return "ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS";
   }
   return "ERROR_UNKNOWN";
 }

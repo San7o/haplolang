@@ -31,18 +31,19 @@
 // --- Macros ---
 
 #ifdef HAPLO_NO_PREFIX
+  #define AtomType HaploAtomType
   #define Atom HaploAtom
   #define Atom_t HaploAtom_t
   #define atom_free haplo_atom_free
 #endif // HAPLO_NO_PREFIX
 
-#define MAX_ATOM_SIZE 100
-
+#define HAPLO_ATOM_MAX_STRING_LEN 1024
 // --- Types ---
 
 enum HaploAtomType {
   HAPLO_ATOM_STRING = 0,    // "Hello World"
   HAPLO_ATOM_INTEGER,       // 69, -420
+  HAPLO_ATOM_FLOAT,         // 69.420
   HAPLO_ATOM_BOOL,          // true, false
   HAPLO_ATOM_SYMBOL,        // print, +
 };
@@ -52,6 +53,7 @@ struct HaploAtom {
   union {
     char* string;
     long int integer;
+    double floating_point;
     bool boolean;
     char* symbol;
   };
@@ -63,6 +65,6 @@ typedef struct HaploAtom HaploAtom_t;
 
 void haplo_atom_free(HaploAtom_t atom);
 // Writes to buff the string representation of the atom.
-void haplo_atom_string(HaploAtom_t atom, char buf[MAX_ATOM_SIZE]);
+void haplo_atom_string(HaploAtom_t atom, char buf[HAPLO_ATOM_MAX_STRING_LEN]);
 
 #endif // _HAPLO_ATOM_H

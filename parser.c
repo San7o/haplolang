@@ -55,9 +55,9 @@ int haplo_parser_next_token(HaploParser_t *parser)
   parser->last_atom = (HaploAtom_t) {0};
   
   parser->pos += haplo_lexer_trim_left(parser->input + parser->pos,
-                                        parser->input_len - parser->pos,
-                                        &parser->line,
-                                        &parser->column);
+                                       parser->input_len - parser->pos,
+                                       &parser->line,
+                                       &parser->column);
   int token_len = 0;
   int ret = haplo_lexer_next_token(parser->input + parser->pos,
                                    parser->input_len - parser->pos,
@@ -68,9 +68,10 @@ int haplo_parser_next_token(HaploParser_t *parser)
     parser->error = ret;
     return -1;
   }
-  
+
   parser->last_token = ret;
   parser->pos += token_len;
+  parser->column += token_len;
   return 0;
 }
 
@@ -105,7 +106,7 @@ int haplo_parser_dump(HaploParser_t *parser)
   if (parser == NULL) return -HAPLO_ERROR_PARSER_NULL;
   
   fprintf(stderr, "Parser dump: error: %s, pos: %d, line: %d, column: %d, last_token: %s\n",
-          error_string(parser->error), parser->pos, parser->line, parser->column, haplo_lexer_token_string(parser->last_token));
+          haplo_error_string(parser->error), parser->pos, parser->line, parser->column, haplo_lexer_token_string(parser->last_token));
   
   return 0;
 }
@@ -195,6 +196,8 @@ HaploExpr_t *haplo_parser_parse_rec(HaploParser_t *parser, bool is_paranthesized
       }    
       expr->tail = NULL;
       return expr;
+    case HAPLO_LEX_COMMENT:
+      break;
     
     default:
       haplo_expr_free(expr);

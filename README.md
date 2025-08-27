@@ -63,3 +63,82 @@ Clean object files:
 ```
 make clean
 ```
+
+## Quickstart
+
+The language is strictly typed. The default value types are `integer`,
+`float`, `string`, `bool`, `func`, `list`, `empty` and `error`. If you
+evaluate a value that is not a function, you will get back the same
+value:
+
+```
+> "Hello World"  # A string
+"Hello World"
+> 123            # An integer
+123
+> 567.890        # A float
+567.890000
+```
+
+Functions are particular names that can be called and will return a
+value. For example, the function `+` takes two integers and returns an
+integer value representing the sum of the two arguments, while the
+function `print` takes a value, the prints it and returns an `empty`
+value.
+
+```
+> + 68.1 0.9
+69.000000
+> print "Nice"
+"Nice"
+empy
+```
+
+You nest function calls using s-expressions, like lisp.
+
+```
+$ cat sample2.haplo 
+(print
+ (*
+  ((+ 1 2)
+  (- 7 5))))
+$ ./haplo sample2.haplo 
+6
+empty
+```
+
+Parenthesys may be omitted, in which case the expression will be
+considered right associative. For example, these are all equal
+expressions:
+
+```
+> + 4 * 2 3
+10
+> ( + 4 ( * 2 3 ) ) )
+10
+> ( + ( 4 ( * ( 2 ( 3 ) ) ) ) ) )
+10
+```
+
+The grammas is as follows:
+
+```
+EXPR    ::= EXPR EXPR
+          | ( EXPR EXPR )
+          | ATOM
+          |
+ATOM    ::= STRING
+          | INTEGER
+          | FLOAT
+          | BOOL
+          | SYMBOL
+STRING  ::= " * "
+INTEGER ::= [+-][0-9]*
+FLOAT   ::= [+-][0-9].[0-9]
+BOOL    ::= true | false
+SYMBOL  ::= [a-zA-Z0-9!@#$%^&*()_+{}|:"<>?[]\;',./_+]*
+```
+
+The number of new lines, spaces and tabs is ignored. Comments are
+currently not fully supported and should not be used to avoid
+troubles.

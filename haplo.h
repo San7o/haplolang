@@ -33,7 +33,6 @@
 #include "lexer.h"
 #include "parser.h"
 #include "expr.h"
-#include "stack.h"
 #include "interpreter.h"
 
 #endif // _HAPLO_HAPLO_H_

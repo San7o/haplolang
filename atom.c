@@ -44,7 +44,7 @@ void haplo_atom_free(HaploAtom_t atom)
   return;
 }
 
-void haplo_atom_string(HaploAtom_t atom, char buf[MAX_ATOM_SIZE])
+void haplo_atom_string(HaploAtom_t atom, char buf[HAPLO_ATOM_MAX_STRING_LEN])
 {
   switch(atom.type)
   {
@@ -53,6 +53,9 @@ void haplo_atom_string(HaploAtom_t atom, char buf[MAX_ATOM_SIZE])
     break;
   case HAPLO_ATOM_INTEGER:
     sprintf(buf, "%ld", atom.integer);
+    break;
+  case HAPLO_ATOM_FLOAT:
+    sprintf(buf, "%f", atom.floating_point);
     break;
   case HAPLO_ATOM_BOOL:
     sprintf(buf, "%s", atom.boolean ? "true" : "false");

@@ -33,7 +33,7 @@ LIB_OBJ=atom.o\
         lexer.o\
         expr.o\
         interpreter.o\
-        stack.o\
+        value.o\
         errors.o
 TEST_OBJ=tests.o
 CLI_OBJ=haplo.o

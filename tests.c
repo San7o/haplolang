@@ -80,7 +80,6 @@ int test_lexer_1()
   return -1;
 }
 
-
 int test_lexer_2()
 {
   {
@@ -171,6 +170,35 @@ int test_lexer_2()
     {
       printf("Error lexer_next_token on \"%s\", expected atom value %ld, got %ld",
              input, expected_atom, atom.integer);
+      goto test_lexer2_failed;
+    }
+  }
+
+  {
+    char *input = "69.420";
+    int token_len = 0;
+    
+    int expected_token_len = 6;
+    enum Token expected_token = HAPLO_LEX_ATOM;
+    double expected_atom = 69.420;
+    Atom_t atom;
+    int token = lexer_next_token(input, strlen(input), &token_len, &atom);
+    if (token != expected_token)
+    {
+      printf("Error lexer_next_token on \"%s\", expected %d, got %d",
+             input, expected_token, token);
+      goto test_lexer2_failed;
+    }
+    if (token_len != expected_token_len)
+    {
+      printf("Error lexer_next_token on \"%s\", expected token len %d, got %d",
+             input, expected_token_len, token_len);
+      goto test_lexer2_failed;
+    }
+    if (atom.type != HAPLO_ATOM_FLOAT || atom.floating_point != expected_atom)
+    {
+      printf("Error lexer_next_token on \"%s\", expected atom value %f, got %f",
+             input, expected_atom, atom.floating_point);
       goto test_lexer2_failed;
     }
   }
@@ -441,7 +469,6 @@ int test_parser_6()
   return -1;
 }
 
-
 int test_parser_7()
 {
   int err;
@@ -476,10 +503,63 @@ int test_parser_7()
   return -1;
 }
 
+int test_parser_8()
+{
+  int err;
+  char* input = "( * ( ( + 1 2 ) 3 ) )";
+  char* expected_ast = "( * ( ( + ( 1 ( 2 ) ) ) ( 3 ) ) )";
+  
+  Parser_t parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_parser2_failed;
+  }
+
+  if (DEBUG_PRINT)
+  {
+    printf("original:     %s\n", input);
+    printf("expected_ast: %s\n", expected_ast);
+  }
+  
+  Expr_t *expr = parser_parse(&parser);
+  if (expr == NULL)
+  {
+    printf("Error parser_parse returned a null expression\n");
+    goto test_parser2_failed;
+  }
+
+  char str[50] = {0};
+  expr_string(expr, str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("ast:          %s\n", str);
+  }
+
+  if (strcmp(expected_ast, str) != 0)
+  {
+    printf("Error reconstructed expression does not match the expected\n");
+    expr_free(expr);
+    goto test_parser2_failed;
+  }
+
+  expr_free(expr);
+
+  printf("OK Test Parser 8\n");
+  return 0;
+
+ test_parser2_failed:
+  printf("ERR Test Parser 8\n");
+  return -1;
+}
+
 int test_interpreter_1()
 {
   int err;
-  char* input = "( print ( + ( 1 ( 2 ) ) ) )";
+  char* input = "( + ( 1 ( 2 ) ) )";
+  long expected_result = 3;
   
   Parser_t parser = {0};
   err = parser_init(&parser, input, strlen(input));
@@ -515,10 +595,24 @@ int test_interpreter_1()
 
   Interpreter_t interpreter = {0};
   interpreter_init(&interpreter);
-  err = interpreter_interpret(&interpreter, expr);
-  if (err < 0)
+  Value_t val = interpreter_interpret(&interpreter, expr);
+  if (val.type == HAPLO_VAL_ERROR)
   {
-    printf("Error %d in interpreter_interpret\n", err);
+    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+  if (val.type != HAPLO_VAL_INTEGER)
+  {
+    printf("Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
+           value_type_string(val.type));
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+  if (val.integer != expected_result)
+  {
+    printf("Error in interpreter_interpret, expected result %ld, got %ld\n",
+           expected_result, val.integer);
     expr_free(expr);
     goto test_interpreter1_failed;
   }
@@ -531,6 +625,79 @@ int test_interpreter_1()
 
  test_interpreter1_failed:
   printf("ERR Test Interpreter 1\n");
+  return -1;
+}
+
+int test_interpreter_2()
+{
+  int err;
+  char* input = "( * ( 4 ( + ( 1 ( 2 ) ) ) ) )";
+  long expected_result = 12;
+  
+  Parser_t parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_interpreter1_failed;
+  }
+
+  Expr_t *expr = parser_parse(&parser);
+  if (expr == NULL)
+  {
+    printf("Error parser_parse returned a null expression\n");
+    goto test_interpreter1_failed;
+  }
+
+  char str[50] = {0};
+  expr_string(expr, str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("original: %s\n", input);
+    printf("ast:      %s\n", str);
+  }
+
+  if (strcmp(input, str) != 0)
+  {
+    printf("Error reconstructed expression does not match original\n");
+
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+
+  Interpreter_t interpreter = {0};
+  interpreter_init(&interpreter);
+  Value_t val = interpreter_interpret(&interpreter, expr);
+  if (val.type == HAPLO_VAL_ERROR)
+  {
+    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+  if (val.type != HAPLO_VAL_INTEGER)
+  {
+    printf("Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
+           value_type_string(val.type));
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+  if (val.integer != expected_result)
+  {
+    printf("Error in interpreter_interpret, expected result %ld, got %ld\n",
+           expected_result, val.integer);
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+
+  haplo_interpreter_clean(&interpreter);
+  expr_free(expr);
+  
+  printf("OK Test Interpreter 2\n");
+  return 0;
+
+ test_interpreter1_failed:
+  printf("ERR Test Interpreter 2\n");
   return -1;
 }
 
@@ -549,7 +716,9 @@ int main(void)
   out += test_parser_5();
   out += test_parser_6();
   out += test_parser_7();
+  out += test_parser_8();
   out += test_interpreter_1();
+  out += test_interpreter_2();
   
   printf("Tests done.\n");
 

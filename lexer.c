@@ -157,14 +157,24 @@ int haplo_lexer_next_token(char* input, int input_size,
         atom->boolean = false;
         return HAPLO_LEX_ATOM;
       }
-      // Check for INTEGER
       else {
+
+        // Check for INTEGER
         char *endptr = NULL;
         long integer = strtol(input, &endptr, 10);
         if (endptr == input + ret)
         {
           atom->type = HAPLO_ATOM_INTEGER;
           atom->integer = integer;
+          return HAPLO_LEX_ATOM;
+        }
+
+        // Check for FLOAT
+        double floating_point = strtod(input, &endptr);
+        if (endptr == input + ret)
+        {
+          atom->type = HAPLO_ATOM_FLOAT;
+          atom->floating_point = floating_point;
           return HAPLO_LEX_ATOM;
         }
       }

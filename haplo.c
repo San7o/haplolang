@@ -61,14 +61,12 @@ void process_line(char* input, ssize_t len)
 
   Interpreter_t interpreter = {0};
   interpreter_init(&interpreter);
-  err = interpreter_interpret(&interpreter, expr);
-  if (err < 0)
-  {
-    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(err));
-    interpreter_clean(&interpreter);
-    expr_free(expr);
-    return;
-  }
+  Value_t val = interpreter_interpret(&interpreter, expr);
+  
+  char buf[HAPLO_VAL_MAX_STRING_LEN] = {0};
+  
+  haplo_value_string(val, buf);
+  printf("%s\n", buf);
 
   interpreter_clean(&interpreter);
   expr_free(expr);

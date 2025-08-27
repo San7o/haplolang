@@ -54,7 +54,7 @@ void haplo_expr_print_rec(HaploExpr_t *expr)
   
   if (expr->is_atom)
   {
-    char buf[MAX_ATOM_SIZE] = {0};
+    char buf[HAPLO_ATOM_MAX_STRING_LEN] = {0};
     haplo_atom_string(expr->atom, buf);
     printf("%s", buf);
   }
@@ -85,7 +85,7 @@ void haplo_expr_string_rec(HaploExpr_t *expr, char *str)
   
   if (expr->is_atom)
   {
-    char buf[MAX_ATOM_SIZE] = {0};
+    char buf[HAPLO_ATOM_MAX_STRING_LEN] = {0};
     haplo_atom_string(expr->atom, buf);
     strcat(str, buf);
   }

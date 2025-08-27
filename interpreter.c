@@ -34,148 +34,294 @@
 int haplo_interpreter_init(HaploInterpreter_t *interpreter)
 {
   if (interpreter == NULL) return -HAPLO_ERROR_INTERPRETER_NULL;
-  
-  haplo_stack_init(&interpreter->stack);
-  
-  return 0;
-}
-
-int haplo_interpreter_interpret(HaploInterpreter_t *interpreter, HaploExpr_t *expr)
-{
-  if (interpreter == NULL) return -HAPLO_ERROR_INTERPRETER_NULL;
-  if (expr == NULL) return -HAPLO_ERROR_EXPR_NULL;
-  int err;
-  
-  if (expr->is_atom)
-  {
-    switch(expr->atom.type)
-    {
-    case HAPLO_ATOM_STRING: ;
-      HaploAtom_t string_atom = (HaploAtom_t){
-        .type = HAPLO_ATOM_STRING,
-      };
-      string_atom.string = malloc(strlen(expr->atom.string));
-      strcpy(string_atom.string, expr->atom.string);
-      haplo_stack_push(&interpreter->stack, string_atom);
-      break;
-    case HAPLO_ATOM_INTEGER:
-      haplo_stack_push(&interpreter->stack, expr->atom);
-      break;
-    case HAPLO_ATOM_BOOL:
-      haplo_stack_push(&interpreter->stack, expr->atom);
-      break;
-    case HAPLO_ATOM_SYMBOL:
-      if (strcmp(expr->atom.symbol, "+") == 0)
-      {
-        HaploAtom_t a, b;
-        err = haplo_stack_pop(&interpreter->stack, &a);
-        if (err < 0) return err;
-        err = haplo_stack_pop(&interpreter->stack, &b);
-        if (err < 0) return err;
-
-        if (a.type != HAPLO_ATOM_INTEGER || b.type != HAPLO_ATOM_INTEGER)
-          return -HAPLO_ERROR_INTERPRETER_INVALID_TYPE;
-
-        HaploAtom_t sum_atom = (HaploAtom_t){
-          .type = HAPLO_ATOM_INTEGER,
-          .integer = a.integer + b.integer,
-        };
-        haplo_stack_push(&interpreter->stack, sum_atom);
-      }
-      else if (strcmp(expr->atom.symbol, "-") == 0)
-      {
-        HaploAtom_t a, b;
-        err = haplo_stack_pop(&interpreter->stack, &a);
-        if (err < 0) return err;
-        err = haplo_stack_pop(&interpreter->stack, &b);
-        if (err < 0) return err;
-
-        if (a.type != HAPLO_ATOM_INTEGER || b.type != HAPLO_ATOM_INTEGER)
-          return -HAPLO_ERROR_INTERPRETER_INVALID_TYPE;
-
-        HaploAtom_t diff_atom = (HaploAtom_t){
-          .type = HAPLO_ATOM_INTEGER,
-          .integer = a.integer - b.integer,
-        };
-        haplo_stack_push(&interpreter->stack, diff_atom);
-      }
-      else if (strcmp(expr->atom.symbol, "*") == 0)
-      {
-        HaploAtom_t a, b;
-        err = haplo_stack_pop(&interpreter->stack, &a);
-        if (err < 0) return err;
-        err = haplo_stack_pop(&interpreter->stack, &b);
-        if (err < 0) return err;
-
-        if (a.type != HAPLO_ATOM_INTEGER || b.type != HAPLO_ATOM_INTEGER)
-          return -HAPLO_ERROR_INTERPRETER_INVALID_TYPE;
-
-        HaploAtom_t prod_atom = (HaploAtom_t){
-          .type = HAPLO_ATOM_INTEGER,
-          .integer = a.integer * b.integer,
-        };
-        haplo_stack_push(&interpreter->stack, prod_atom);
-      }
-      else if (strcmp(expr->atom.symbol, "/") == 0)
-      {
-        HaploAtom_t a, b;
-        err = haplo_stack_pop(&interpreter->stack, &a);
-        if (err < 0) return err;
-        err = haplo_stack_pop(&interpreter->stack, &b);
-        if (err < 0) return err;
-
-        if (a.type != HAPLO_ATOM_INTEGER || b.type != HAPLO_ATOM_INTEGER)
-          return -HAPLO_ERROR_INTERPRETER_INVALID_TYPE;
-
-        HaploAtom_t quot_atom = (HaploAtom_t){
-          .type = HAPLO_ATOM_INTEGER,
-          .integer = a.integer / b.integer,
-        };
-        haplo_stack_push(&interpreter->stack, quot_atom);
-      }
-      else if (strcmp(expr->atom.symbol, "print") == 0)
-      {
-        HaploAtom_t val;
-        err = haplo_stack_pop(&interpreter->stack, &val);
-        if (err < 0) return err;
-
-        char buf[MAX_ATOM_SIZE] = {0};
-        haplo_atom_string(val, buf);
-        printf("%s\n", buf);
-        
-        haplo_atom_free(val);
-      }
-      else {
-        return -HAPLO_ERROR_INTERPRETER_UNKNOWN_FUNCTION;
-      }
-      break;
-    }
-  } else {
-    if (expr->tail)
-    {
-      err = haplo_interpreter_interpret(interpreter, expr->tail);
-      if (err < 0) return err;
-    }
-    if (expr->head)
-    {
-      err = haplo_interpreter_interpret(interpreter, expr->head);
-      if (err < 0) return err;
-    }
-  }
-
+  // For future use
   return 0;
 }
 
 void haplo_interpreter_clean(HaploInterpreter_t *interpreter)
 {
   if (interpreter == NULL) return;
-  haplo_stack_free(&interpreter->stack);
+  // For future use
   return;
 }
 
-/*
-int haplo_interpreter_interpret(HaploInterpreter_t *interpreter, HaploExpr_t *expr)
+HaploValue_t haplo_interpreter_eval_atom(HaploAtom_t atom)
 {
-  return 0;
+  switch(atom.type)
+  {
+  case HAPLO_ATOM_STRING: ;
+    char* new_string = (char*) malloc(strlen(atom.string));
+    strcpy(new_string, atom.string);
+    return (HaploValue_t) {
+      .type = HAPLO_VAL_STRING,
+      .string = new_string,
+    };
+  case HAPLO_ATOM_INTEGER:
+    return (HaploValue_t) {
+      .type = HAPLO_VAL_INTEGER,
+      .integer = atom.integer,
+    };
+    break;
+  case HAPLO_ATOM_FLOAT:
+    return (HaploValue_t) {
+      .type = HAPLO_VAL_FLOAT,
+      .floating_point = atom.floating_point,
+    };
+    break;
+  case HAPLO_ATOM_BOOL:
+    return (HaploValue_t) {
+      .type = HAPLO_VAL_BOOL,
+      .boolean = atom.boolean,
+    };
+  case HAPLO_ATOM_SYMBOL: ;
+    char* new_symbol = (char*) malloc(strlen(atom.symbol));
+    strcpy(new_symbol, atom.symbol);
+    return (HaploValue_t) {
+      .type = HAPLO_VAL_FUNC,
+      .function = new_symbol,
+    };
+  default:
+    return (HaploValue_t) {
+      .type = HAPLO_VAL_ERROR,
+      .error = -HAPLO_ERROR_INTERPRETER_INVALID_ATOM,
+    };      
+  }
 }
-*/
+
+HaploValue_t haplo_interpreter_interpret(HaploInterpreter_t *interpreter,
+                                         HaploExpr_t *expr)
+{
+  if (interpreter == NULL)
+  {
+    return (HaploValue_t) {
+      .type = HAPLO_VAL_ERROR,
+      .error = -HAPLO_ERROR_INTERPRETER_NULL,
+    };
+  }
+  if (expr == NULL)
+  {
+    return (HaploValue_t) {
+      .type = HAPLO_VAL_EMPTY,
+    };
+  }
+
+  if (expr->is_atom)
+    return haplo_interpreter_eval_atom(expr->atom);
+
+  HaploValue_t func = haplo_interpreter_interpret(interpreter, expr->head);
+  HaploValueList_t *args = haplo_interpreter_interpret_tail(interpreter, expr->tail);
+
+  HaploValue_t val = haplo_interpreter_call(interpreter, func, args);
+
+  haplo_value_list_free(args);
+  return val;
+}
+
+HaploValueList_t *haplo_interpreter_interpret_tail(HaploInterpreter_t *interpreter,
+                                                   HaploExpr_t *expr)
+{
+  if (interpreter == NULL || expr == NULL)
+    return NULL;
+
+  HaploValue_t head = haplo_interpreter_interpret(interpreter, expr->head);
+  HaploValueList_t *tail = haplo_interpreter_interpret_tail(interpreter, expr->tail);
+
+  if (head.type == HAPLO_VAL_FUNC)
+  {
+    head = haplo_interpreter_call(interpreter, head, tail);
+    haplo_value_list_free(tail);
+    return haplo_value_list_push_front(head, NULL);
+  }
+  
+  return haplo_value_list_push_front(head, tail);
+}
+
+HaploValue_t haplo_interpreter_call(HaploInterpreter_t *interpreter,
+                                    HaploValue_t value,
+                                    HaploValueList_t* args)
+{
+  if (interpreter == NULL)
+  {
+    return (HaploValue_t) {
+      .type = HAPLO_VAL_ERROR,
+      .error = -HAPLO_ERROR_INTERPRETER_NULL,
+    };
+  }
+
+  // Useful debug prints
+  /*
+  char buf[HAPLO_VAL_MAX_STRING_LEN] = {0};
+  haplo_value_string(value, buf);
+  printf("Calling value: %s\n", buf);
+
+  printf("With args:\n");
+  haplo_value_list_print(args);
+  */
+
+  // TODO: implement proper function calling infrastructure
+
+  if (value.type != HAPLO_VAL_FUNC)
+  {
+    return value;
+  }
+  
+  if (strcmp(value.function, "+") == 0)
+  {
+    if (haplo_value_list_len(args) != 2)
+    {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      };
+    }
+    
+    HaploValue_t a, b;
+    a = args->val;
+    b = args->next->val;
+
+    if (a.type == HAPLO_VAL_INTEGER || b.type == HAPLO_VAL_INTEGER)
+    {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_INTEGER,
+        .integer = a.integer + b.integer,
+      };
+    } else if (a.type == HAPLO_VAL_FLOAT || b.type == HAPLO_VAL_FLOAT)
+    {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_FLOAT,
+        .floating_point = a.floating_point + b.floating_point,
+      };
+    } else {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+      };
+    }
+  }
+  else if (strcmp(value.function, "-") == 0)
+  {
+    if (haplo_value_list_len(args) != 2)
+    {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      };
+    }
+    
+    HaploValue_t a, b;
+    a = args->val;
+    b = args->next->val;
+
+    if (a.type == HAPLO_VAL_INTEGER || b.type == HAPLO_VAL_INTEGER)
+    {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_INTEGER,
+        .integer = a.integer - b.integer,
+      };
+    } else if (a.type == HAPLO_VAL_FLOAT || b.type == HAPLO_VAL_FLOAT)
+    {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_FLOAT,
+        .floating_point = a.floating_point - b.floating_point,
+      };
+    } else {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+      };
+    }
+  }
+  else if (strcmp(value.function, "*") == 0)
+  {
+    if (haplo_value_list_len(args) != 2)
+    {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      };
+    }
+
+    HaploValue_t a, b;
+    a = args->val;
+    b = args->next->val;
+
+    if (a.type == HAPLO_VAL_INTEGER || b.type == HAPLO_VAL_INTEGER)
+    {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_INTEGER,
+        .integer = a.integer * b.integer,
+      };
+    } else if (a.type == HAPLO_VAL_FLOAT || b.type == HAPLO_VAL_FLOAT)
+    {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_FLOAT,
+        .floating_point = a.floating_point * b.floating_point,
+      };
+    } else {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+      };
+    }
+  }
+  else if (strcmp(value.function, "/") == 0)
+  {
+    if (haplo_value_list_len(args) != 2)
+    {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      };
+    }
+    
+    HaploValue_t a, b;
+    a = args->val;
+    b = args->next->val;
+
+    if (a.type == HAPLO_VAL_INTEGER || b.type == HAPLO_VAL_INTEGER)
+    {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_INTEGER,
+        .integer = a.integer / b.integer,
+      };
+    } else if (a.type == HAPLO_VAL_FLOAT || b.type == HAPLO_VAL_FLOAT)
+    {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_FLOAT,
+        .floating_point = a.floating_point / b.floating_point,
+      };
+    } else {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+      };
+    }
+  }
+  else if (strcmp(value.function, "print") == 0)
+  {
+    if (haplo_value_list_len(args) != 1)
+    {
+      return (HaploValue_t) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      };
+    }
+    
+    HaploValue_t val;
+    val = args->val;
+    
+    char buf[HAPLO_VAL_MAX_STRING_LEN] = {0};
+    haplo_value_string(val, buf);
+    printf("%s\n", buf);
+  }
+  else {
+    return (HaploValue_t) {
+      .type = HAPLO_VAL_ERROR,
+      .error = -HAPLO_ERROR_INTERPRETER_UNKNOWN_FUNCTION,
+    };
+  }
+
+  return (HaploValue_t) {
+    .type = HAPLO_VAL_EMPTY,
+  };
+}

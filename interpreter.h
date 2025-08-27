@@ -27,7 +27,7 @@
 #define _HAPLO_INTERPRETER_H_
 
 #include "expr.h"
-#include "stack.h"
+#include "value.h"
 
 // --- Macros ---
 
@@ -37,12 +37,15 @@
   #define interpreter_init haplo_interpreter_init
   #define interpreter_clean haplo_interpreter_clean
   #define interpreter_interpret haplo_interpreter_interpret
+  #define interpreter_interpret_tail haplo_interpreter_interpret_tail
+  #define interpreter_call haplo_interpreter_call
 #endif // HAPLO_NO_PREFIX
 
 // --- Types ---
 
 struct HaploInterpreter {
-  HaploStack_t stack;
+  // TODO: variables, functions, debug instrumentation
+  int foo;
 };
 
 typedef struct HaploInterpreter HaploInterpreter_t;
@@ -51,6 +54,12 @@ typedef struct HaploInterpreter HaploInterpreter_t;
 
 int haplo_interpreter_init(HaploInterpreter_t *interpreter);
 void haplo_interpreter_clean(HaploInterpreter_t *interpreter);
-int haplo_interpreter_interpret(HaploInterpreter_t *interpreter, HaploExpr_t *expr);
-
+HaploValue_t haplo_interpreter_interpret(HaploInterpreter_t *interpreter,
+                                         HaploExpr_t *expr);
+HaploValueList_t *haplo_interpreter_interpret_tail(HaploInterpreter_t *interpreter,
+                                                  HaploExpr_t *expr);
+HaploValue_t haplo_interpreter_call(HaploInterpreter_t *interpreter,
+                                    HaploValue_t value,
+                                    HaploValueList_t *args);
+  
 #endif // _HAPLO_INTERPRETER_H_
