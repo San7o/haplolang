@@ -33,7 +33,6 @@
 #ifdef HAPLO_NO_PREFIX
   #define AtomType HaploAtomType
   #define Atom HaploAtom
-  #define Atom_t HaploAtom_t
   #define atom_free haplo_atom_free
 #endif // HAPLO_NO_PREFIX
 
@@ -48,7 +47,7 @@ enum HaploAtomType {
   HAPLO_ATOM_SYMBOL,        // print, +
 };
 
-struct HaploAtom {
+typedef struct HaploAtom {
   enum HaploAtomType type;
   union {
     char* string;
@@ -57,14 +56,12 @@ struct HaploAtom {
     bool boolean;
     char* symbol;
   };
-};
-
-typedef struct HaploAtom HaploAtom_t;
+} HaploAtom;
 
 // --- Functios ---
 
-void haplo_atom_free(HaploAtom_t atom);
+void haplo_atom_free(HaploAtom atom);
 // Writes to buff the string representation of the atom.
-void haplo_atom_string(HaploAtom_t atom, char buf[HAPLO_ATOM_MAX_STRING_LEN]);
+void haplo_atom_string(HaploAtom atom, char buf[HAPLO_ATOM_MAX_STRING_LEN]);
 
 #endif // _HAPLO_ATOM_H

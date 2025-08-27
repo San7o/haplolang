@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void haplo_atom_free(HaploAtom_t atom)
+void haplo_atom_free(HaploAtom atom)
 {
   switch(atom.type)
   {
@@ -44,7 +44,7 @@ void haplo_atom_free(HaploAtom_t atom)
   return;
 }
 
-void haplo_atom_string(HaploAtom_t atom, char buf[HAPLO_ATOM_MAX_STRING_LEN])
+void haplo_atom_string(HaploAtom atom, char buf[HAPLO_ATOM_MAX_STRING_LEN])
 {
   switch(atom.type)
   {

@@ -68,6 +68,6 @@ int haplo_lexer_trim_left(char* input, int input_size,
 // ATOM, a new Atom will be allocated and the user will be responsible
 // to free it using haplo_atom_free.
 int haplo_lexer_next_token(char* input, int input_size,
-                           int* token_len, HaploAtom_t *atom);
+                           int* token_len, HaploAtom *atom);
 
 #endif // _HAPLO_LEXER_H_

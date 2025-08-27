@@ -31,7 +31,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-void haplo_expr_free(HaploExpr_t *expr)
+void haplo_expr_free(HaploExpr *expr)
 {
   if (expr == NULL) return;
 
@@ -48,7 +48,7 @@ void haplo_expr_free(HaploExpr_t *expr)
 
 // Printing / Formatting
 
-void haplo_expr_print_rec(HaploExpr_t *expr)
+void haplo_expr_print_rec(HaploExpr *expr)
 {
   if (expr == NULL) return;
   
@@ -72,14 +72,14 @@ void haplo_expr_print_rec(HaploExpr_t *expr)
   return;
 }
 
-void haplo_expr_print(HaploExpr_t *expr)
+void haplo_expr_print(HaploExpr *expr)
 {
   haplo_expr_print_rec(expr);
   printf("\n");
   return;
 }
 
-void haplo_expr_string_rec(HaploExpr_t *expr, char *str)
+void haplo_expr_string_rec(HaploExpr *expr, char *str)
 {
   if (expr == NULL) return;
   
@@ -103,7 +103,7 @@ void haplo_expr_string_rec(HaploExpr_t *expr, char *str)
   return;
 }
 
-void haplo_expr_string(HaploExpr_t *expr, char *str)
+void haplo_expr_string(HaploExpr *expr, char *str)
 {
   haplo_expr_string_rec(expr, str);
   strcat(str, "\0");

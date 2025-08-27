@@ -28,16 +28,16 @@
 
 #include <stdlib.h>
 
-int haplo_parser_init(HaploParser_t *parser, char *input, size_t len)
+int haplo_parser_init(HaploParser *parser, char *input, size_t len)
 {
   if (parser == NULL) return -HAPLO_ERROR_PARSER_NULL;
   if (input == NULL) return -HAPLO_ERROR_PARSER_INPUT_NULL;
   
-  *parser = (HaploParser_t){
+  *parser = (HaploParser){
     .input = input,
     .input_len = len,
     .last_token = HAPLO_LEX_NONE,
-    .last_atom = (HaploAtom_t) {0},
+    .last_atom = (HaploAtom) {0},
     .pos = 0,
     .line = 0,
     .column = 0,
@@ -47,12 +47,12 @@ int haplo_parser_init(HaploParser_t *parser, char *input, size_t len)
   return 0;
 }
 
-int haplo_parser_next_token(HaploParser_t *parser)
+int haplo_parser_next_token(HaploParser *parser)
 {
   if (parser == NULL) return -HAPLO_ERROR_PARSER_NULL;
   parser->error = 0;
   parser->last_token = HAPLO_LEX_NONE;
-  parser->last_atom = (HaploAtom_t) {0};
+  parser->last_atom = (HaploAtom) {0};
   
   parser->pos += haplo_lexer_trim_left(parser->input + parser->pos,
                                        parser->input_len - parser->pos,
@@ -75,12 +75,12 @@ int haplo_parser_next_token(HaploParser_t *parser)
   return 0;
 }
 
-int haplo_parser_peek_next_token(HaploParser_t *parser)
+int haplo_parser_peek_next_token(HaploParser *parser)
 {
   if (parser == NULL) return -HAPLO_ERROR_PARSER_NULL;
   parser->error = 0;
   parser->last_token = HAPLO_LEX_NONE;
-  parser->last_atom = (HaploAtom_t) {0};
+  parser->last_atom = (HaploAtom) {0};
   
   parser->pos += haplo_lexer_trim_left(parser->input + parser->pos,
                                         parser->input_len - parser->pos,
@@ -101,7 +101,7 @@ int haplo_parser_peek_next_token(HaploParser_t *parser)
   return 0;
 }
 
-int haplo_parser_dump(HaploParser_t *parser)
+int haplo_parser_dump(HaploParser *parser)
 {
   if (parser == NULL) return -HAPLO_ERROR_PARSER_NULL;
   
@@ -111,20 +111,20 @@ int haplo_parser_dump(HaploParser_t *parser)
   return 0;
 }
 
-bool haplo_parser_check_error(HaploParser_t *parser)
+bool haplo_parser_check_error(HaploParser *parser)
 {
   if (parser == NULL) return false;
   return (parser->error < 0);
 }
 
 
-HaploExpr_t *haplo_parser_parse_rec(HaploParser_t *parser, bool is_paranthesized)
+HaploExpr *haplo_parser_parse_rec(HaploParser *parser, bool is_paranthesized)
 {
   if (parser == NULL) return NULL;  
   parser->error = 0;
   
-  HaploExpr_t *expr = malloc(sizeof(HaploExpr_t));
-  *expr = (HaploExpr_t){0};
+  HaploExpr *expr = malloc(sizeof(HaploExpr));
+  *expr = (HaploExpr){0};
   
   // First expression
   
@@ -137,8 +137,8 @@ HaploExpr_t *haplo_parser_parse_rec(HaploParser_t *parser, bool is_paranthesized
   switch (parser->last_token)
   {
   case HAPLO_LEX_ATOM:
-    expr->head = malloc(sizeof(HaploExpr_t));
-    *expr->head = (HaploExpr_t){
+    expr->head = malloc(sizeof(HaploExpr));
+    *expr->head = (HaploExpr){
       .is_atom = true,
       .atom = parser->last_atom,
     };
@@ -233,7 +233,7 @@ HaploExpr_t *haplo_parser_parse_rec(HaploParser_t *parser, bool is_paranthesized
   return expr;
 }
 
-HaploExpr_t *haplo_parser_parse(HaploParser_t *parser)
+HaploExpr *haplo_parser_parse(HaploParser *parser)
 {
   if (parser == NULL) return NULL;
   parser->error = 0;

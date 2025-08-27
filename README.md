@@ -4,8 +4,8 @@ I decided it is finally time for me to implement a proper programming
 language in C like a real programmer, so here is `Haplolang`. "Haplo"
 is a Greek word meaning simple, which describes my philosophy in
 implementing the language. Haplolang an s-expression based imperative
-language, greatly inspired by [Scheme](https://www.scheme.org/), and
-my main motivation is purely recreational.
+language, greatly inspired by Lisp, and my main motivation is purely
+recreational.
 
 The current implementation was developed in two sittings: first the
 parser and then the interpreter + cli program. Some functions are
@@ -26,8 +26,10 @@ The Haplolang interpreter by Giovanni Santini
 > # Hello, this is a comment
 > print "Hello, World!"
 "Hello, World!"
+empty
 > print ( + 69 420 )
 489
+empty
 ```
 
 You can also interpret a file:
@@ -35,6 +37,7 @@ You can also interpret a file:
 ```python
 $ ./haplo sample.haplo 
 "Hello, World!"
+empty
 ```
 
 ## Building
@@ -42,20 +45,20 @@ $ ./haplo sample.haplo
 Build the library:
 
 ```bash
-make lib
-```
-
-Build the library and the cli interpreter, you need to have
-[readline](https://savannah.gnu.org/git/?group=readline) installed:
-
-```
-make cli
+make
 ```
 
 Build and run the tests:
 
 ```
 make check
+```
+
+Build the cli interpreter, you need to have
+[readline](https://savannah.gnu.org/git/?group=readline) installed:
+
+```
+make cli
 ```
 
 Clean object files:
@@ -80,11 +83,11 @@ value:
 567.890000
 ```
 
-Functions are particular names that can be called and will return a
-value. For example, the function `+` takes two integers and returns an
-integer value representing the sum of the two arguments, while the
-function `print` takes a value, then prints it and returns an `empty`
-value.
+Functions are particular names that can be called with some arguments
+and will return a value. For example, the function `+` takes two
+integers and returns an integer value representing the sum of the two
+arguments, while the function `print` takes a value, then prints it
+and returns an `empty` value.
 
 ```python
 > + 68.1 0.9

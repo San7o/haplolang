@@ -31,76 +31,76 @@
 #include <string.h>
 #include <stdlib.h>
 
-int haplo_interpreter_init(HaploInterpreter_t *interpreter)
+int haplo_interpreter_init(HaploInterpreter *interpreter)
 {
   if (interpreter == NULL) return -HAPLO_ERROR_INTERPRETER_NULL;
   // For future use
   return 0;
 }
 
-void haplo_interpreter_clean(HaploInterpreter_t *interpreter)
+void haplo_interpreter_clean(HaploInterpreter *interpreter)
 {
   if (interpreter == NULL) return;
   // For future use
   return;
 }
 
-HaploValue_t haplo_interpreter_eval_atom(HaploAtom_t atom)
+HaploValue haplo_interpreter_eval_atom(HaploAtom atom)
 {
   switch(atom.type)
   {
   case HAPLO_ATOM_STRING: ;
     char* new_string = (char*) malloc(strlen(atom.string));
     strcpy(new_string, atom.string);
-    return (HaploValue_t) {
+    return (HaploValue) {
       .type = HAPLO_VAL_STRING,
       .string = new_string,
     };
   case HAPLO_ATOM_INTEGER:
-    return (HaploValue_t) {
+    return (HaploValue) {
       .type = HAPLO_VAL_INTEGER,
       .integer = atom.integer,
     };
     break;
   case HAPLO_ATOM_FLOAT:
-    return (HaploValue_t) {
+    return (HaploValue) {
       .type = HAPLO_VAL_FLOAT,
       .floating_point = atom.floating_point,
     };
     break;
   case HAPLO_ATOM_BOOL:
-    return (HaploValue_t) {
+    return (HaploValue) {
       .type = HAPLO_VAL_BOOL,
       .boolean = atom.boolean,
     };
   case HAPLO_ATOM_SYMBOL: ;
     char* new_symbol = (char*) malloc(strlen(atom.symbol));
     strcpy(new_symbol, atom.symbol);
-    return (HaploValue_t) {
+    return (HaploValue) {
       .type = HAPLO_VAL_FUNC,
       .function = new_symbol,
     };
   default:
-    return (HaploValue_t) {
+    return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
       .error = -HAPLO_ERROR_INTERPRETER_INVALID_ATOM,
     };      
   }
 }
 
-HaploValue_t haplo_interpreter_interpret(HaploInterpreter_t *interpreter,
-                                         HaploExpr_t *expr)
+HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
+                                         HaploExpr *expr)
 {
   if (interpreter == NULL)
   {
-    return (HaploValue_t) {
+    return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
       .error = -HAPLO_ERROR_INTERPRETER_NULL,
     };
   }
   if (expr == NULL)
   {
-    return (HaploValue_t) {
+    return (HaploValue) {
       .type = HAPLO_VAL_EMPTY,
     };
   }
@@ -108,23 +108,23 @@ HaploValue_t haplo_interpreter_interpret(HaploInterpreter_t *interpreter,
   if (expr->is_atom)
     return haplo_interpreter_eval_atom(expr->atom);
 
-  HaploValue_t func = haplo_interpreter_interpret(interpreter, expr->head);
-  HaploValueList_t *args = haplo_interpreter_interpret_tail(interpreter, expr->tail);
+  HaploValue func = haplo_interpreter_interpret(interpreter, expr->head);
+  HaploValueList *args = haplo_interpreter_interpret_tail(interpreter, expr->tail);
 
-  HaploValue_t val = haplo_interpreter_call(interpreter, func, args);
+  HaploValue val = haplo_interpreter_call(interpreter, func, args);
 
   haplo_value_list_free(args);
   return val;
 }
 
-HaploValueList_t *haplo_interpreter_interpret_tail(HaploInterpreter_t *interpreter,
-                                                   HaploExpr_t *expr)
+HaploValueList *haplo_interpreter_interpret_tail(HaploInterpreter *interpreter,
+                                                   HaploExpr *expr)
 {
   if (interpreter == NULL || expr == NULL)
     return NULL;
 
-  HaploValue_t head = haplo_interpreter_interpret(interpreter, expr->head);
-  HaploValueList_t *tail = haplo_interpreter_interpret_tail(interpreter, expr->tail);
+  HaploValue head = haplo_interpreter_interpret(interpreter, expr->head);
+  HaploValueList *tail = haplo_interpreter_interpret_tail(interpreter, expr->tail);
 
   if (head.type == HAPLO_VAL_FUNC)
   {
@@ -136,13 +136,13 @@ HaploValueList_t *haplo_interpreter_interpret_tail(HaploInterpreter_t *interpret
   return haplo_value_list_push_front(head, tail);
 }
 
-HaploValue_t haplo_interpreter_call(HaploInterpreter_t *interpreter,
-                                    HaploValue_t value,
-                                    HaploValueList_t* args)
+HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
+                                    HaploValue value,
+                                    HaploValueList* args)
 {
   if (interpreter == NULL)
   {
-    return (HaploValue_t) {
+    return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
       .error = -HAPLO_ERROR_INTERPRETER_NULL,
     };
@@ -169,30 +169,30 @@ HaploValue_t haplo_interpreter_call(HaploInterpreter_t *interpreter,
   {
     if (haplo_value_list_len(args) != 2)
     {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
         .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
       };
     }
     
-    HaploValue_t a, b;
+    HaploValue a, b;
     a = args->val;
     b = args->next->val;
 
     if (a.type == HAPLO_VAL_INTEGER || b.type == HAPLO_VAL_INTEGER)
     {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_INTEGER,
         .integer = a.integer + b.integer,
       };
     } else if (a.type == HAPLO_VAL_FLOAT || b.type == HAPLO_VAL_FLOAT)
     {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_FLOAT,
         .floating_point = a.floating_point + b.floating_point,
       };
     } else {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
         .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
       };
@@ -202,30 +202,30 @@ HaploValue_t haplo_interpreter_call(HaploInterpreter_t *interpreter,
   {
     if (haplo_value_list_len(args) != 2)
     {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
         .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
       };
     }
     
-    HaploValue_t a, b;
+    HaploValue a, b;
     a = args->val;
     b = args->next->val;
 
     if (a.type == HAPLO_VAL_INTEGER || b.type == HAPLO_VAL_INTEGER)
     {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_INTEGER,
         .integer = a.integer - b.integer,
       };
     } else if (a.type == HAPLO_VAL_FLOAT || b.type == HAPLO_VAL_FLOAT)
     {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_FLOAT,
         .floating_point = a.floating_point - b.floating_point,
       };
     } else {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
         .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
       };
@@ -235,30 +235,30 @@ HaploValue_t haplo_interpreter_call(HaploInterpreter_t *interpreter,
   {
     if (haplo_value_list_len(args) != 2)
     {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
         .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
       };
     }
 
-    HaploValue_t a, b;
+    HaploValue a, b;
     a = args->val;
     b = args->next->val;
 
     if (a.type == HAPLO_VAL_INTEGER || b.type == HAPLO_VAL_INTEGER)
     {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_INTEGER,
         .integer = a.integer * b.integer,
       };
     } else if (a.type == HAPLO_VAL_FLOAT || b.type == HAPLO_VAL_FLOAT)
     {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_FLOAT,
         .floating_point = a.floating_point * b.floating_point,
       };
     } else {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
         .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
       };
@@ -268,30 +268,30 @@ HaploValue_t haplo_interpreter_call(HaploInterpreter_t *interpreter,
   {
     if (haplo_value_list_len(args) != 2)
     {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
         .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
       };
     }
     
-    HaploValue_t a, b;
+    HaploValue a, b;
     a = args->val;
     b = args->next->val;
 
     if (a.type == HAPLO_VAL_INTEGER || b.type == HAPLO_VAL_INTEGER)
     {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_INTEGER,
         .integer = a.integer / b.integer,
       };
     } else if (a.type == HAPLO_VAL_FLOAT || b.type == HAPLO_VAL_FLOAT)
     {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_FLOAT,
         .floating_point = a.floating_point / b.floating_point,
       };
     } else {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
         .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
       };
@@ -301,27 +301,33 @@ HaploValue_t haplo_interpreter_call(HaploInterpreter_t *interpreter,
   {
     if (haplo_value_list_len(args) != 1)
     {
-      return (HaploValue_t) {
+      return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
         .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
       };
     }
     
-    HaploValue_t val;
+    HaploValue val;
     val = args->val;
     
     char buf[HAPLO_VAL_MAX_STRING_LEN] = {0};
     haplo_value_string(val, buf);
     printf("%s\n", buf);
   }
+  else if (strcmp(value.function, "list") == 0)
+  {
+    // TODO: iterate over the old list and append items to the new list
+    // TODO: update the printing function to correctly print list values
+    printf("TODO\n");
+  }
   else {
-    return (HaploValue_t) {
+    return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
       .error = -HAPLO_ERROR_INTERPRETER_UNKNOWN_FUNCTION,
     };
   }
 
-  return (HaploValue_t) {
+  return (HaploValue) {
     .type = HAPLO_VAL_EMPTY,
   };
 }

@@ -109,7 +109,7 @@ int haplo_lexer_trim_left(char* input, int input_size,
 }
 
 int haplo_lexer_next_token(char* input, int input_size,
-                           int *token_len, HaploAtom_t *atom)
+                           int *token_len, HaploAtom *atom)
 {
   if (input == NULL) return -HAPLO_ERROR_LEXER_INPUT_NULL;
   if (input_size == 0) return -HAPLO_ERROR_LEXER_END_OF_INPUT;

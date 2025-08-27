@@ -41,7 +41,7 @@
 void process_line(char* input, ssize_t len)
 {
   int err;
-  Parser_t parser = {0};
+  Parser parser = {0};
   err = parser_init(&parser, input, len);
   if (err < 0)
   {
@@ -49,7 +49,7 @@ void process_line(char* input, ssize_t len)
     return;
   }
 
-  Expr_t *expr = parser_parse(&parser);
+  Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
     if (parser.error != 0)
@@ -59,9 +59,9 @@ void process_line(char* input, ssize_t len)
     return;
   }
 
-  Interpreter_t interpreter = {0};
+  Interpreter interpreter = {0};
   interpreter_init(&interpreter);
-  Value_t val = interpreter_interpret(&interpreter, expr);
+  Value val = interpreter_interpret(&interpreter, expr);
   
   char buf[HAPLO_VAL_MAX_STRING_LEN] = {0};
   

@@ -35,7 +35,6 @@
 #ifdef HAPLO_NO_PREFIX
   #define Atom HaploAtom
   #define Expr HaploExpr
-  #define Expr_t HaploExpr_t
   #define expr_free haplo_expr_free
   #define expr_print haplo_expr_print
   #define expr_string haplo_expr_string
@@ -43,23 +42,21 @@
 
 // --- Types ---
 
-struct HaploExpr {
+typedef struct HaploExpr {
   bool is_atom;
   union {
-    HaploAtom_t atom;
+    HaploAtom atom;
     struct {
       struct HaploExpr* head;
       struct HaploExpr* tail;
     };
   };
-};
-
-typedef struct HaploExpr HaploExpr_t;
+} HaploExpr;
 
 // --- Functions ---
 
-void haplo_expr_free(HaploExpr_t *expr);
-void haplo_expr_print(HaploExpr_t *expr);
-void haplo_expr_string(HaploExpr_t *expr, char *str);
+void haplo_expr_free(HaploExpr *expr);
+void haplo_expr_print(HaploExpr *expr);
+void haplo_expr_string(HaploExpr *expr, char *str);
 
 #endif // _HAPLO_EXPR_H_

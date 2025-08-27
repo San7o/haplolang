@@ -59,9 +59,8 @@ enum HaploValueType {
 };
 
 struct HaploValueList;
-typedef struct HaploValueList HaploValueList_t;
 
-struct HaploValue {
+typedef struct HaploValue {
   enum HaploValueType type;
   union {
     long integer;
@@ -69,27 +68,25 @@ struct HaploValue {
     char* string;
     bool boolean;
     char* function;
-    HaploValueList_t *list;
+    struct HaploValueList *list;
     int error;
   };
-};
+} HaploValue;
 
-typedef struct HaploValue HaploValue_t;
-
-struct HaploValueList {
+typedef struct HaploValueList {
   struct HaploValueList *next;
-  HaploValue_t val;
-};
+  HaploValue val;
+} HaploValueList;
 
 // --- Functions ---
 
-HaploValueList_t *haplo_value_list_push_front(HaploValue_t value,
-                                              HaploValueList_t *list);
+HaploValueList *haplo_value_list_push_front(HaploValue value,
+                                              HaploValueList *list);
 // Returns the length of the list
-int haplo_value_list_len(HaploValueList_t *list);
-void haplo_value_list_free(HaploValueList_t *list);
-void haplo_value_list_print(HaploValueList_t *list);
+int haplo_value_list_len(HaploValueList *list);
+void haplo_value_list_free(HaploValueList *list);
+void haplo_value_list_print(HaploValueList *list);
 char* haplo_value_type_string(enum HaploValueType type);
-void haplo_value_string(HaploValue_t value, char buf[HAPLO_VAL_MAX_STRING_LEN]);
+void haplo_value_string(HaploValue value, char buf[HAPLO_VAL_MAX_STRING_LEN]);
 
 #endif // _HAPLO_VALUE_H_

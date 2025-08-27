@@ -29,11 +29,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-HaploValueList_t *haplo_value_list_push_front(HaploValue_t value,
-                                              HaploValueList_t *list)
+HaploValueList *haplo_value_list_push_front(HaploValue value,
+                                              HaploValueList *list)
 {
-  HaploValueList_t *new_list =
-    (HaploValueList_t*) malloc(sizeof(HaploValueList_t));
+  HaploValueList *new_list =
+    (HaploValueList*) malloc(sizeof(HaploValueList));
   new_list->val = value;
     
   if (list == NULL)
@@ -46,13 +46,13 @@ HaploValueList_t *haplo_value_list_push_front(HaploValue_t value,
   return new_list;
 }
 
-int haplo_value_list_len(HaploValueList_t *list)
+int haplo_value_list_len(HaploValueList *list)
 {
   if (list == NULL) return 0;
   return haplo_value_list_len(list->next) + 1;
 }
 
-void haplo_value_list_print(HaploValueList_t *list)
+void haplo_value_list_print(HaploValueList *list)
 {
   if (list == NULL)
     return;
@@ -65,7 +65,7 @@ void haplo_value_list_print(HaploValueList_t *list)
   return;
 }
 
-void haplo_value_list_free(HaploValueList_t *list)
+void haplo_value_list_free(HaploValueList *list)
 {
   if (list == NULL)
     return;
@@ -114,7 +114,7 @@ char* haplo_value_type_string(enum HaploValueType type)
   return "HAPLO_VAL_UNKNOWN_VALUE";
 }
 
-void haplo_value_string(HaploValue_t value, char buf[HAPLO_VAL_MAX_STRING_LEN])
+void haplo_value_string(HaploValue value, char buf[HAPLO_VAL_MAX_STRING_LEN])
 {
   switch(value.type)
   {

@@ -152,7 +152,7 @@ int test_lexer_2()
     int expected_token_len = 3;
     enum Token expected_token = HAPLO_LEX_ATOM;
     long int expected_atom = 123;
-    Atom_t atom;
+    Atom atom;
     int token = lexer_next_token(input, strlen(input), &token_len, &atom);
     if (token != expected_token)
     {
@@ -181,7 +181,7 @@ int test_lexer_2()
     int expected_token_len = 6;
     enum Token expected_token = HAPLO_LEX_ATOM;
     double expected_atom = 69.420;
-    Atom_t atom;
+    Atom atom;
     int token = lexer_next_token(input, strlen(input), &token_len, &atom);
     if (token != expected_token)
     {
@@ -216,7 +216,7 @@ int test_parser_1()
   int err;
   char* input = "( c ( a ( b ) ) )";
   
-  Parser_t parser = {0};
+  Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
@@ -224,7 +224,7 @@ int test_parser_1()
     goto test_parser1_failed;
   }
 
-  Expr_t *expr = parser_parse(&parser);
+  Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
     printf("Error parser_parse returned a null expression\n");
@@ -262,7 +262,7 @@ int test_parser_2()
   int err;
   char* input = "( + ( 1 ( * ( 2 ( 3 ) ) ) ) )";
   
-  Parser_t parser = {0};
+  Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
@@ -270,7 +270,7 @@ int test_parser_2()
     goto test_parser2_failed;
   }
 
-  Expr_t *expr = parser_parse(&parser);
+  Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
     printf("Error parser_parse returned a null expression\n");
@@ -313,7 +313,7 @@ int test_parser_3()
     printf("malformed expression: %s\n", input);
   }
   
-  Parser_t parser = {0};
+  Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
@@ -321,7 +321,7 @@ int test_parser_3()
     goto test_parser3_failed;
   }
 
-  Expr_t *expr = parser_parse(&parser);
+  Expr *expr = parser_parse(&parser);
   if (expr != NULL || parser.error == 0)
   {
     printf("Error parser_parse should have returned an error\n");
@@ -342,7 +342,7 @@ int test_parser_4()
   char* input = "( + 2 3 )";
   char* expected_ast = "( + ( 2 ( 3 ) ) )";
 
-  Parser_t parser = {0};
+  Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
@@ -355,7 +355,7 @@ int test_parser_4()
     printf("original:     %s\n", input);
   }
   
-  Expr_t *expr = parser_parse(&parser);  
+  Expr *expr = parser_parse(&parser);  
   if (expr == NULL)
   {
     printf("Error parser_parse returned a null expression\n");
@@ -393,7 +393,7 @@ int test_parser_5()
   int err;
   char* input = "( print \"Hello, World! )";
 
-  Parser_t parser = {0};
+  Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
@@ -406,7 +406,7 @@ int test_parser_5()
     printf("original:     %s\n", input);
   }
   
-  Expr_t *expr = parser_parse(&parser);  
+  Expr *expr = parser_parse(&parser);  
   if (expr != NULL || parser.error != -HAPLO_ERROR_PARSER_STRING_LITERAL_END)
   {
     printf("Error parser_parse returned the wrong error\n");
@@ -427,7 +427,7 @@ int test_parser_6()
   char* input = "print \"Hello, World!\"";
   char* expected_ast = "( print ( \"Hello, World!\" ) )";
   
-  Parser_t parser = {0};
+  Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
@@ -435,7 +435,7 @@ int test_parser_6()
     goto test_parser2_failed;
   }
 
-  Expr_t *expr = parser_parse(&parser);
+  Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
     printf("Error parser_parse returned a null expression\n");
@@ -479,7 +479,7 @@ int test_parser_7()
     printf("original:     %s\n", input);
   }
   
-  Parser_t parser = {0};
+  Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
@@ -487,7 +487,7 @@ int test_parser_7()
     goto test_parser2_failed;
   }
   
-  Expr_t *expr = parser_parse(&parser);
+  Expr *expr = parser_parse(&parser);
   if (expr != NULL)
   {
     printf("Error parser_parse should return null\n");
@@ -509,7 +509,7 @@ int test_parser_8()
   char* input = "( * ( ( + 1 2 ) 3 ) )";
   char* expected_ast = "( * ( ( + ( 1 ( 2 ) ) ) ( 3 ) ) )";
   
-  Parser_t parser = {0};
+  Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
@@ -523,7 +523,7 @@ int test_parser_8()
     printf("expected_ast: %s\n", expected_ast);
   }
   
-  Expr_t *expr = parser_parse(&parser);
+  Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
     printf("Error parser_parse returned a null expression\n");
@@ -561,7 +561,7 @@ int test_interpreter_1()
   char* input = "( + ( 1 ( 2 ) ) )";
   long expected_result = 3;
   
-  Parser_t parser = {0};
+  Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
@@ -569,7 +569,7 @@ int test_interpreter_1()
     goto test_interpreter1_failed;
   }
 
-  Expr_t *expr = parser_parse(&parser);
+  Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
     printf("Error parser_parse returned a null expression\n");
@@ -593,9 +593,9 @@ int test_interpreter_1()
     goto test_interpreter1_failed;
   }
 
-  Interpreter_t interpreter = {0};
+  Interpreter interpreter = {0};
   interpreter_init(&interpreter);
-  Value_t val = interpreter_interpret(&interpreter, expr);
+  Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
     printf("Error %s in interpreter_interpret\n", error_string(val.error));
@@ -634,7 +634,7 @@ int test_interpreter_2()
   char* input = "( * ( 4 ( + ( 1 ( 2 ) ) ) ) )";
   long expected_result = 12;
   
-  Parser_t parser = {0};
+  Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
@@ -642,7 +642,7 @@ int test_interpreter_2()
     goto test_interpreter1_failed;
   }
 
-  Expr_t *expr = parser_parse(&parser);
+  Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
     printf("Error parser_parse returned a null expression\n");
@@ -666,9 +666,9 @@ int test_interpreter_2()
     goto test_interpreter1_failed;
   }
 
-  Interpreter_t interpreter = {0};
+  Interpreter interpreter = {0};
   interpreter_init(&interpreter);
-  Value_t val = interpreter_interpret(&interpreter, expr);
+  Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
     printf("Error %s in interpreter_interpret\n", error_string(val.error));
