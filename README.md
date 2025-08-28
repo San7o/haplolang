@@ -15,12 +15,12 @@ functions or variables yet.
 Everything is implemented in C. The project is composed of:
 
 - `libhaplo`: the library containing all the logic
-- `haplo`: cli-based interpreter
+- `haplo`: cli-based REPL interpreter
 - `haplo_tests`: unit tests
 
 You can use the interactive interpreter by running the `haplo` cli:
 
-```python
+```
 $ ./haplo
 The Haplolang interpreter by Giovanni Santini
 > # Hello, this is a comment
@@ -34,7 +34,7 @@ empty
 
 You can also interpret a file:
 
-```python
+```
 $ ./haplo samples/sample1.haplo 
 "Hello, World!"
 empty
@@ -158,7 +158,7 @@ list: 4, 3, 2, 1
 list: 2, 1
 ```
 
-Note that the element are in reverse order from the order we
+Note that the elements are in reverse order from the order we
 supplied. This happens because the parser is right associative and the
 first element is the deepest expression. This may be changed in the
 future.
