@@ -1,6 +1,6 @@
   TODO
 =========
 
-- Implement lists and list-functions (like append)
-- Declare variables
-- Declare functions
+- Implement proper function call infrastructure
+- Declare variables and functions
+- Add control flow

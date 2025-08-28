@@ -2,7 +2,7 @@
 
 HAPLO_EXECUTABLE=./haplo
 TMP_FILE=.haplo_tests_e2e_tmp
-SAMPLES="sample1.haplo sample2.haplo"
+SAMPLES="sample1.haplo sample2.haplo sample3.haplo"
 SAMPLES_DIR=./samples
 OK="true"
 

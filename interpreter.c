@@ -151,13 +151,18 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
   haplo_value_list_print(args);
   */
 
-  // TODO: implement proper function calling infrastructure
+  // TODO: implement proper function calling infrastructure and
+  // standard library
 
   if (value.type != HAPLO_VAL_FUNC)
   {
     return value;
   }
-  
+
+  // + INTEGER INTEGER
+  // Returns: INTEGER
+  // + FLOAT FLOAT
+  // Returns FLOAT
   if (strcmp(value.function, "+") == 0)
   {
     if (haplo_value_list_len(args) != 2)
@@ -197,6 +202,10 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
       };
     }
   }
+  // - INTEGER INTEGER
+  // Returns: INTEGER
+  // - FLOAT FLOAT
+  // Returns: FLOAT
   else if (strcmp(value.function, "-") == 0)
   {
     if (haplo_value_list_len(args) != 2)
@@ -236,6 +245,10 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
       };
     }
   }
+  // * INTEGER INTEGER
+  // Returns INTEGER
+  // * FLOAT FLOAT
+  // Returns FLOAT
   else if (strcmp(value.function, "*") == 0)
   {
     if (haplo_value_list_len(args) != 2)
@@ -275,6 +288,10 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
       };
     }
   }
+  // / INTEGER INTEGER
+  // Returns INTEGER
+  // / FLOAT FLOAT
+  // Returns FLOAT
   else if (strcmp(value.function, "/") == 0)
   {
     if (haplo_value_list_len(args) != 2)
@@ -314,6 +331,107 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
       };
     }
   }
+  // append VALUE LIST
+  // Returns: LIST
+  else if (strcmp(value.function, "append") == 0)
+  {
+    if (haplo_value_list_len(args) != 2)
+    {
+      return (HaploValue) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      };
+    }
+    
+    HaploValue val, list;
+    val = args->val;
+    list = args->next->val;
+
+    if (val.type != HAPLO_VAL_LIST && list.type == HAPLO_VAL_LIST)
+    {
+      HaploValueList *new_list = haplo_value_list_deep_copy(list.list);
+      HaploValue new_val = haplo_value_deep_copy(val);
+      return (HaploValue) {
+        .type = HAPLO_VAL_LIST,
+        .list = haplo_value_list_push_front(new_val, new_list),
+      };
+    } else if (list.type == HAPLO_VAL_ERROR)
+    {
+      return list;
+    } else {
+      return (HaploValue) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+      };
+    }
+  }
+  // head LIST
+  // returns: VALUE
+  else if (strcmp(value.function, "head") == 0)
+  {
+    if (haplo_value_list_len(args) != 1)
+    {
+      return (HaploValue) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      };
+    }
+    
+    HaploValue val;
+    val = args->val;
+
+    if (val.type == HAPLO_VAL_LIST)
+    {
+      HaploValue head, new_head;
+      head = val.list->val;
+      new_head = haplo_value_deep_copy(head);
+      return new_head;
+    } else if (val.type == HAPLO_VAL_ERROR)
+    {
+      return val;
+    } else {
+      return (HaploValue) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+      };
+    }
+  }
+  // tail LIST
+  // Returns: LIST
+  else if (strcmp(value.function, "tail") == 0)
+  {
+    if (haplo_value_list_len(args) != 1)
+    {
+      return (HaploValue) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      };
+    }
+    
+    HaploValue val;
+    val = args->val;
+
+    if (val.type == HAPLO_VAL_LIST)
+    {
+      HaploValueList *list, *new_list;
+      list = val.list->next;
+      new_list = haplo_value_list_deep_copy(list);
+      return (HaploValue) {
+        .type = HAPLO_VAL_LIST,
+        .list = new_list,
+      };
+    } else if (val.type == HAPLO_VAL_ERROR)
+    {
+      return val;
+    } else {
+      return (HaploValue) {
+        .type = HAPLO_VAL_ERROR,
+        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+      };
+    }
+  }
+  // print *
+  // Returns: EMPTY
   else if (strcmp(value.function, "print") == 0)
   {
     if (haplo_value_list_len(args) != 1)
@@ -331,6 +449,8 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
     haplo_value_string(val, &buf[0], 1024);
     printf("%s\n", buf);
   }
+  // list VALUE ...
+  // Returns: LIST
   else if (strcmp(value.function, "list") == 0)
   {
     HaploValueList* new_list = NULL;

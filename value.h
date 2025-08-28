@@ -38,6 +38,7 @@
   #define value_list_len haplo_value_list_len
   #define value_list_print haplo_value_list_print
   #define value_list_free haplo_value_list_free
+  #define value_list_deep_copy haplo_value_list_deep_copy
   #define value_free haplo_value_free
   #define value_deep_copy haplo_value_deep_copy
   #define value_type_string haplo_value_type_string
@@ -86,7 +87,10 @@ HaploValueList *haplo_value_list_push_back(HaploValue value,
 int haplo_value_list_len(HaploValueList *list);
 void haplo_value_list_free(HaploValueList *list);
 void haplo_value_list_print(HaploValueList *list);
+// Returns a deep copy of the argument list
+HaploValueList *haplo_value_list_deep_copy(HaploValueList *list);
 char* haplo_value_type_string(enum HaploValueType type);
+// Returns a deep copy of the argument value
 HaploValue haplo_value_deep_copy(HaploValue value);
 void haplo_value_free(HaploValue value);
 // Returns the number of bytes written to buf. At most buf_len bytes

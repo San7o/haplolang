@@ -85,6 +85,16 @@ void haplo_value_list_print(HaploValueList *list)
   return;
 }
 
+HaploValueList *haplo_value_list_deep_copy(HaploValueList *list)
+{
+  if (list == NULL) return NULL;
+
+  HaploValueList *new_list = malloc(sizeof(HaploValueList));
+  new_list->val = haplo_value_deep_copy(list->val);
+  new_list->next = haplo_value_list_deep_copy(list->next);
+  return new_list;
+}
+
 void haplo_value_list_free(HaploValueList *list)
 {
   if (list == NULL)

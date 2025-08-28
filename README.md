@@ -144,6 +144,25 @@ expressions:
 10
 ```
 
+The only data structure currenly present in the standard library is
+the list, and you can do the usual list operations:
+
+```lisp
+> ( list 1 2 3 )
+list: 3, 2, 1
+> ( append 4 ( list 1 2 3 ) )
+list: 4, 3, 2, 1
+> ( head ( list 1 2 3 ) )
+3
+> ( tail ( list 1 2 3 ) )
+list: 2, 1
+```
+
+Note that the element are in reverse order from the order we
+supplied. This happens because the parser is right associative and the
+first element is the deepest expression. This may be changed in the
+future.
+
 The grammas is as follows:
 
 ```ebnf
