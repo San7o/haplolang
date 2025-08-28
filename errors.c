@@ -30,7 +30,7 @@ char* haplo_error_string(int error)
   switch(-error)
   {
   case HAPLO_ERROR_LEXER_END_OF_INPUT:
-    return "ERROR_PARSER_END_OF_INPUT";
+    return "ERROR_LEXER_END_OF_INPUT";
   case HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED:
     return "ERROR_PARSER_TOKEN_UNRECOGNIZED";
   case HAPLO_ERROR_MALFORMED_PARENTHESIS:

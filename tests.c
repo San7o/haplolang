@@ -215,6 +215,7 @@ int test_parser_1()
 {
   int err;
   char* input = "( c ( a ( b ) ) )";
+  char* expected = "( c ( ( a ( ( b ) ) ) ) )";
   
   Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
@@ -237,12 +238,13 @@ int test_parser_1()
   if (DEBUG_PRINT)
   {
     printf("original: %s\n", input);
+    printf("expected: %s\n", expected);
     printf("ast:      %s\n", str);
   }
 
-  if (strcmp(input, str) != 0)
+  if (strcmp(expected, str) != 0)
   {
-    printf("Error reconstructed expression does not match original\n");
+    printf("Error reconstructed expression does not match expected\n");
     expr_free(expr);
     goto test_parser1_failed;
   }
@@ -260,7 +262,8 @@ int test_parser_1()
 int test_parser_2()
 {
   int err;
-  char* input = "( + ( 1 ( * ( 2 ( 3 ) ) ) ) )";
+  char* input = "( + 1 * 2 3 )";
+  char* expected = "( + ( 1 ( * ( 2 ( 3 ) ) ) ) )";
   
   Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
@@ -283,12 +286,13 @@ int test_parser_2()
   if (DEBUG_PRINT)
   {
     printf("original: %s\n", input);
+    printf("expected: %s\n", expected);
     printf("ast:      %s\n", str);
   }
 
-  if (strcmp(input, str) != 0)
+  if (strcmp(expected, str) != 0)
   {
-    printf("Error reconstructed expression does not match original\n");
+    printf("Error reconstructed expression does not match expected\n");
     expr_free(expr);
     goto test_parser2_failed;
   }
@@ -507,7 +511,7 @@ int test_parser_8()
 {
   int err;
   char* input = "( * ( ( + 1 2 ) 3 ) )";
-  char* expected_ast = "( * ( ( + ( 1 ( 2 ) ) ) ( 3 ) ) )";
+  char* expected_ast = "( * ( ( ( + ( 1 ( 2 ) ) ) ( 3 ) ) ) )";
   
   Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
@@ -555,10 +559,63 @@ int test_parser_8()
   return -1;
 }
 
+int test_parser_9()
+{
+  int err;
+  char* input = "( * ( + 1 2 ) 3 )";
+  char* expected_ast = "( * ( ( + ( 1 ( 2 ) ) ) ( 3 ) ) )";
+  
+  Parser parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_parser2_failed;
+  }
+
+  if (DEBUG_PRINT)
+  {
+    printf("original:     %s\n", input);
+    printf("expected_ast: %s\n", expected_ast);
+  }
+  
+  Expr *expr = parser_parse(&parser);
+  if (expr == NULL)
+  {
+    printf("Error parser_parse returned a null expression\n");
+    goto test_parser2_failed;
+  }
+
+  char str[50] = {0};
+  expr_string(expr, str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("ast:          %s\n", str);
+  }
+
+  if (strcmp(expected_ast, str) != 0)
+  {
+    printf("Error reconstructed expression does not match the expected\n");
+    expr_free(expr);
+    goto test_parser2_failed;
+  }
+
+  expr_free(expr);
+
+  printf("OK Test Parser 9\n");
+  return 0;
+
+ test_parser2_failed:
+  printf("ERR Test Parser 9\n");
+  return -1;
+}
+
 int test_interpreter_1()
 {
   int err;
-  char* input = "( + ( 1 ( 2 ) ) )";
+  char* input = "( + 1 2 )";
+  char* expected = "( + ( 1 ( 2 ) ) )";
   long expected_result = 3;
   
   Parser parser = {0};
@@ -582,12 +639,13 @@ int test_interpreter_1()
   if (DEBUG_PRINT)
   {
     printf("original: %s\n", input);
+    printf("expected: %s\n", expected);
     printf("ast:      %s\n", str);
   }
 
-  if (strcmp(input, str) != 0)
+  if (strcmp(expected, str) != 0)
   {
-    printf("Error reconstructed expression does not match original\n");
+    printf("Error reconstructed expression does not match expected\n");
 
     expr_free(expr);
     goto test_interpreter1_failed;
@@ -631,8 +689,9 @@ int test_interpreter_1()
 int test_interpreter_2()
 {
   int err;
-  char* input = "( * ( 4 ( + ( 1 ( 2 ) ) ) ) )";
-  long expected_result = 12;
+  char* input = "( * ( + 1 2 ) 3 )";
+  char* expected = "( * ( ( + ( 1 ( 2 ) ) ) ( 3 ) ) )";
+  long expected_result = 9;
   
   Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
@@ -655,10 +714,11 @@ int test_interpreter_2()
   if (DEBUG_PRINT)
   {
     printf("original: %s\n", input);
+    printf("expected: %s\n", expected);
     printf("ast:      %s\n", str);
   }
 
-  if (strcmp(input, str) != 0)
+  if (strcmp(expected, str) != 0)
   {
     printf("Error reconstructed expression does not match original\n");
 
@@ -701,6 +761,231 @@ int test_interpreter_2()
   return -1;
 }
 
+int test_interpreter_3()
+{
+  int err;
+  char* input = "123";
+  char* expected = "( 123 )";
+  long expected_result = 123;
+  
+  Parser parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_interpreter1_failed;
+  }
+
+  Expr *expr = parser_parse(&parser);
+  if (expr == NULL)
+  {
+    printf("Error parser_parse returned a null expression\n");
+    goto test_interpreter1_failed;
+  }
+
+  char str[50] = {0};
+  expr_string(expr, str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("original: %s\n", input);
+    printf("expected: %s\n", expected);
+    printf("ast:      %s\n", str);
+  }
+
+  if (strcmp(expected, str) != 0)
+  {
+    printf("Error reconstructed expression does not match expected\n");
+
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+
+  Interpreter interpreter = {0};
+  interpreter_init(&interpreter);
+  Value val = interpreter_interpret(&interpreter, expr);
+  if (val.type == HAPLO_VAL_ERROR)
+  {
+    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+  if (val.type != HAPLO_VAL_INTEGER)
+  {
+    printf("Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
+           value_type_string(val.type));
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+  if (val.integer != expected_result)
+  {
+    printf("Error in interpreter_interpret, expected result %ld, got %ld\n",
+           expected_result, val.integer);
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+
+  haplo_interpreter_clean(&interpreter);
+  expr_free(expr);
+  
+  printf("OK Test Interpreter 3\n");
+  return 0;
+
+ test_interpreter1_failed:
+  printf("ERR Test Interpreter 3\n");
+  return -1;
+}
+
+int test_interpreter_4()
+{
+  int err;
+  char* input = "\"Hello!\"";
+  char* expected = "( \"Hello!\" )";
+  char* expected_result = "Hello!";
+  
+  Parser parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_interpreter1_failed;
+  }
+
+  Expr *expr = parser_parse(&parser);
+  if (expr == NULL)
+  {
+    printf("Error parser_parse returned a null expression\n");
+    goto test_interpreter1_failed;
+  }
+
+  char str[50] = {0};
+  expr_string(expr, str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("original: %s\n", input);
+    printf("expected: %s\n", expected);
+    printf("ast:      %s\n", str);
+  }
+
+  if (strcmp(expected, str) != 0)
+  {
+    printf("Error reconstructed expression does not match expected\n");
+
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+
+  Interpreter interpreter = {0};
+  interpreter_init(&interpreter);
+  Value val = interpreter_interpret(&interpreter, expr);
+  if (val.type == HAPLO_VAL_ERROR)
+  {
+    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+  if (val.type != HAPLO_VAL_STRING)
+  {
+    printf("Error in interpreter_interpret, expected type HAPLO_VAL_STRING, got %s\n",
+           value_type_string(val.type));
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+  if (strcmp(val.string, expected_result) != 0)
+  {
+    printf("Error in interpreter_interpret, expected result %s, got %s\n",
+           expected_result, val.string);
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+
+  haplo_interpreter_clean(&interpreter);
+  expr_free(expr);
+  
+  printf("OK Test Interpreter 4\n");
+  return 0;
+
+ test_interpreter1_failed:
+  printf("ERR Test Interpreter 4\n");
+  return -1;
+}
+
+int test_interpreter_5()
+{
+  int err;
+  char* input = "( + 4 ( * 2 3 ) ) ) )";
+  char* expected = "( + ( 4 ( ( * ( 2 ( 3 ) ) ) ) ) )";
+  long expected_result = 10;
+  
+  Parser parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_interpreter1_failed;
+  }
+
+  Expr *expr = parser_parse(&parser);
+  if (expr == NULL)
+  {
+    printf("Error parser_parse returned a null expression\n");
+    goto test_interpreter1_failed;
+  }
+
+  char str[50] = {0};
+  expr_string(expr, str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("original: %s\n", input);
+    printf("expected: %s\n", expected);
+    printf("ast:      %s\n", str);
+  }
+
+  if (strcmp(expected, str) != 0)
+  {
+    printf("Error reconstructed expression does not match original\n");
+
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+
+  Interpreter interpreter = {0};
+  interpreter_init(&interpreter);
+  Value val = interpreter_interpret(&interpreter, expr);
+  if (val.type == HAPLO_VAL_ERROR)
+  {
+    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+  if (val.type != HAPLO_VAL_INTEGER)
+  {
+    printf("Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
+           value_type_string(val.type));
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+  if (val.integer != expected_result)
+  {
+    printf("Error in interpreter_interpret, expected result %ld, got %ld\n",
+           expected_result, val.integer);
+    expr_free(expr);
+    goto test_interpreter1_failed;
+  }
+
+  haplo_interpreter_clean(&interpreter);
+  expr_free(expr);
+  
+  printf("OK Test Interpreter 5\n");
+  return 0;
+
+ test_interpreter1_failed:
+  printf("ERR Test Interpreter 5\n");
+  return -1;
+}
+
 int main(void)
 {
   int out = 0;
@@ -717,8 +1002,12 @@ int main(void)
   out += test_parser_6();
   out += test_parser_7();
   out += test_parser_8();
+  out += test_parser_9();
   out += test_interpreter_1();
   out += test_interpreter_2();
+  out += test_interpreter_3();
+  out += test_interpreter_4();
+  out += test_interpreter_5();
   
   printf("Tests done.\n");
 

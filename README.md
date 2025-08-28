@@ -87,12 +87,19 @@ evaluate a value that is not a function, you will get back the same
 value:
 
 ```python
-> "Hello World"  # A string
-"Hello World"
 > 123            # An integer
 123
 > 567.890        # A float
 567.890000
+> "Hello World"  # A string
+"Hello World"
+> true           # A bool
+true
+> list 1 2 3     # A list
+list 3 2 1
+> hello          # A function
+Error: ERROR_INTERPRETER_UNKNOWN_FUNCTION
+> # The previous result was an error
 ```
 
 Functions are particular names that can be called with some arguments
@@ -113,10 +120,10 @@ You nest function calls using s-expressions, like lisp.
 
 ```lisp
 $ cat sample2.haplo 
-(print
- (*
-  ((+ 1 2)
-  (- 7 5))))
+( print
+ ( *
+  ( + 1 2 )
+  ( - 7 5 ) ) )
 $ ./haplo sample2.haplo 
 6
 empty
@@ -131,7 +138,9 @@ expressions:
 10
 > ( + 4 ( * 2 3 ) ) )
 10
-> ( + ( 4 ( * ( 2 ( 3 ) ) ) ) ) )
+> ( + ( 4 ) ( * ( 2 ) ( 3 ) ) ) ) )
+10
+> ( ( ( ( 10 ) ) ) )
 10
 ```
 

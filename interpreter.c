@@ -144,10 +144,9 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
 
   // Useful debug prints
   /*
-  char buf[HAPLO_VAL_MAX_STRING_LEN] = {0};
-  haplo_value_string(value, buf);
+  char buf[1024] = {0};
+  haplo_value_string(value, buf, 1024);
   printf("Calling value: %s\n", buf);
-
   printf("With args:\n");
   haplo_value_list_print(args);
   */
@@ -173,18 +172,24 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
     a = args->val;
     b = args->next->val;
 
-    if (a.type == HAPLO_VAL_INTEGER || b.type == HAPLO_VAL_INTEGER)
+    if (a.type == HAPLO_VAL_INTEGER && b.type == HAPLO_VAL_INTEGER)
     {
       return (HaploValue) {
         .type = HAPLO_VAL_INTEGER,
         .integer = a.integer + b.integer,
       };
-    } else if (a.type == HAPLO_VAL_FLOAT || b.type == HAPLO_VAL_FLOAT)
+    } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
     {
       return (HaploValue) {
         .type = HAPLO_VAL_FLOAT,
         .floating_point = a.floating_point + b.floating_point,
       };
+    } else if (b.type == HAPLO_VAL_ERROR)
+    {
+      return b;
+    } else if (a.type == HAPLO_VAL_ERROR)
+    {
+      return a;
     } else {
       return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
@@ -206,18 +211,24 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
     a = args->val;
     b = args->next->val;
 
-    if (a.type == HAPLO_VAL_INTEGER || b.type == HAPLO_VAL_INTEGER)
+    if (a.type == HAPLO_VAL_INTEGER && b.type == HAPLO_VAL_INTEGER)
     {
       return (HaploValue) {
         .type = HAPLO_VAL_INTEGER,
         .integer = a.integer - b.integer,
       };
-    } else if (a.type == HAPLO_VAL_FLOAT || b.type == HAPLO_VAL_FLOAT)
+    } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
     {
       return (HaploValue) {
         .type = HAPLO_VAL_FLOAT,
         .floating_point = a.floating_point - b.floating_point,
       };
+    } else if (b.type == HAPLO_VAL_ERROR)
+    {
+      return b;
+    } else if (a.type == HAPLO_VAL_ERROR)
+    {
+      return a;
     } else {
       return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
@@ -239,18 +250,24 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
     a = args->val;
     b = args->next->val;
 
-    if (a.type == HAPLO_VAL_INTEGER || b.type == HAPLO_VAL_INTEGER)
+    if (a.type == HAPLO_VAL_INTEGER && b.type == HAPLO_VAL_INTEGER)
     {
       return (HaploValue) {
         .type = HAPLO_VAL_INTEGER,
         .integer = a.integer * b.integer,
       };
-    } else if (a.type == HAPLO_VAL_FLOAT || b.type == HAPLO_VAL_FLOAT)
+    } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
     {
       return (HaploValue) {
         .type = HAPLO_VAL_FLOAT,
         .floating_point = a.floating_point * b.floating_point,
       };
+    } else if (b.type == HAPLO_VAL_ERROR)
+    {
+      return b;
+    } else if (a.type == HAPLO_VAL_ERROR)
+    {
+      return a;
     } else {
       return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
@@ -272,18 +289,24 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
     a = args->val;
     b = args->next->val;
 
-    if (a.type == HAPLO_VAL_INTEGER || b.type == HAPLO_VAL_INTEGER)
+    if (a.type == HAPLO_VAL_INTEGER && b.type == HAPLO_VAL_INTEGER)
     {
       return (HaploValue) {
         .type = HAPLO_VAL_INTEGER,
         .integer = a.integer / b.integer,
       };
-    } else if (a.type == HAPLO_VAL_FLOAT || b.type == HAPLO_VAL_FLOAT)
+    } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
     {
       return (HaploValue) {
         .type = HAPLO_VAL_FLOAT,
         .floating_point = a.floating_point / b.floating_point,
       };
+    } else if (b.type == HAPLO_VAL_ERROR)
+    {
+      return b;
+    } else if (a.type == HAPLO_VAL_ERROR)
+    {
+      return a;
     } else {
       return (HaploValue) {
         .type = HAPLO_VAL_ERROR,

@@ -206,7 +206,7 @@ int haplo_value_string(HaploValue value, char* buf, int buf_len)
   case HAPLO_VAL_EMPTY:
     return snprintf(buf, buf_len, "empty");
   case HAPLO_VAL_ERROR:
-    return snprintf(buf, buf_len, "%s", haplo_error_string(value.error));
+    return snprintf(buf, buf_len, "Error: %s", haplo_error_string(value.error));
   }
   return 0;
 }
