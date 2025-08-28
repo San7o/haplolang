@@ -86,7 +86,7 @@ The language is strictly typed. The default value types are `integer`,
 evaluate a value that is not a function, you will get back the same
 value:
 
-```python
+```lisp
 > 123            # An integer
 123
 > 567.890        # A float
@@ -108,7 +108,7 @@ integers and returns an integer value representing the sum of the two
 arguments, while the function `print` takes a value, then prints it
 and returns an `empty` value.
 
-```python
+```lisp
 > + 68.1 0.9
 69.000000
 > print "Nice"
