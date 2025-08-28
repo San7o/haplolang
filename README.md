@@ -35,7 +35,7 @@ empty
 You can also interpret a file:
 
 ```python
-$ ./haplo sample.haplo 
+$ ./haplo samples/sample1.haplo 
 "Hello, World!"
 empty
 ```
@@ -60,7 +60,7 @@ user    0m0.125s
 sys     0m0.044s
 ```
 
-Build and run the tests:
+Build and run the tests and e2e tests:
 
 ```
 make check
@@ -119,12 +119,12 @@ empy
 You nest function calls using s-expressions, like lisp.
 
 ```lisp
-$ cat sample2.haplo 
+$ cat samples/sample2.haplo 
 ( print
  ( *
   ( + 1 2 )
   ( - 7 5 ) ) )
-$ ./haplo sample2.haplo 
+$ ./haplo samples/sample2.haplo 
 6
 empty
 ```

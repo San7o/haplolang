@@ -62,6 +62,12 @@ tests: ${TEST_OBJ} lib
 check: tests
 	chmod +x ${NAME}_tests
 	./${NAME}_tests
+	./${NAME}_tests_e2e.sh
+
+.PHONY: check-e2e
+check-e2e:
+	chmod +x ${NAME}_tests_e2e.sh
+	./${NAME}_tests_e2e.sh
 
 # --- Cleanup ---
 
