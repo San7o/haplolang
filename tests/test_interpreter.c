@@ -1,0 +1,395 @@
+//
+// MIT License
+//
+// Copyright (c) 2025 Giovanni Santini
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//
+
+#define HAPLO_NO_PREFIX
+#include "../haplo.h"
+#include "tests.h"
+
+#include <stdio.h>
+#include <string.h>
+
+HAPLO_TEST(interpreter, interpreter_1)
+{
+  int err;
+  char* input = "( + 1 2 )";
+  char* expected = "( + ( 1 ( 2 ) ) )";
+  long expected_result = 3;
+  
+  Parser parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_failed;
+  }
+
+  Expr *expr = parser_parse(&parser);
+  if (expr == NULL)
+  {
+    printf("Error parser_parse returned a null expression\n");
+    goto test_failed;
+  }
+
+  char str[50] = {0};
+  expr_string(expr, str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("original: %s\n", input);
+    printf("expected: %s\n", expected);
+    printf("ast:      %s\n", str);
+  }
+
+  if (strcmp(expected, str) != 0)
+  {
+    printf("Error reconstructed expression does not match expected\n");
+
+    expr_free(expr);
+    goto test_failed;
+  }
+
+  Interpreter interpreter = {0};
+  interpreter_init(&interpreter);
+  Value val = interpreter_interpret(&interpreter, expr);
+  if (val.type == HAPLO_VAL_ERROR)
+  {
+    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    expr_free(expr);
+    goto test_failed;
+  }
+  if (val.type != HAPLO_VAL_INTEGER)
+  {
+    printf("Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
+           value_type_string(val.type));
+    expr_free(expr);
+    goto test_failed;
+  }
+  if (val.integer != expected_result)
+  {
+    printf("Error in interpreter_interpret, expected result %ld, got %ld\n",
+           expected_result, val.integer);
+    expr_free(expr);
+    goto test_failed;
+  }
+
+  haplo_interpreter_destroy(&interpreter);
+  expr_free(expr);
+  
+  HAPLO_TEST_SUCCESS;
+
+ test_failed:
+  HAPLO_TEST_FAILED;
+}
+
+HAPLO_TEST(interpreter, interpreter_2)
+{
+  int err;
+  char* input = "( * ( + 1 2 ) 3 )";
+  char* expected = "( * ( ( + ( 1 ( 2 ) ) ) ( 3 ) ) )";
+  long expected_result = 9;
+  
+  Parser parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_failed;
+  }
+
+  Expr *expr = parser_parse(&parser);
+  if (expr == NULL)
+  {
+    printf("Error parser_parse returned a null expression\n");
+    goto test_failed;
+  }
+
+  char str[50] = {0};
+  expr_string(expr, str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("original: %s\n", input);
+    printf("expected: %s\n", expected);
+    printf("ast:      %s\n", str);
+  }
+
+  if (strcmp(expected, str) != 0)
+  {
+    printf("Error reconstructed expression does not match original\n");
+
+    expr_free(expr);
+    goto test_failed;
+  }
+
+  Interpreter interpreter = {0};
+  interpreter_init(&interpreter);
+  Value val = interpreter_interpret(&interpreter, expr);
+  if (val.type == HAPLO_VAL_ERROR)
+  {
+    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    expr_free(expr);
+    goto test_failed;
+  }
+  if (val.type != HAPLO_VAL_INTEGER)
+  {
+    printf("Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
+           value_type_string(val.type));
+    expr_free(expr);
+    goto test_failed;
+  }
+  if (val.integer != expected_result)
+  {
+    printf("Error in interpreter_interpret, expected result %ld, got %ld\n",
+           expected_result, val.integer);
+    expr_free(expr);
+    goto test_failed;
+  }
+
+  haplo_interpreter_destroy(&interpreter);
+  expr_free(expr);
+  
+  HAPLO_TEST_SUCCESS;
+  
+ test_failed:
+  HAPLO_TEST_FAILED;
+}
+
+HAPLO_TEST(interpreter, interpreter_3)
+{
+  int err;
+  char* input = "123";
+  char* expected = "( 123 )";
+  long expected_result = 123;
+  
+  Parser parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_failed;
+  }
+
+  Expr *expr = parser_parse(&parser);
+  if (expr == NULL)
+  {
+    printf("Error parser_parse returned a null expression\n");
+    goto test_failed;
+  }
+
+  char str[50] = {0};
+  expr_string(expr, str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("original: %s\n", input);
+    printf("expected: %s\n", expected);
+    printf("ast:      %s\n", str);
+  }
+
+  if (strcmp(expected, str) != 0)
+  {
+    printf("Error reconstructed expression does not match expected\n");
+
+    expr_free(expr);
+    goto test_failed;
+  }
+
+  Interpreter interpreter = {0};
+  interpreter_init(&interpreter);
+  Value val = interpreter_interpret(&interpreter, expr);
+  if (val.type == HAPLO_VAL_ERROR)
+  {
+    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    expr_free(expr);
+    goto test_failed;
+  }
+  if (val.type != HAPLO_VAL_INTEGER)
+  {
+    printf("Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
+           value_type_string(val.type));
+    expr_free(expr);
+    goto test_failed;
+  }
+  if (val.integer != expected_result)
+  {
+    printf("Error in interpreter_interpret, expected result %ld, got %ld\n",
+           expected_result, val.integer);
+    expr_free(expr);
+    goto test_failed;
+  }
+
+  haplo_interpreter_destroy(&interpreter);
+  expr_free(expr);
+  
+  HAPLO_TEST_SUCCESS;
+
+ test_failed:
+  HAPLO_TEST_FAILED;
+}
+
+HAPLO_TEST(interpreter, interpreter_4)
+{
+  int err;
+  char* input = "\"Hello!\"";
+  char* expected = "( \"Hello!\" )";
+  char* expected_result = "Hello!";
+  
+  Parser parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_failed;
+  }
+
+  Expr *expr = parser_parse(&parser);
+  if (expr == NULL)
+  {
+    printf("Error parser_parse returned a null expression\n");
+    goto test_failed;
+  }
+
+  char str[50] = {0};
+  expr_string(expr, str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("original: %s\n", input);
+    printf("expected: %s\n", expected);
+    printf("ast:      %s\n", str);
+  }
+
+  if (strcmp(expected, str) != 0)
+  {
+    printf("Error reconstructed expression does not match expected\n");
+
+    expr_free(expr);
+    goto test_failed;
+  }
+
+  Interpreter interpreter = {0};
+  interpreter_init(&interpreter);
+  Value val = interpreter_interpret(&interpreter, expr);
+  if (val.type == HAPLO_VAL_ERROR)
+  {
+    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    expr_free(expr);
+    goto test_failed;
+  }
+  if (val.type != HAPLO_VAL_STRING)
+  {
+    printf("Error in interpreter_interpret, expected type HAPLO_VAL_STRING, got %s\n",
+           value_type_string(val.type));
+    expr_free(expr);
+    goto test_failed;
+  }
+  if (strcmp(val.string, expected_result) != 0)
+  {
+    printf("Error in interpreter_interpret, expected result %s, got %s\n",
+           expected_result, val.string);
+    expr_free(expr);
+    goto test_failed;
+  }
+
+  haplo_interpreter_destroy(&interpreter);
+  expr_free(expr);
+  
+  HAPLO_TEST_SUCCESS;
+
+ test_failed:
+  HAPLO_TEST_FAILED;
+}
+
+HAPLO_TEST(interpreter, interpreter_5)
+{
+  int err;
+  char* input = "( + 4 ( * 2 3 ) ) ) )";
+  char* expected = "( + ( 4 ( ( * ( 2 ( 3 ) ) ) ) ) )";
+  long expected_result = 10;
+  
+  Parser parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_failed;
+  }
+
+  Expr *expr = parser_parse(&parser);
+  if (expr == NULL)
+  {
+    printf("Error parser_parse returned a null expression\n");
+    goto test_failed;
+  }
+
+  char str[50] = {0};
+  expr_string(expr, str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("original: %s\n", input);
+    printf("expected: %s\n", expected);
+    printf("ast:      %s\n", str);
+  }
+
+  if (strcmp(expected, str) != 0)
+  {
+    printf("Error reconstructed expression does not match original\n");
+
+    expr_free(expr);
+    goto test_failed;
+  }
+
+  Interpreter interpreter = {0};
+  interpreter_init(&interpreter);
+  Value val = interpreter_interpret(&interpreter, expr);
+  if (val.type == HAPLO_VAL_ERROR)
+  {
+    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    expr_free(expr);
+    goto test_failed;
+  }
+  if (val.type != HAPLO_VAL_INTEGER)
+  {
+    printf("Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
+           value_type_string(val.type));
+    expr_free(expr);
+    goto test_failed;
+  }
+  if (val.integer != expected_result)
+  {
+    printf("Error in interpreter_interpret, expected result %ld, got %ld\n",
+           expected_result, val.integer);
+    expr_free(expr);
+    goto test_failed;
+  }
+
+  haplo_interpreter_destroy(&interpreter);
+  expr_free(expr);
+  
+  HAPLO_TEST_SUCCESS;
+
+ test_failed:
+  HAPLO_TEST_FAILED;
+}
