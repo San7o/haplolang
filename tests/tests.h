@@ -44,7 +44,7 @@
   while(0)
 
 // Register a test case, It should end with HAPLO_TEST_SUCCESS or
-// HAPLO_TEST_FAILURE
+// HAPLO_TEST_FAILED
 // Thanks Sam P.
 #define HAPLO_TEST(suiteName, uTtestName)                      \
     static int suiteName##_##uTtestName(void);                 \
