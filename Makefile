@@ -34,7 +34,8 @@ LIB_OBJ=atom.o\
         expr.o\
         interpreter.o\
         value.o\
-        errors.o
+        errors.o\
+        function.o
 TEST_OBJ=tests.o
 CLI_OBJ=haplo.o
 

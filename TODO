@@ -2,5 +2,8 @@
 =========
 
 - Implement proper function call infrastructure
+  - Implement function.h
 - Declare variables and functions
 - Add control flow
+- Generated documentation
+- Release 0.1.0

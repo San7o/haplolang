@@ -22,17 +22,15 @@
 // SOFTWARE.
 //
 
-#ifndef _HAPLO_HAPLO_H_
-#define _HAPLO_HAPLO_H_
+#ifndef _HAPLO_UTILS_H_
+#define _HAPLO_UTILS_H_
 
-// --- Headers ---
+#include <stdio.h>
 
-#include "errors.h"
-#include "atom.h"
-#include "lexer.h"
-#include "parser.h"
-#include "expr.h"
-#include "function.h"
-#include "interpreter.h"
+// --- Macros ----
 
-#endif // _HAPLO_HAPLO_H_
+#define HAPLO_UNUSED(value) (void)(value)
+#define HAPLO_TODO(message) do { fprintf(stderr, "%s:%d: TODO: %s\n", __FILE__, __LINE__, message); abort(); } while(0)
+#define HAPLO_UNREACHABLE(message) do { fprintf(stderr, "%s:%d: UNREACHABLE: %s\n", __FILE__, __LINE__, message); abort(); } while(0)
+
+#endif // _HAPLO_UTILS_H_
