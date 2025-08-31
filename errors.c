@@ -24,7 +24,7 @@
 
 #include "errors.h"
 
-char* haplo_error_string(int error)
+const char* haplo_error_string(int error)
 {
   switch(-error)
   {
@@ -68,6 +68,10 @@ char* haplo_error_string(int error)
     return "ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS";
   case HAPLO_ERROR_FUNCTION_MAP_NULL:
     return "ERROR_FUNCTION_MAP_NULL";
+  case HAPLO_ERROR_FUNCTION_MAP_NOT_INITIALIZED:
+    return "ERROR_FUNCTION_MAP_NOT_INITIALIZED";
+  case HAPLO_ERROR_FUNCTION_MAP_LOOKUP_NOT_FOUND:
+    return "ERROR_FUNCTION_MAP_LOOKUP_NOT_FOUND";
   }
   return "ERROR_UNKNOWN";
 }

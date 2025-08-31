@@ -49,6 +49,8 @@
 #define HAPLO_ERROR_INTERPRETER_NOT_FUNCTION     19
 #define HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS 20
 #define HAPLO_ERROR_FUNCTION_MAP_NULL            21
+#define HAPLO_ERROR_FUNCTION_MAP_NOT_INITIALIZED 22
+#define HAPLO_ERROR_FUNCTION_MAP_LOOKUP_NOT_FOUND 23
 
 #ifdef HAPLO_NO_PREFIX
   #define error_string haplo_error_string
@@ -56,6 +58,6 @@
 
 // --- Functions ---
 
-char* haplo_error_string(int error);
+const char* haplo_error_string(int error);
 
 #endif // _HAPLO_ERRORS_H_

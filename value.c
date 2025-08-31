@@ -106,7 +106,7 @@ void haplo_value_free(HaploValue value)
   return;
 }
 
-char* haplo_value_type_string(enum HaploValueType type)
+const char* haplo_value_type_string(enum HaploValueType type)
 {
   switch(type)
   {

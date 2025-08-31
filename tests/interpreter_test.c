@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 
-HAPLO_TEST(interpreter, interpreter_1)
+HAPLO_TEST(interpreter_test, simple_math)
 {
   int err;
   char* input = "( + 1 2 )";
@@ -102,7 +102,7 @@ HAPLO_TEST(interpreter, interpreter_1)
   HAPLO_TEST_FAILED;
 }
 
-HAPLO_TEST(interpreter, interpreter_2)
+HAPLO_TEST(interpreter_test, should_eval_head)
 {
   int err;
   char* input = "( * ( + 1 2 ) 3 )";
@@ -175,7 +175,7 @@ HAPLO_TEST(interpreter, interpreter_2)
   HAPLO_TEST_FAILED;
 }
 
-HAPLO_TEST(interpreter, interpreter_3)
+HAPLO_TEST(interpreter_test, simple_integer_val)
 {
   int err;
   char* input = "123";
@@ -248,7 +248,7 @@ HAPLO_TEST(interpreter, interpreter_3)
   HAPLO_TEST_FAILED;
 }
 
-HAPLO_TEST(interpreter, interpreter_4)
+HAPLO_TEST(interpreter_test, simple_string_val)
 {
   int err;
   char* input = "\"Hello!\"";
@@ -321,7 +321,7 @@ HAPLO_TEST(interpreter, interpreter_4)
   HAPLO_TEST_FAILED;
 }
 
-HAPLO_TEST(interpreter, interpreter_5)
+HAPLO_TEST(interpreter_test, math)
 {
   int err;
   char* input = "( + 4 ( * 2 3 ) ) ) )";

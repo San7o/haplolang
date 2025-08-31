@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 
-HAPLO_TEST(lexer, lexer_1)
+HAPLO_TEST(lexer_test, trim)
 {
   {
     char *input = "  ( 123";
@@ -73,7 +73,7 @@ HAPLO_TEST(lexer, lexer_1)
   HAPLO_TEST_FAILED;
 }
 
-HAPLO_TEST(lexer, lexer_2)
+HAPLO_TEST(lexer_test, next)
 {
   {
     char *input = "( 123";

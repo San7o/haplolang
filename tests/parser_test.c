@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 
-HAPLO_TEST(parser, parser_1)
+HAPLO_TEST(parser_test, simple1)
 {
   int err;
   char* input = "( c ( a ( b ) ) )";
@@ -74,7 +74,7 @@ HAPLO_TEST(parser, parser_1)
   HAPLO_TEST_FAILED;
 }
 
-HAPLO_TEST(parser, parser_2)
+HAPLO_TEST(parser_test, no_parenthesis)
 {
   int err;
   char* input = "( + 1 * 2 3 )";
@@ -119,7 +119,7 @@ HAPLO_TEST(parser, parser_2)
   HAPLO_TEST_FAILED;
 }
 
-HAPLO_TEST(parser, parser_3)
+HAPLO_TEST(parser_test, malformed_parenthesis)
 {
   int err;
   char* input = "(( 1 2 3 )";
@@ -144,15 +144,13 @@ HAPLO_TEST(parser, parser_3)
     goto test_failed;
   }
 
-  printf("OK Test Parser 3\n");
   HAPLO_TEST_SUCCESS;
 
  test_failed:
-  printf("ERR Test Parser 3\n");
   HAPLO_TEST_FAILED;
 }
 
-HAPLO_TEST(parser, parser_4)
+HAPLO_TEST(parser_test, simple2)
 {
   int err;
   char* input = "( + 2 3 )";
@@ -201,7 +199,7 @@ HAPLO_TEST(parser, parser_4)
   HAPLO_TEST_FAILED;
 }
 
-HAPLO_TEST(parser, parser_5)
+HAPLO_TEST(parser_test, hello_world)
 {
   int err;
   char* input = "( print \"Hello, World! )";
@@ -233,7 +231,7 @@ HAPLO_TEST(parser, parser_5)
   HAPLO_TEST_FAILED;
 }
 
-HAPLO_TEST(parser, parser_6)
+HAPLO_TEST(parser_test, hello_world_no_parenthesis)
 {
   int err;
   char* input = "print \"Hello, World!\"";
@@ -278,7 +276,7 @@ HAPLO_TEST(parser, parser_6)
   HAPLO_TEST_FAILED;
 }
 
-HAPLO_TEST(parser, parser_7)
+HAPLO_TEST(parser_test, comment)
 {
   int err;
   char* input = "# This is a comment";
@@ -310,7 +308,7 @@ HAPLO_TEST(parser, parser_7)
   HAPLO_TEST_FAILED;
 }
 
-HAPLO_TEST(parser, parser_8)
+HAPLO_TEST(parser_test, nested_expr)
 {
   int err;
   char* input = "( * ( ( + 1 2 ) 3 ) )";
@@ -359,7 +357,7 @@ HAPLO_TEST(parser, parser_8)
   HAPLO_TEST_FAILED;
 }
 
-HAPLO_TEST(parser, parser_9)
+HAPLO_TEST(parser_test, nested_head_expr)
 {
   int err;
   char* input = "( * ( + 1 2 ) 3 )";

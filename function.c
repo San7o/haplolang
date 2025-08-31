@@ -29,6 +29,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 void haplo_function_list_free(HaploFunctionList *list)
 {
@@ -60,21 +61,134 @@ int haplo_function_map_destroy(HaploFunctionMap *map)
     {
       haplo_function_list_free(map->_map[i]);
     }
+    map->_map = NULL;
   }
 
   return 0;
 }
 
-int haplo_function_map_update(HaploFunctionMap *map, HaploFunctionKey key, HaploFunction function)
+int haplo_function_map_lookup(HaploFunctionMap *map,
+                              HaploFunctionKey key,
+                              HaploFunction* func)
 {
-  HAPLO_TODO("haplo_function_map_update");
+  if (map == NULL) return -HAPLO_ERROR_FUNCTION_MAP_NULL;
+  if (map->_map == NULL) return -HAPLO_ERROR_FUNCTION_MAP_NOT_INITIALIZED;
+
+  unsigned int hash = haplo_function_hash(key, map->capacity);
+
+  HaploFunctionList *func_list = map->_map[hash];
+  if (func_list == NULL) return -HAPLO_ERROR_FUNCTION_MAP_LOOKUP_NOT_FOUND;
+
+  bool found = false;
+  while (func_list != NULL){
+    if (strcmp(key, func_list->key) == 0)
+    {
+      found = true;
+      break;
+    }
+    func_list = func_list->next;
+  }
+
+  if (found)
+  {
+    *func = func_list->func;
+    return 0;
+  }
+  
+  return -HAPLO_ERROR_FUNCTION_MAP_LOOKUP_NOT_FOUND;
+}
+
+int haplo_function_map_update(HaploFunctionMap *map,
+                              HaploFunctionKey key,
+                              HaploFunction func)
+{
+  if (map == NULL) return -HAPLO_ERROR_FUNCTION_MAP_NULL;
+  if (map->_map == NULL) return -HAPLO_ERROR_FUNCTION_MAP_NOT_INITIALIZED;
+
+  unsigned int hash = haplo_function_hash(key, map->capacity);
+  
+  HaploFunctionList *func_list = map->_map[hash];
+  if (func_list == NULL)
+  {
+    func_list = (HaploFunctionList*) malloc(sizeof(HaploFunctionList));
+    func_list->next = NULL;
+    func_list->func = func;
+    func_list->key = malloc(strlen(key));
+    strcpy(func_list->key, key);
+    map->_map[hash] = func_list;
+    return 0;
+  }
+
+  if (strcmp(func_list->key, key) == 0)
+  {
+    func_list->func = func;
+    return 1;
+  }
+  
+  bool found = false;
+  do {
+    func_list = func_list->next;
+    if (strcmp(func_list->key, key) == 0)
+    {
+      found = true;
+      break;
+    }
+  } while (func_list->next != NULL);
+
+  if (found)
+  {
+    func_list->func = func;
+    return 1;
+  }
+
+  HaploFunctionList * new_list = (HaploFunctionList*) malloc(sizeof(HaploFunctionList));
+  new_list->next = NULL;
+  new_list->func = func;
+  new_list->key = malloc(strlen(key));
+  strcpy(new_list->key, key);
+  func_list->next = new_list;
+  
   return 0;
 }
 
-HaploFunction haplo_function_map_lookup(HaploFunctionMap *map, HaploFunctionKey key)
+int haplo_function_map_delete(HaploFunctionMap *map,
+                              HaploFunctionKey key)
 {
-  HAPLO_TODO("haplo_function_map_lookup");
-  return (HaploFunction){0};
+  if (map == NULL) return -HAPLO_ERROR_FUNCTION_MAP_NULL;
+  if (map->_map == NULL) return -HAPLO_ERROR_FUNCTION_MAP_NOT_INITIALIZED;
+
+  unsigned int hash = haplo_function_hash(key, map->capacity);
+  
+  HaploFunctionList *func_list = map->_map[hash];
+  if (strcmp(func_list->key, key) == 0)
+  {
+    map->_map[hash] = func_list->next;
+    free(func_list->key);
+    free(func_list);
+    return 0;
+  }
+  
+  bool found = false;
+  HaploFunctionList *prev;
+  do {
+    prev = func_list;
+    func_list = func_list->next;
+    if (strcmp(func_list->key, key) == 0)
+    {
+      found = true;
+      break;
+    }
+  } while (func_list != NULL);
+  
+  if (found)
+  {
+    prev->next = func_list->next;
+    free(func_list->key);
+    free(func_list);
+    return 0;
+  }
+  
+  return 0;
 }
 
 // Credits to http://www.cse.yorku.ca/~oz/hash.html

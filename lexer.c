@@ -28,7 +28,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-char* haplo_lexer_token_string(enum HaploToken token)
+const char* haplo_lexer_token_string(enum HaploToken token)
 {
   switch(token)
   {

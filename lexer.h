@@ -50,7 +50,7 @@ enum HaploToken {
 // --- Functions ---
 
 // Returns the string representation of a token enum
-char* haplo_lexer_token_string(enum HaploToken token);
+const char* haplo_lexer_token_string(enum HaploToken token);
 // Returns the length of an atom
 int haplo_lexer_atom_len(char* input, int input_size);
 

@@ -86,7 +86,7 @@ void haplo_value_list_free(HaploValueList *list);
 void haplo_value_list_print(HaploValueList *list);
 // Returns a deep copy of the argument list
 HaploValueList *haplo_value_list_deep_copy(HaploValueList *list);
-char* haplo_value_type_string(enum HaploValueType type);
+const char* haplo_value_type_string(enum HaploValueType type);
 // Returns a deep copy of the argument value
 HaploValue haplo_value_deep_copy(HaploValue value);
 void haplo_value_free(HaploValue value);

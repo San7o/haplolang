@@ -29,7 +29,7 @@
 
 // --- Macros ---
 
-#ifndef HAPLO_NO_PREFIX
+#ifdef HAPLO_NO_PREFIX
   #define FunctionKey HaploFunctionKey
   #define Function HaploFunction
   #define FunctionList HaploFunctionList
@@ -37,8 +37,9 @@
   #define function_list_free haplo_function_list_free
   #define function_map_init haplo_function_map_init
   #define function_map_destroy haplo_function_map_destroy
-  #define function_map_update haplo_function_map_update
   #define function_map_lookup haplo_function_map_lookup
+  #define function_map_update haplo_function_map_update
+  #define function_map_delete haplo_function_map_delete
   #define function_hash haplo_function_hash
 #endif // HAPLO_NO_PREFIX
 
@@ -51,6 +52,7 @@ typedef struct HaploFunction {
 } HaploFunction;
 
 typedef struct HaploFunctionList {
+  HaploFunctionKey key;
   HaploFunction func;
   struct HaploFunctionList *next;
 } HaploFunctionList;
@@ -65,9 +67,21 @@ typedef struct HaploFunctionMap {
 void haplo_function_list_free(HaploFunctionList *list);
 int haplo_function_map_init(HaploFunctionMap *map, int capacity);
 int haplo_function_map_destroy(HaploFunctionMap *map);
-int haplo_function_map_update(HaploFunctionMap *map, HaploFunctionKey key,
-                              HaploFunction function);
-HaploFunction haplo_function_map_lookup(HaploFunctionMap *map, HaploFunctionKey key);
+// Retuns 0 if key exists in map and fills func with the value if func
+// is not null, or returns a negative number representing an error
+int haplo_function_map_lookup(HaploFunctionMap *map,
+                              HaploFunctionKey key,
+                              HaploFunction *func);
+// Inserts or updates key with func. Returns 0 for insertions and 1
+// for updates, or a negative number representing an error
+int haplo_function_map_update(HaploFunctionMap *map,
+                              HaploFunctionKey key,
+                              HaploFunction func);
+// Deletes map entry with key, returns 0 on success or a negative
+// number representing an error
+int haplo_function_map_delete(HaploFunctionMap *map,
+                              HaploFunctionKey key);
+// Return the hashed key
 unsigned int haplo_function_hash(HaploFunctionKey key, int max_value);
 
 #endif // _HAPLO_FUNCTION_H_

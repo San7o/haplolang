@@ -130,8 +130,8 @@ HaploValueList *haplo_interpreter_interpret_tail(HaploInterpreter *interpreter,
 
 // Should not free args here
 HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
-                                    HaploValue value,
-                                    HaploValueList* args)
+                                  HaploValue value,
+                                  HaploValueList* args)
 {
   if (interpreter == NULL)
   {

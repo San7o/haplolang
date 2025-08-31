@@ -37,9 +37,10 @@ LIB_OBJ=atom.o\
         errors.o\
         function.o
 TEST_OBJ=tests/tests.o\
-         tests/test_lexer.o\
-         tests/test_parser.o\
-         tests/test_interpreter.o
+         tests/lexer_test.o\
+         tests/parser_test.o\
+         tests/interpreter_test.o\
+         tests/function_map_test.o
 TEST_LINKER_SCRIPT=tests/linker.ld
 CLI_OBJ=haplo.o
 
@@ -62,7 +63,7 @@ cli: ${CLI_OBJ} lib
 # --- Testing ---
 
 tests: ${TEST_OBJ} lib
-	${CC} ${TEST_OBJ} -Wl,--whole-archive lib${NAME}.a -Wl,--no-whole-archive ${FLAGS} -Wl,-T,${TEST_LINKER_SCRIPT} -O0 -o ${NAME}_tests
+	${CC} ${TEST_OBJ} -Wl,--whole-archive lib${NAME}.a -Wl,--no-whole-archive ${FLAGS} -Wl,-T,${TEST_LINKER_SCRIPT} -o ${NAME}_tests
 
 check: tests
 	chmod +x ${NAME}_tests
