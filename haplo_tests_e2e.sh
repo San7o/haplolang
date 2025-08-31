@@ -59,7 +59,7 @@ for SAMPLE in $SAMPLES; do
         echo -e "\nGot: \n"
         echo $OUTPUT
         echo -e ""
-        $OK="false"
+        OK="false"
     else
         e2e_ok "$SAMPLE"
     fi

@@ -22,18 +22,11 @@
 // SOFTWARE.
 //
 
-#ifndef _HAPLO_HAPLO_H_
-#define _HAPLO_HAPLO_H_
+#include "stdlib.h"
 
-// --- Headers ---
+#include <stddef.h>
 
-#include "errors.h"
-#include "atom.h"
-#include "lexer.h"
-#include "parser.h"
-#include "expr.h"
-#include "function.h"
-#include "stdlib/stdlib.h"
-#include "interpreter.h"
-
-#endif // _HAPLO_HAPLO_H_
+HaploFunctionMap __haplo_std_function_map = {
+  ._map = NULL,
+  .capacity = 0,
+};

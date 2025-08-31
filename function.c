@@ -30,6 +30,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <assert.h>
 
 void haplo_function_list_free(HaploFunctionList *list)
 {
@@ -37,9 +38,22 @@ void haplo_function_list_free(HaploFunctionList *list)
 
   HaploFunctionList *next = list->next;
   haplo_function_list_free(next);
+  free(list->key);
   free(list);
   
   return;
+}
+
+HaploFunctionList *haplo_function_list_deep_copy(HaploFunctionList *list)
+{
+  if (list == NULL) return NULL;
+
+  HaploFunctionList *new_list = malloc(sizeof(HaploFunctionList));
+  new_list->func = list->func;
+  new_list->key = (HaploFunctionKey) malloc(strlen(list->key));
+  strcpy(new_list->key, list->key);
+  new_list->next = haplo_function_list_deep_copy(list->next);
+  return new_list;
 }
 
 int haplo_function_map_init(HaploFunctionMap *map, int capacity)
@@ -48,6 +62,7 @@ int haplo_function_map_init(HaploFunctionMap *map, int capacity)
 
   map->capacity = capacity;
   map->_map = (HaploFunctionList**) calloc(sizeof(HaploFunctionList*), capacity);
+  assert(map->_map != NULL);
   return 0;
 }
 
@@ -67,6 +82,22 @@ int haplo_function_map_destroy(HaploFunctionMap *map)
   return 0;
 }
 
+HaploFunctionMap haplo_function_map_deep_copy(HaploFunctionMap map)
+{
+  HaploFunctionMap map_copy = {0};
+
+  if (map.capacity == 0) return map_copy;
+
+  map_copy.capacity = map.capacity;
+  map_copy._map = (HaploFunctionList**) calloc(sizeof(HaploFunctionList*), map.capacity);
+  for (int i = 0; i < map.capacity; ++i)
+  {
+    map_copy._map[i] = haplo_function_list_deep_copy(map._map[i]);
+  }
+  
+  return map_copy;
+}
+
 int haplo_function_map_lookup(HaploFunctionMap *map,
                               HaploFunctionKey key,
                               HaploFunction* func)
@@ -80,7 +111,8 @@ int haplo_function_map_lookup(HaploFunctionMap *map,
   if (func_list == NULL) return -HAPLO_ERROR_FUNCTION_MAP_LOOKUP_NOT_FOUND;
 
   bool found = false;
-  while (func_list != NULL){
+  while (func_list != NULL)
+  {
     if (strcmp(key, func_list->key) == 0)
     {
       found = true;
@@ -115,7 +147,7 @@ int haplo_function_map_update(HaploFunctionMap *map,
     func_list->func = func;
     func_list->key = malloc(strlen(key));
     strcpy(func_list->key, key);
-    map->_map[hash] = func_list;
+    map->_map[hash] = func_list;    
     return 0;
   }
 

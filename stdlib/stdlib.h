@@ -22,18 +22,33 @@
 // SOFTWARE.
 //
 
-#ifndef _HAPLO_HAPLO_H_
-#define _HAPLO_HAPLO_H_
+#ifndef _HAPLO_STDLIB_H_
+#define _HAPLO_STDLIB_H_
 
-// --- Headers ---
+#include "../interpreter.h"
+#include "../function.h"
 
-#include "errors.h"
-#include "atom.h"
-#include "lexer.h"
-#include "parser.h"
-#include "expr.h"
-#include "function.h"
-#include "stdlib/stdlib.h"
-#include "interpreter.h"
+#include <stddef.h>
 
-#endif // _HAPLO_HAPLO_H_
+extern HaploFunctionMap __haplo_std_function_map;
+
+#define HAPLO_STD_FUNC(fn)    \
+  HAPLO_STD_FUNC_STR(fn, #fn)
+
+#define HAPLO_STD_FUNC_STR(fn, func_string)    \
+    HaploValue __haplo_std_##fn(HaploValueList *); \
+    __attribute__((constructor)) static void __haplo_std_register_##fn(void) \
+    {                                                \
+      if (__haplo_std_function_map._map == NULL) \
+      { \
+        haplo_function_map_init(&__haplo_std_function_map, \
+                                HAPLO_INTERPRETER_FUNCTION_MAP_CAPACITY); \
+      } \
+      haplo_function_map_update(&__haplo_std_function_map,\
+                                func_string, \
+                                (HaploFunction){ .func = __haplo_std_##fn }); \
+    } \
+    HaploValue __haplo_std_##fn(HaploValueList *args)
+
+                                
+#endif // _HAPLO_STDLIB_H_

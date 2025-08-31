@@ -30,13 +30,15 @@
 // --- Macros ---
 
 #ifdef HAPLO_NO_PREFIX
-  #define FunctionKey HaploFunctionKey
   #define Function HaploFunction
+  #define FunctionKey HaploFunctionKey
   #define FunctionList HaploFunctionList
   #define FunctionMap HaploFunctionMap
   #define function_list_free haplo_function_list_free
+  #define function_list_deep_copy haplo_function_list_deep_copy
   #define function_map_init haplo_function_map_init
   #define function_map_destroy haplo_function_map_destroy
+  #define function_map_deep_copy haplo_function_map_deep_copy
   #define function_map_lookup haplo_function_map_lookup
   #define function_map_update haplo_function_map_update
   #define function_map_delete haplo_function_map_delete
@@ -65,8 +67,12 @@ typedef struct HaploFunctionMap {
 // --- Functions ---
 
 void haplo_function_list_free(HaploFunctionList *list);
+// Returns a deep copy of the list
+HaploFunctionList *haplo_function_list_deep_copy(HaploFunctionList *list);
 int haplo_function_map_init(HaploFunctionMap *map, int capacity);
 int haplo_function_map_destroy(HaploFunctionMap *map);
+// Returns a deep copy of the map
+HaploFunctionMap haplo_function_map_deep_copy(HaploFunctionMap map);
 // Retuns 0 if key exists in map and fills func with the value if func
 // is not null, or returns a negative number representing an error
 int haplo_function_map_lookup(HaploFunctionMap *map,

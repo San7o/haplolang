@@ -40,11 +40,15 @@
   #define interpreter_call haplo_interpreter_call
 #endif // HAPLO_NO_PREFIX
 
+#ifndef HAPLO_INTERPRETER_FUNCTION_MAP_CAPACITY
+#define HAPLO_INTERPRETER_FUNCTION_MAP_CAPACITY 1024
+#endif // HAPLO_INTERPRETER_FUNCTION_MAP_CAPACITY
+
 // --- Types ---
 
 typedef struct HaploInterpreter {
   // TODO: variables, debug instrumentation
-  HaploFunctionMap *functions;
+  HaploFunctionMap function_map;
 } HaploInterpreter;
 
 // --- Functions ---

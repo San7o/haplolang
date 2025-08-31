@@ -68,7 +68,7 @@ void process_line(char* input, ssize_t len)
   printf("%s\n", buf);
 
   haplo_value_free(val);
-  interpreter_clean(&interpreter);
+  interpreter_destroy(&interpreter);
   expr_free(expr);
   return;
 }

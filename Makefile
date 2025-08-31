@@ -35,7 +35,11 @@ LIB_OBJ=atom.o\
         interpreter.o\
         value.o\
         errors.o\
-        function.o
+        function.o\
+        stdlib/stdlib.o\
+        stdlib/io.o\
+        stdlib/list.o\
+        stdlib/math.o
 TEST_OBJ=tests/tests.o\
          tests/lexer_test.o\
          tests/parser_test.o\
@@ -58,7 +62,7 @@ lib${NAME}.a: ${LIB_OBJ}
 # --- Cli ---
 
 cli: ${CLI_OBJ} lib
-	${CC} ${CLI_OBJ} lib${NAME}.a -lreadline ${FLAGS} -o ${NAME}
+	${CC} ${CLI_OBJ} -Wl,--whole-archive lib${NAME}.a -Wl,--no-whole-archive -lreadline ${FLAGS} -o ${NAME}
 
 # --- Testing ---
 

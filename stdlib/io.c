@@ -22,18 +22,32 @@
 // SOFTWARE.
 //
 
-#ifndef _HAPLO_HAPLO_H_
-#define _HAPLO_HAPLO_H_
+#include "stdlib.h"
+#include "../value.h"
+#include "../errors.h"
 
-// --- Headers ---
+#include <stdio.h>
 
-#include "errors.h"
-#include "atom.h"
-#include "lexer.h"
-#include "parser.h"
-#include "expr.h"
-#include "function.h"
-#include "stdlib/stdlib.h"
-#include "interpreter.h"
+// print *
+// Returns: EMPTY
+HAPLO_STD_FUNC(print)
+{
+  if (haplo_value_list_len(args) != 1)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_ERROR,
+      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+    };
+  }
+    
+  HaploValue val;
+  val = args->val;
+    
+  char buf[1024] = {0};
+  haplo_value_string(val, &buf[0], 1024);
+  printf("%s\n", buf);
 
-#endif // _HAPLO_HAPLO_H_
+  return (HaploValue) {
+    .type = HAPLO_VAL_EMPTY,
+  };
+}

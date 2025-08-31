@@ -24,6 +24,8 @@
 
 #include "interpreter.h"
 #include "errors.h"
+#include "function.h"
+#include "stdlib/stdlib.h"
 
 #include <stddef.h>
 #include <stdio.h>
@@ -33,14 +35,18 @@
 int haplo_interpreter_init(HaploInterpreter *interpreter)
 {
   if (interpreter == NULL) return -HAPLO_ERROR_INTERPRETER_NULL;
-  // For future use
+
+  interpreter->function_map = haplo_function_map_deep_copy(__haplo_std_function_map);
+  
   return 0;
 }
 
 void haplo_interpreter_destroy(HaploInterpreter *interpreter)
 {
   if (interpreter == NULL) return;
-  // For future use
+
+  haplo_function_map_destroy(&interpreter->function_map);
+
   return;
 }
 
@@ -141,7 +147,7 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
     };
   }
 
-  // Useful debug prints
+  // Useful debug
   /*
   char buf[1024] = {0};
   haplo_value_string(value, buf, 1024);
@@ -150,331 +156,22 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
   haplo_value_list_print(args);
   */
 
-  // TODO: implement proper function calling infrastructure and
-  // standard library
-
   if (value.type != HAPLO_VAL_FUNC)
   {
     return value;
   }
 
-  // + INTEGER INTEGER
-  // Returns: INTEGER
-  // + FLOAT FLOAT
-  // Returns FLOAT
-  if (strcmp(value.function, "+") == 0)
+  HaploFunction func;
+  int err = haplo_function_map_lookup(&interpreter->function_map,
+                                      value.function,
+                                      &func);
+  if (err < 0)
   {
-    if (haplo_value_list_len(args) != 2)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
-      };
-    }
-    
-    HaploValue a, b;
-    a = args->val;
-    b = args->next->val;
-
-    if (a.type == HAPLO_VAL_INTEGER && b.type == HAPLO_VAL_INTEGER)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_INTEGER,
-        .integer = a.integer + b.integer,
-      };
-    } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_FLOAT,
-        .floating_point = a.floating_point + b.floating_point,
-      };
-    } else if (b.type == HAPLO_VAL_ERROR)
-    {
-      return b;
-    } else if (a.type == HAPLO_VAL_ERROR)
-    {
-      return a;
-    } else {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
-      };
-    }
-  }
-  // - INTEGER INTEGER
-  // Returns: INTEGER
-  // - FLOAT FLOAT
-  // Returns: FLOAT
-  else if (strcmp(value.function, "-") == 0)
-  {
-    if (haplo_value_list_len(args) != 2)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
-      };
-    }
-    
-    HaploValue a, b;
-    a = args->val;
-    b = args->next->val;
-
-    if (a.type == HAPLO_VAL_INTEGER && b.type == HAPLO_VAL_INTEGER)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_INTEGER,
-        .integer = a.integer - b.integer,
-      };
-    } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_FLOAT,
-        .floating_point = a.floating_point - b.floating_point,
-      };
-    } else if (b.type == HAPLO_VAL_ERROR)
-    {
-      return b;
-    } else if (a.type == HAPLO_VAL_ERROR)
-    {
-      return a;
-    } else {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
-      };
-    }
-  }
-  // * INTEGER INTEGER
-  // Returns INTEGER
-  // * FLOAT FLOAT
-  // Returns FLOAT
-  else if (strcmp(value.function, "*") == 0)
-  {
-    if (haplo_value_list_len(args) != 2)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
-      };
-    }
-
-    HaploValue a, b;
-    a = args->val;
-    b = args->next->val;
-
-    if (a.type == HAPLO_VAL_INTEGER && b.type == HAPLO_VAL_INTEGER)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_INTEGER,
-        .integer = a.integer * b.integer,
-      };
-    } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_FLOAT,
-        .floating_point = a.floating_point * b.floating_point,
-      };
-    } else if (b.type == HAPLO_VAL_ERROR)
-    {
-      return b;
-    } else if (a.type == HAPLO_VAL_ERROR)
-    {
-      return a;
-    } else {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
-      };
-    }
-  }
-  // / INTEGER INTEGER
-  // Returns INTEGER
-  // / FLOAT FLOAT
-  // Returns FLOAT
-  else if (strcmp(value.function, "/") == 0)
-  {
-    if (haplo_value_list_len(args) != 2)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
-      };
-    }
-    
-    HaploValue a, b;
-    a = args->val;
-    b = args->next->val;
-
-    if (a.type == HAPLO_VAL_INTEGER && b.type == HAPLO_VAL_INTEGER)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_INTEGER,
-        .integer = a.integer / b.integer,
-      };
-    } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_FLOAT,
-        .floating_point = a.floating_point / b.floating_point,
-      };
-    } else if (b.type == HAPLO_VAL_ERROR)
-    {
-      return b;
-    } else if (a.type == HAPLO_VAL_ERROR)
-    {
-      return a;
-    } else {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
-      };
-    }
-  }
-  // append VALUE LIST
-  // Returns: LIST
-  else if (strcmp(value.function, "append") == 0)
-  {
-    if (haplo_value_list_len(args) != 2)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
-      };
-    }
-    
-    HaploValue val, list;
-    val = args->val;
-    list = args->next->val;
-
-    if (val.type != HAPLO_VAL_LIST && list.type == HAPLO_VAL_LIST)
-    {
-      HaploValueList *new_list = haplo_value_list_deep_copy(list.list);
-      HaploValue new_val = haplo_value_deep_copy(val);
-      return (HaploValue) {
-        .type = HAPLO_VAL_LIST,
-        .list = haplo_value_list_push_front(new_val, new_list),
-      };
-    } else if (list.type == HAPLO_VAL_ERROR)
-    {
-      return list;
-    } else {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
-      };
-    }
-  }
-  // head LIST
-  // returns: VALUE
-  else if (strcmp(value.function, "head") == 0)
-  {
-    if (haplo_value_list_len(args) != 1)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
-      };
-    }
-    
-    HaploValue val;
-    val = args->val;
-
-    if (val.type == HAPLO_VAL_LIST)
-    {
-      HaploValue head, new_head;
-      head = val.list->val;
-      new_head = haplo_value_deep_copy(head);
-      return new_head;
-    } else if (val.type == HAPLO_VAL_ERROR)
-    {
-      return val;
-    } else {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
-      };
-    }
-  }
-  // tail LIST
-  // Returns: LIST
-  else if (strcmp(value.function, "tail") == 0)
-  {
-    if (haplo_value_list_len(args) != 1)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
-      };
-    }
-    
-    HaploValue val;
-    val = args->val;
-
-    if (val.type == HAPLO_VAL_LIST)
-    {
-      HaploValueList *list, *new_list;
-      list = val.list->next;
-      new_list = haplo_value_list_deep_copy(list);
-      return (HaploValue) {
-        .type = HAPLO_VAL_LIST,
-        .list = new_list,
-      };
-    } else if (val.type == HAPLO_VAL_ERROR)
-    {
-      return val;
-    } else {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
-      };
-    }
-  }
-  // print *
-  // Returns: EMPTY
-  else if (strcmp(value.function, "print") == 0)
-  {
-    if (haplo_value_list_len(args) != 1)
-    {
-      return (HaploValue) {
-        .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
-      };
-    }
-    
-    HaploValue val;
-    val = args->val;
-    
-    char buf[1024] = {0};
-    haplo_value_string(val, &buf[0], 1024);
-    printf("%s\n", buf);
-  }
-  // list VALUE ...
-  // Returns: LIST
-  else if (strcmp(value.function, "list") == 0)
-  {
-    HaploValueList* new_list = NULL;
-    HaploValue new_value = {0};
-    HaploValueList* this = args;
-    while (this != NULL)
-    {
-      new_value = haplo_value_deep_copy(this->val);
-      new_list = haplo_value_list_push_front(new_value, new_list);
-      this = this->next;
-    }
-    
-    return (HaploValue) {
-      .type = HAPLO_VAL_LIST,
-      .list = new_list,
-    };
-  }
-  else {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
       .error = -HAPLO_ERROR_INTERPRETER_UNKNOWN_FUNCTION,
     };
   }
 
-  return (HaploValue) {
-    .type = HAPLO_VAL_EMPTY,
-  };
+  return func.func(args);
 }
