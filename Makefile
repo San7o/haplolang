@@ -28,6 +28,7 @@ NAME=haplo
 CFLAGS=-Wall -Werror -Wpedantic -ggdb
 CC=gcc
 
+LIB_NAME=lib${NAME}.a
 LIB_OBJ=atom.o\
         parser.o\
         lexer.o\
@@ -35,11 +36,13 @@ LIB_OBJ=atom.o\
         interpreter.o\
         value.o\
         errors.o\
-        function.o\
-        stdlib/stdlib.o\
-        stdlib/io.o\
-        stdlib/list.o\
-        stdlib/math.o
+        function.o
+STDLIB_NAME=lib${NAME}std.a
+STDLIB_OBJ=stdlib/stdlib.o\
+           stdlib/io.o\
+           stdlib/list.o\
+           stdlib/math.o
+TEST_NAME=${NAME}_tests
 TEST_OBJ=tests/tests.o\
          tests/lexer_test.o\
          tests/parser_test.o\
@@ -50,44 +53,45 @@ CLI_OBJ=haplo.o
 
 ## --- Commands ---
 
-# --- Lib ---
+# --- Targets ---
 
 all: lib
 
-lib: lib${NAME}.a
+lib: ${LIB_NAME}
 
-lib${NAME}.a: ${LIB_OBJ}
+${LIB_NAME}: ${LIB_OBJ}
 	ar rcs $@ $^
 
-# --- Cli ---
+stdlib: ${STDLIB_NAME}
 
-cli: ${CLI_OBJ} lib
-	${CC} ${CLI_OBJ} -Wl,--whole-archive lib${NAME}.a -Wl,--no-whole-archive -lreadline ${FLAGS} -o ${NAME}
+${STDLIB_NAME}: ${STDLIB_OBJ}
+	ar rcs $@ $^
+
+cli: ${CLI_OBJ} lib stdlib
+	${CC} ${CLI_OBJ} -Wl,--whole-archive ${LIB_NAME} ${STDLIB_NAME} -Wl,--no-whole-archive -lreadline ${FLAGS} -o ${NAME}
+
+%.o: %.c
+	${CC} ${CFLAGS} -c $< -o $@
 
 # --- Testing ---
 
-tests: ${TEST_OBJ} lib
-	${CC} ${TEST_OBJ} -Wl,--whole-archive lib${NAME}.a -Wl,--no-whole-archive ${FLAGS} -Wl,-T,${TEST_LINKER_SCRIPT} -o ${NAME}_tests
+tests: ${TEST_OBJ} lib stdlib
+	${CC} ${TEST_OBJ} -Wl,--whole-archive ${LIB_NAME} ${STDLIB_NAME} -Wl,--no-whole-archive ${FLAGS} -Wl,-T,${TEST_LINKER_SCRIPT} -o ${TEST_NAME}
 
-check: tests
-	chmod +x ${NAME}_tests
-	./${NAME}_tests
+check: tests cli
+	chmod +x ${TEST_NAME}
+	./${TEST_NAME}
 	./${NAME}_tests_e2e.sh
 
 .PHONY: check-e2e
-check-e2e:
+check-e2e: cli
 	chmod +x ${NAME}_tests_e2e.sh
 	./${NAME}_tests_e2e.sh
 
 # --- Cleanup ---
 
 clean:
-	rm ${LIB_OBJ} ${TEST_OBJ} ${HAPLO_OBJ} 2>/dev/null || :
+	rm ${LIB_OBJ} ${TEST_OBJ} ${HAPLO_OBJ} ${STDLIB_OBJ} 2>/dev/null || :
 
 distclean:
-	rm lib${NAME}.a ${NAME} ${NAME}_tests 2>/dev/null || :
-
-# --- Misc ---
-
-%.o: %.c
-	${CC} ${CFLAGS} -c $< -o $@
+	rm ${LIB_NAME} ${STDLIB_NAME} ${NAME} ${TEST_NAME} 2>/dev/null || :

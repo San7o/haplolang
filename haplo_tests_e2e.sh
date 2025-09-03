@@ -26,8 +26,8 @@
 
 HAPLO_EXECUTABLE=./haplo
 TMP_FILE=.haplo_tests_e2e_tmp
-SAMPLES="sample1.haplo sample2.haplo sample3.haplo"
 SAMPLES_DIR=./samples
+SAMPLES=$(echo $SAMPLES_DIR/*.haplo)
 OK="true"
 
 set -e
@@ -50,8 +50,8 @@ if [ ! -e $HAPLO_EXECUTABLE ]; then
 fi
 
 for SAMPLE in $SAMPLES; do
-    OUTPUT=$($HAPLO_EXECUTABLE $SAMPLES_DIR/$SAMPLE)
-    EXPECTED_OUTPUT=$(cat $SAMPLES_DIR/$SAMPLE.out)
+    OUTPUT=$($HAPLO_EXECUTABLE $SAMPLE)
+    EXPECTED_OUTPUT=$(cat $SAMPLE.out)
     if [ ! "$OUTPUT" = "$EXPECTED_OUTPUT"  ]; then
         e2e_error "e2e test failed for sample $SAMPLE"
         echo -e "Expected: \n"
