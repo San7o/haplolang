@@ -49,6 +49,5 @@ extern HaploFunctionMap __haplo_std_function_map;
                                 (HaploFunction){ .func = __haplo_std_##fn }); \
     } \
     HaploValue __haplo_std_##fn(HaploValueList *args)
-
                                 
 #endif // _HAPLO_STDLIB_H_

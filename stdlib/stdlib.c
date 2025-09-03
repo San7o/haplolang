@@ -30,3 +30,8 @@ HaploFunctionMap __haplo_std_function_map = {
   ._map = NULL,
   .capacity = 0,
 };
+
+__attribute__((destructor))
+static void __haplo_std_function_map_free() {
+  haplo_function_map_destroy(&__haplo_std_function_map);
+}

@@ -131,7 +131,7 @@ int haplo_lexer_next_token(char* input, int input_size,
                 "Number of tokens changed, maybe haplo_lexer_next_token needs to be updated?");
 
   if (token_char == NULL) token_char = haplo_default_token_char;
-  
+
   if (input[0] == token_char[HAPLO_LEX_OPEN])
   {
     if (token_len != NULL) *token_len = 1;

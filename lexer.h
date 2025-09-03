@@ -50,7 +50,10 @@ enum HaploToken {
   _HAPLO_LEX_MAX,
 };
 
+// HaploTokenChar is used to define a mapping between the HaploToken
+// enum and a char
 typedef const char HaploTokenChar[_HAPLO_LEX_MAX];
+// Default HaploToken to char mapping
 extern HaploTokenChar haplo_default_token_char;
 
 // --- Functions ---
