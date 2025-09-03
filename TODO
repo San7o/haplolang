@@ -1,8 +1,6 @@
   TODO
 =========
 
-- Implement proper function call infrastructure
-- add configurable char tokens to the lexer
 - Declare variables and functions
 - Add control flow
 - Generated documentation

@@ -60,7 +60,8 @@ int haplo_parser_next_token(HaploParser *parser)
   int ret = haplo_lexer_next_token(parser->input + parser->pos,
                                    parser->input_len - parser->pos,
                                    &token_len,
-                                   &parser->last_atom);
+                                   &parser->last_atom,
+                                   NULL);
   if (ret < 0)
   {
     parser->error = ret;
@@ -88,7 +89,8 @@ int haplo_parser_peek_next_token(HaploParser *parser)
   int ret = haplo_lexer_next_token(parser->input + parser->pos,
                                    parser->input_len - parser->pos,
                                    NULL,
-                                   &parser->last_atom);
+                                   &parser->last_atom,
+                                   NULL);
   if (ret < 0)
   {
     parser->error = ret;

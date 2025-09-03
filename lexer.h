@@ -31,6 +31,8 @@
 
 #ifdef HAPLO_NO_PREFIX
   #define Token HaploToken
+  #define TokenChar HaploTokenChar
+  #define default_token_char haplo_default_token_char
   #define lexer_token_string haplo_lexer_token_string
   #define lexer_atom_len haplo_lexer_atom_len
   #define lexer_trim_left haplo_lexer_trim_left
@@ -45,7 +47,11 @@ enum HaploToken {
   HAPLO_LEX_ATOM,      // see struct HaploAtom in atom.h
   HAPLO_LEX_COMMENT,   // '#'
   HAPLO_LEX_NONE,
+  _HAPLO_LEX_MAX,
 };
+
+typedef const char HaploTokenChar[_HAPLO_LEX_MAX];
+extern HaploTokenChar haplo_default_token_char;
 
 // --- Functions ---
 
@@ -65,8 +71,12 @@ int haplo_lexer_trim_left(char* input, int input_size,
 // value.  If token_len is specified, its value will be set to the
 // length of the token. If atom is specified and the type of token is
 // ATOM, a new Atom will be allocated and the user will be responsible
-// to free it using haplo_atom_free.
+// to free it using haplo_atom_free. If token_char is non null, it
+// will be used to map the HaploToken enum to a char, otherwise a
+// default HaploTokenChar will be used instead
+// (haplo_default_token_char).
 int haplo_lexer_next_token(char* input, int input_size,
-                           int* token_len, HaploAtom *atom);
+                           int* token_len, HaploAtom *atom,
+                           HaploTokenChar token_char);
 
 #endif // _HAPLO_LEXER_H_
