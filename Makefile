@@ -36,7 +36,7 @@ LIB_OBJ=atom.o\
         interpreter.o\
         value.o\
         errors.o\
-        function.o
+        symbol.o
 STDLIB_NAME=lib${NAME}std.a
 STDLIB_OBJ=stdlib/stdlib.o\
            stdlib/io.o\
@@ -47,8 +47,9 @@ TEST_OBJ=tests/tests.o\
          tests/lexer_test.o\
          tests/parser_test.o\
          tests/interpreter_test.o\
-         tests/function_map_test.o
+         tests/symbol_map_test.o
 TEST_LINKER_SCRIPT=tests/linker.ld
+TEST_E2E_NAME=${NAME}_tests_e2e.sh
 CLI_OBJ=haplo.o
 
 ## --- Commands ---
@@ -81,12 +82,12 @@ tests: ${TEST_OBJ} lib stdlib
 check: tests cli
 	chmod +x ${TEST_NAME}
 	./${TEST_NAME}
-	./${NAME}_tests_e2e.sh
+	./${TEST_E2E_NAME}
 
 .PHONY: check-e2e
 check-e2e: cli
-	chmod +x ${NAME}_tests_e2e.sh
-	./${NAME}_tests_e2e.sh
+	chmod +x ${TEST_E2E_NAME}
+	./${TEST_E2E_NAME}
 
 # --- Cleanup ---
 

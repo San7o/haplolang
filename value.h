@@ -50,10 +50,11 @@ enum HaploValueType {
   HAPLO_VAL_FLOAT,
   HAPLO_VAL_STRING,
   HAPLO_VAL_BOOL,
-  HAPLO_VAL_FUNC,
+  HAPLO_VAL_SYMBOL,
   HAPLO_VAL_LIST,
   HAPLO_VAL_EMPTY,
   HAPLO_VAL_ERROR,
+  _HAPLO_VAL_MAX,
 };
 
 struct HaploValueList;
@@ -65,7 +66,7 @@ typedef struct HaploValue {
     double floating_point;
     char* string;
     bool boolean;
-    char* function;
+    char* symbol;
     struct HaploValueList *list;
     int error;
   };

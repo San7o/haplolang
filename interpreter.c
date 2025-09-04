@@ -24,7 +24,7 @@
 
 #include "interpreter.h"
 #include "errors.h"
-#include "function.h"
+#include "symbol.h"
 #include "stdlib/stdlib.h"
 
 #include <stddef.h>
@@ -36,7 +36,7 @@ int haplo_interpreter_init(HaploInterpreter *interpreter)
 {
   if (interpreter == NULL) return -HAPLO_ERROR_INTERPRETER_NULL;
 
-  interpreter->function_map = haplo_function_map_deep_copy(__haplo_std_function_map);
+  interpreter->symbol_map = haplo_symbol_map_deep_copy(__haplo_std_symbol_map);
   
   return 0;
 }
@@ -45,7 +45,7 @@ void haplo_interpreter_destroy(HaploInterpreter *interpreter)
 {
   if (interpreter == NULL) return;
 
-  haplo_function_map_destroy(&interpreter->function_map);
+  haplo_symbol_map_destroy(&interpreter->symbol_map);
 
   return;
 }
@@ -76,8 +76,8 @@ HaploValue haplo_interpreter_eval_atom(HaploAtom atom)
   case HAPLO_ATOM_SYMBOL: ;
     char* new_symbol = (char*) malloc(strlen(atom.symbol));
     strcpy(new_symbol, atom.symbol);
-    new_value.type = HAPLO_VAL_FUNC;
-    new_value.function = new_symbol;
+    new_value.type = HAPLO_VAL_SYMBOL;
+    new_value.symbol = new_symbol;
     break;
   default:
     new_value.type = HAPLO_VAL_ERROR;
@@ -124,7 +124,7 @@ HaploValueList *haplo_interpreter_interpret_tail(HaploInterpreter *interpreter,
   HaploValue head = haplo_interpreter_interpret(interpreter, expr->head);
   HaploValueList *tail = haplo_interpreter_interpret_tail(interpreter, expr->tail);
 
-  if (head.type == HAPLO_VAL_FUNC)
+  if (head.type == HAPLO_VAL_SYMBOL)
   {
     head = haplo_interpreter_call(interpreter, head, tail);
     haplo_value_list_free(tail);
@@ -156,22 +156,32 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
   haplo_value_list_print(args);
   */
 
-  if (value.type != HAPLO_VAL_FUNC)
+  if (value.type != HAPLO_VAL_SYMBOL)
   {
     return value;
   }
 
-  HaploFunction func;
-  int err = haplo_function_map_lookup(&interpreter->function_map,
-                                      value.function,
-                                      &func);
+  HaploSymbol symbol;
+  int err = haplo_symbol_map_lookup(&interpreter->symbol_map,
+                                    value.symbol,
+                                    &symbol);
   if (err < 0)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_UNKNOWN_FUNCTION,
+      .error = -HAPLO_ERROR_INTERPRETER_UNKNOWN_SYMBOL,
     };
   }
 
-  return func.func(args);
+  switch(symbol.type)
+  {
+  case HAPLO_SYMBOL_FUNCTION:
+    return symbol.func.run(args);
+  case HAPLO_SYMBOL_VARIABLE:
+    return symbol.var;
+  }
+  return (HaploValue) {
+    .type = HAPLO_VAL_ERROR,
+    .error = -HAPLO_ERROR_INTERPRETER_UNKNOWN_SYMBOL_TYPE,
+  };
 }

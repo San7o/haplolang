@@ -113,7 +113,7 @@ and returns an `empty` value.
 69.000000
 > print "Nice"
 "Nice"
-empy
+empty
 ```
 
 You nest function calls using s-expressions, like lisp.

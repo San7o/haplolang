@@ -27,7 +27,7 @@
 
 #include "expr.h"
 #include "value.h"
-#include "function.h"
+#include "symbol.h"
 
 // --- Macros ---
 
@@ -40,15 +40,14 @@
   #define interpreter_call haplo_interpreter_call
 #endif // HAPLO_NO_PREFIX
 
-#ifndef HAPLO_INTERPRETER_FUNCTION_MAP_CAPACITY
-#define HAPLO_INTERPRETER_FUNCTION_MAP_CAPACITY 1024
-#endif // HAPLO_INTERPRETER_FUNCTION_MAP_CAPACITY
+#ifndef HAPLO_INTERPRETER_SYMBOL_MAP_CAPACITY
+#define HAPLO_INTERPRETER_SYMBOL_MAP_CAPACITY 1024
+#endif // HAPLO_INTERPRETER_SYMBOL_MAP_CAPACITY
 
 // --- Types ---
 
 typedef struct HaploInterpreter {
-  // TODO: variables, debug instrumentation
-  HaploFunctionMap function_map;
+  HaploSymbolMap symbol_map;
 } HaploInterpreter;
 
 // --- Functions ---
@@ -56,11 +55,11 @@ typedef struct HaploInterpreter {
 int haplo_interpreter_init(HaploInterpreter *interpreter);
 void haplo_interpreter_destroy(HaploInterpreter *interpreter);
 HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
-                                         HaploExpr *expr);
+                                       HaploExpr *expr);
 HaploValueList *haplo_interpreter_interpret_tail(HaploInterpreter *interpreter,
                                                   HaploExpr *expr);
 HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
-                                    HaploValue value,
-                                    HaploValueList *args);
+                                  HaploValue value,
+                                  HaploValueList *args);
   
 #endif // _HAPLO_INTERPRETER_H_

@@ -32,7 +32,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include "expr.h"
-#include "function.h"
+#include "symbol.h"
 #include "stdlib/stdlib.h"
 #include "interpreter.h"
 

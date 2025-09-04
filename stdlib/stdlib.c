@@ -26,12 +26,12 @@
 
 #include <stddef.h>
 
-HaploFunctionMap __haplo_std_function_map = {
+HaploSymbolMap __haplo_std_symbol_map = {
   ._map = NULL,
   .capacity = 0,
 };
 
 __attribute__((destructor))
-static void __haplo_std_function_map_free() {
-  haplo_function_map_destroy(&__haplo_std_function_map);
+static void __haplo_std_symbol_map_free() {
+  haplo_symbol_map_destroy(&__haplo_std_symbol_map);
 }

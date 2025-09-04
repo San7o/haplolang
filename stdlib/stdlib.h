@@ -25,12 +25,13 @@
 #ifndef _HAPLO_STDLIB_H_
 #define _HAPLO_STDLIB_H_
 
+#include "../value.h"
+#include "../symbol.h"
 #include "../interpreter.h"
-#include "../function.h"
 
 #include <stddef.h>
 
-extern HaploFunctionMap __haplo_std_function_map;
+extern HaploSymbolMap __haplo_std_symbol_map;
 
 #define HAPLO_STD_FUNC(fn)    \
   HAPLO_STD_FUNC_STR(fn, #fn)
@@ -39,14 +40,19 @@ extern HaploFunctionMap __haplo_std_function_map;
     HaploValue __haplo_std_##fn(HaploValueList *); \
     __attribute__((constructor)) static void __haplo_std_register_##fn(void) \
     {                                                \
-      if (__haplo_std_function_map._map == NULL) \
+      if (__haplo_std_symbol_map._map == NULL) \
       { \
-        haplo_function_map_init(&__haplo_std_function_map, \
-                                HAPLO_INTERPRETER_FUNCTION_MAP_CAPACITY); \
+        haplo_symbol_map_init(&__haplo_std_symbol_map, \
+                              HAPLO_INTERPRETER_SYMBOL_MAP_CAPACITY); \
       } \
-      haplo_function_map_update(&__haplo_std_function_map,\
-                                func_string, \
-                                (HaploFunction){ .func = __haplo_std_##fn }); \
+      haplo_symbol_map_update(&__haplo_std_symbol_map,\
+                              func_string,            \
+                              (HaploSymbol){ \
+                                .type = HAPLO_SYMBOL_FUNCTION,  \
+                                .func = (HaploFunction) {\
+                                  .run = __haplo_std_##fn \
+                                }               \
+                              });               \
     } \
     HaploValue __haplo_std_##fn(HaploValueList *args)
                                 

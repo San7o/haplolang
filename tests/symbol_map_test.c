@@ -28,16 +28,16 @@
 
 #include <stdio.h>
 
-HAPLO_TEST(function_map_test, init_destroy)
+HAPLO_TEST(symbol_map_test, init_destroy)
 {
-  FunctionMap map;
+  SymbolMap map;
   int capacity = 10;
   int err;
   
-  err = function_map_init(&map, capacity);
+  err = symbol_map_init(&map, capacity);
   if (err < 0)
   {
-    fprintf(stderr, "Function map init returned error %s\n", error_string(err));
+    fprintf(stderr, "Symbol map init returned error %s\n", error_string(err));
     goto test_failed;
   }
   if (map._map == NULL)
@@ -51,10 +51,10 @@ HAPLO_TEST(function_map_test, init_destroy)
     goto test_failed;
   }
 
-  err = function_map_destroy(&map);
+  err = symbol_map_destroy(&map);
   if (err < 0)
   {
-    fprintf(stderr, "Function map destroy returned error %s\n", error_string(err));
+    fprintf(stderr, "Symbol map destroy returned error %s\n", error_string(err));
     goto test_failed;
   }
   if (map._map != NULL)
@@ -68,21 +68,21 @@ HAPLO_TEST(function_map_test, init_destroy)
   HAPLO_TEST_FAILED;
 }
 
-Value my_test_function_1(ValueList *expr)
+Value my_test_symbol_1(ValueList *expr)
 {
   return (Value){0};
 }
 
-HAPLO_TEST(function_map_test, update_lookup)
+HAPLO_TEST(symbol_map_test, update_lookup)
 {
-  FunctionMap map;
+  SymbolMap map;
   int capacity = 10;
   int err;
   
-  err = function_map_init(&map, capacity);
+  err = symbol_map_init(&map, capacity);
   if (err < 0)
   {
-    fprintf(stderr, "Function map init returned error %s\n", error_string(err));
+    fprintf(stderr, "Symbol map init returned error %s\n", error_string(err));
     goto test_failed;
   }
   if (map._map == NULL)
@@ -97,39 +97,50 @@ HAPLO_TEST(function_map_test, update_lookup)
   }
 
   char* key = "test";
-  Function func = { .func = &my_test_function_1 };
-  err = haplo_function_map_update(&map, key, func);
+  Symbol symbol = {
+    .type = HAPLO_SYMBOL_FUNCTION,
+    .func = (HaploFunction) {
+      .run = &my_test_symbol_1,
+    },
+  };
+  err = haplo_symbol_map_update(&map, key, symbol);
   if (err == 1)
   {
-    fprintf(stderr, "Function map update returned 1 instead of 0\n");
-    function_map_destroy(&map);
+    fprintf(stderr, "Symbol map update returned 1 instead of 0\n");
+    symbol_map_destroy(&map);
     goto test_failed;
   }
   else if (err < 0) {
-    fprintf(stderr, "Function map update returned error %s\n", error_string(err));
-    function_map_destroy(&map);
+    fprintf(stderr, "Symbol map update returned error %s\n", error_string(err));
+    symbol_map_destroy(&map);
     goto test_failed;
   }
 
-  Function lookup_function;
-  err = haplo_function_map_lookup(&map, key, &lookup_function);
+  Symbol lookup_symbol;
+  err = haplo_symbol_map_lookup(&map, key, &lookup_symbol);
   if (err < 0)
   {
-    fprintf(stderr, "Function map lookup returned error %s\n", error_string(err));
-    function_map_destroy(&map);
+    fprintf(stderr, "Symbol map lookup returned error %s\n", error_string(err));
+    symbol_map_destroy(&map);
     goto test_failed;
   }
-  if (lookup_function.func != func.func)
+  if (lookup_symbol.type != HAPLO_SYMBOL_FUNCTION)
   {
-    fprintf(stderr, "Function map lookup returned error %s\n", error_string(err));
-    function_map_destroy(&map);
+    fprintf(stderr, "Symbol map lookup type is not correct\n");
+    symbol_map_destroy(&map);
+    goto test_failed;
+  }
+  if (lookup_symbol.func.run != symbol.func.run)
+  {
+    fprintf(stderr, "Symbol map lookup function does not match\n");
+    symbol_map_destroy(&map);
     goto test_failed;
   }
   
-  err = function_map_destroy(&map);
+  err = symbol_map_destroy(&map);
   if (err < 0)
   {
-    fprintf(stderr, "Function map destroy returned error %s\n", error_string(err));
+    fprintf(stderr, "Symbol map destroy returned error %s\n", error_string(err));
     goto test_failed;
   }
   if (map._map != NULL)
@@ -143,21 +154,21 @@ HAPLO_TEST(function_map_test, update_lookup)
   HAPLO_TEST_FAILED;
 }
 
-Value my_test_function_2(ValueList *expr)
+Value my_test_symbol_2(ValueList *expr)
 {
   return (Value){0};
 }
 
-HAPLO_TEST(function_map_test, delete)
+HAPLO_TEST(symbol_map_test, delete)
 {
-  FunctionMap map;
+  SymbolMap map;
   int capacity = 10;
   int err;
   
-  err = function_map_init(&map, capacity);
+  err = symbol_map_init(&map, capacity);
   if (err < 0)
   {
-    fprintf(stderr, "Function map init returned error %s\n", error_string(err));
+    fprintf(stderr, "Symbol map init returned error %s\n", error_string(err));
     goto test_failed;
   }
   if (map._map == NULL)
@@ -172,55 +183,66 @@ HAPLO_TEST(function_map_test, delete)
   }
 
   char* key = "test_with_a_decently_long_name";
-  Function func = { .func = &my_test_function_2 };
-  err = haplo_function_map_update(&map, key, func);
+  Symbol symbol = {
+    .type = HAPLO_SYMBOL_FUNCTION,
+    .func = (HaploFunction) {
+      .run = &my_test_symbol_2,
+    },
+  };
+  err = haplo_symbol_map_update(&map, key, symbol);
   if (err == 1)
   {
-    fprintf(stderr, "Function map update returned 1 instead of 0\n");
-    function_map_destroy(&map);
+    fprintf(stderr, "Symbol map update returned 1 instead of 0\n");
+    symbol_map_destroy(&map);
     goto test_failed;
   }
   else if (err < 0) {
-    fprintf(stderr, "Function map update returned error %s\n", error_string(err));
-    function_map_destroy(&map);
+    fprintf(stderr, "Symbol map update returned error %s\n", error_string(err));
+    symbol_map_destroy(&map);
     goto test_failed;
   }
 
-  Function lookup_function;
-  err = haplo_function_map_lookup(&map, key, &lookup_function);
+  Symbol lookup_symbol;
+  err = haplo_symbol_map_lookup(&map, key, &lookup_symbol);
   if (err < 0)
   {
-    fprintf(stderr, "Function map lookup returned error %s\n", error_string(err));
-    function_map_destroy(&map);
+    fprintf(stderr, "Symbol map lookup returned error %s\n", error_string(err));
+    symbol_map_destroy(&map);
     goto test_failed;
   }
-  if (lookup_function.func != func.func)
+  if (lookup_symbol.type != HAPLO_SYMBOL_FUNCTION)
   {
-    fprintf(stderr, "Function map lookup returned error %s\n", error_string(err));
-    function_map_destroy(&map);
+    fprintf(stderr, "Symbol map lookup type does not match\n");
+    symbol_map_destroy(&map);
+    goto test_failed;
+  }
+  if (lookup_symbol.func.run != symbol.func.run)
+  {
+    fprintf(stderr, "Symbol map lookup function does not match\n");
+    symbol_map_destroy(&map);
     goto test_failed;
   }
 
-  err = haplo_function_map_delete(&map, key);
+  err = haplo_symbol_map_delete(&map, key);
   if (err < 0)
   {
-    fprintf(stderr, "Function map delete returned error %s\n", error_string(err));
-    function_map_destroy(&map);
+    fprintf(stderr, "Symbol map delete returned error %s\n", error_string(err));
+    symbol_map_destroy(&map);
     goto test_failed;
   }
 
-  err = haplo_function_map_lookup(&map, key, &lookup_function);
-  if (err != -HAPLO_ERROR_FUNCTION_MAP_LOOKUP_NOT_FOUND)
+  err = haplo_symbol_map_lookup(&map, key, &lookup_symbol);
+  if (err != -HAPLO_ERROR_SYMBOL_MAP_LOOKUP_NOT_FOUND)
   {
-    fprintf(stderr, "Function map lookup unexpected error %s\n", error_string(err));
-    function_map_destroy(&map);
+    fprintf(stderr, "Symbol map lookup unexpected error %s\n", error_string(err));
+    symbol_map_destroy(&map);
     goto test_failed;
   }
   
-  err = function_map_destroy(&map);
+  err = symbol_map_destroy(&map);
   if (err < 0)
   {
-    fprintf(stderr, "Function map destroy returned error %s\n", error_string(err));
+    fprintf(stderr, "Symbol map destroy returned error %s\n", error_string(err));
     goto test_failed;
   }
   if (map._map != NULL)
