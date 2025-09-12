@@ -29,7 +29,7 @@ empty
 You can also interpret a file:
 
 ```
-$ ./haplo samples/sample1.haplo 
+$ ./haplo samples/hello_world.haplo 
 "Hello, World!"
 empty
 ```
@@ -126,12 +126,12 @@ specifying the symbol that denotes the variable using a quote:
 You can nest function calls using s-expressions, like lisp.
 
 ```lisp
-$ cat samples/sample2.haplo 
+$ cat samples/quick_math.haplo 
 (print
  (*
   (+ 1 2)
   (- 7 5)))
-$ ./haplo samples/sample2.haplo 
+$ ./haplo samples/quick_math.haplo 
 6
 empty
 ```
