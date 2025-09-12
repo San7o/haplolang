@@ -4,7 +4,7 @@ Haplolang an s-expression based imperative language implemented in C,
 greatly inspired by Lisp. The term "Haplo" is a Greek word meaning
 simple, which describes my philosophy in implementing the language.
 
-This is a recreational programming project.
+This is a [recreational programming](https://giovanni-diary.netlify.app/programming/notes/recreational-programming) project.
 
 The project is composed of:
 
