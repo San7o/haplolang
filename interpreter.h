@@ -27,7 +27,6 @@
 
 #include "expr.h"
 #include "value.h"
-#include "symbol.h"
 
 // --- Macros ---
 
@@ -46,8 +45,11 @@
 
 // --- Types ---
 
+// Forward declaration to prevent circular dependency
+struct HaploSymbolMap;
+
 typedef struct HaploInterpreter {
-  HaploSymbolMap symbol_map;
+  struct HaploSymbolMap *symbol_map;
 } HaploInterpreter;
 
 // --- Functions ---

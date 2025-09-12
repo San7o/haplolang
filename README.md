@@ -10,11 +10,12 @@ recreational.
 The current implementation was developed in two sittings: first the
 parser and then the interpreter + cli program. Some functions are
 implemented for basic math operations and printing, you cannot define
-functions or variables yet.
+functions yet.
 
 Everything is implemented in C. The project is composed of:
 
 - `libhaplo`: the library containing all the logic
+- `haplostdlib.a`: the haplo standard library in C
 - `haplo`: cli-based REPL interpreter
 - `haplo_tests`: unit tests
 
@@ -24,10 +25,10 @@ You can use the interactive interpreter by running the `haplo` cli:
 $ ./haplo
 The Haplolang interpreter by Giovanni Santini
 > # Hello, this is a comment
-> print "Hello, World!"
+> (print "Hello, World!")
 "Hello, World!"
 empty
-> print ( + 69 420 )
+> (print (+ 69 420))
 489
 empty
 ```
@@ -82,9 +83,9 @@ make clean
 ## Quickstart
 
 The language is strictly typed. The default value types are `integer`,
-`float`, `string`, `bool`, `func`, `list`, `empty` and `error`. If you
-evaluate a value that is not a function, you will get back the same
-value:
+`float`, `string`, `bool`, `func`, `list`, `quote`, `empty` and
+`error`. If you evaluate a value that is not a function, you will get
+back the same value:
 
 ```lisp
 > 123            # An integer
@@ -97,16 +98,18 @@ value:
 true
 > list 1 2 3     # A list
 list 3 2 1
+> 'hello         # A quote
+'hello
 > hello          # A function
 Error: ERROR_INTERPRETER_UNKNOWN_FUNCTION
 > # The previous result was an error
 ```
 
-Functions are particular names that can be called with some arguments
-and will return a value. For example, the function `+` takes two
-integers and returns an integer value representing the sum of the two
-arguments, while the function `print` takes a value, then prints it
-and returns an `empty` value.
+Functions are particular symbols that can be called with some
+arguments and will return a value. For example, the function `+` takes
+two integers and returns an integer value representing the sum of the
+two arguments, while the function `print` takes a value, then prints
+it and returns an `empty` value.
 
 ```lisp
 > + 68.1 0.9
@@ -116,7 +119,19 @@ and returns an `empty` value.
 empty
 ```
 
-You nest function calls using s-expressions, like lisp.
+A quote is a symbol prepended with `'`. This symbol will not be called
+unlike functions, so symbols can be passed as arguments to other
+functions. For example, you can define a variable with `setq` a
+specifying the symbol that denotes the variable using the quote:
+
+```lisp
+> (setq 'hello "Hello, World!")
+"Hello, World!"
+> hello
+"Hello, World!"
+```
+
+You can nest function calls using s-expressions, like lisp.
 
 ```lisp
 $ cat samples/sample2.haplo 

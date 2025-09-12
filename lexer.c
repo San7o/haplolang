@@ -28,19 +28,21 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <stdio.h>
 
-static_assert(_HAPLO_LEX_MAX == 5,
+static_assert(_HAPLO_LEX_MAX == 6,
               "Number of tokens changed, maybe defaults should be updated?");
 HaploTokenChar haplo_default_token_char = {
   [HAPLO_LEX_OPEN] = '(',
   [HAPLO_LEX_CLOSE] = ')',
   [HAPLO_LEX_COMMENT] = '#',
+  [HAPLO_LEX_QUOTE] = '\'',
 };
 
+static_assert(_HAPLO_LEX_MAX == 6,
+                "Number of tokens changed, maybe strings need to be updated?");
 const char* haplo_lexer_token_string(enum HaploToken token)
 {
-  static_assert(_HAPLO_LEX_MAX == 5,
-                "Number of tokens changed, maybe strings need to be updated?");
   switch(token)
   {
   case HAPLO_LEX_OPEN:
@@ -51,6 +53,8 @@ const char* haplo_lexer_token_string(enum HaploToken token)
     return "ATOM";
   case HAPLO_LEX_COMMENT:
     return "COMMENT";
+  case HAPLO_LEX_QUOTE:
+    return "QUOTE";
   case HAPLO_LEX_NONE:
     return "NONE";
   default:
@@ -120,15 +124,14 @@ int haplo_lexer_trim_left(char* input, int input_size,
   return pos;
 }
 
+static_assert(_HAPLO_LEX_MAX == 6,
+              "Number of tokens changed, maybe haplo_lexer_next_token needs to be updated?");
 int haplo_lexer_next_token(char* input, int input_size,
                            int *token_len, HaploAtom *atom,
                            HaploTokenChar token_char)
 {
   if (input == NULL) return -HAPLO_ERROR_LEXER_INPUT_NULL;
   if (input_size == 0) return -HAPLO_ERROR_LEXER_END_OF_INPUT;
-
-  static_assert(_HAPLO_LEX_MAX == 5,
-                "Number of tokens changed, maybe haplo_lexer_next_token needs to be updated?");
 
   if (token_char == NULL) token_char = haplo_default_token_char;
 
@@ -146,6 +149,11 @@ int haplo_lexer_next_token(char* input, int input_size,
   {
     if (token_len != NULL) *token_len = 1;
     return HAPLO_LEX_COMMENT;
+  }
+  if (input[0] == token_char[HAPLO_LEX_QUOTE])
+  {
+    if (token_len != NULL) *token_len = 1;
+    return HAPLO_LEX_QUOTE;
   }
   if (input[0] ==  '"') // Atom of type HAPLO_ATOM_STRING
   {
@@ -200,7 +208,7 @@ int haplo_lexer_next_token(char* input, int input_size,
     atom->floating_point = floating_point;
     return HAPLO_LEX_ATOM;
   }
-      
+
   // Otherwise Atom is SYMBOL
   atom->type = HAPLO_ATOM_SYMBOL;
   if (atom != NULL)

@@ -26,15 +26,16 @@
 #define _HAPLO_SYMBOL_H_
 
 #include "value.h"
+#include "function.h"
 
 // --- Macros ---
 
 #ifdef HAPLO_NO_PREFIX
-  #define Function HaploFunction
   #define Symbol HaploSymbol
   #define SymbolKey HaploSymbolKey
   #define SymbolList HaploSymbolList
   #define SymbolMap HaploSymbolMap
+  #define symbol_type_string haplo_symbol_type_string
   #define symbol_list_free haplo_symbol_list_free
   #define symbol_list_deep_copy haplo_symbol_list_deep_copy
   #define symbol_free haplo_symbol_free
@@ -53,11 +54,8 @@
 enum HaploSymbolType {
   HAPLO_SYMBOL_FUNCTION = 0,
   HAPLO_SYMBOL_VARIABLE,
+  _HAPLO_SYMBOL_MAX,
 };
-
-typedef struct HaploFunction {
-  HaploValue (*run) (HaploValueList *args);
-} HaploFunction;
 
 typedef char* HaploSymbolKey;
 
@@ -82,6 +80,7 @@ typedef struct HaploSymbolMap {
 
 // --- Functions ---
 
+const char* haplo_symbol_type_string(enum HaploSymbolType type);
 void haplo_symbol_list_free(HaploSymbolList *list);
 // Returns a deep copy of the list
 HaploSymbolList *haplo_symbol_list_deep_copy(HaploSymbolList *list);
@@ -90,7 +89,7 @@ int haplo_symbol_map_destroy(HaploSymbolMap *map);
 void haplo_symbol_free(HaploSymbol symbol);
 HaploSymbol haplo_symbol_deep_copy(HaploSymbol symbol);
 // Returns a deep copy of the map
-HaploSymbolMap haplo_symbol_map_deep_copy(HaploSymbolMap map);
+HaploSymbolMap *haplo_symbol_map_deep_copy(HaploSymbolMap *map);
 // Retuns 0 if key exists in map and fills symbol with the value if
 // symbol is not null, or returns a negative number representing an
 // error

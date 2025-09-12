@@ -52,6 +52,7 @@ enum HaploValueType {
   HAPLO_VAL_BOOL,
   HAPLO_VAL_SYMBOL,
   HAPLO_VAL_LIST,
+  HAPLO_VAL_QUOTE,
   HAPLO_VAL_EMPTY,
   HAPLO_VAL_ERROR,
   _HAPLO_VAL_MAX,
@@ -67,6 +68,7 @@ typedef struct HaploValue {
     char* string;
     bool boolean;
     char* symbol;
+    char* quote;
     struct HaploValueList *list;
     int error;
   };

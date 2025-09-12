@@ -68,7 +68,7 @@ HAPLO_TEST(symbol_map_test, init_destroy)
   HAPLO_TEST_FAILED;
 }
 
-Value my_test_symbol_1(ValueList *expr)
+Value my_test_symbol_1(Interpreter *interpreter, ValueList *expr)
 {
   return (Value){0};
 }
@@ -154,7 +154,7 @@ HAPLO_TEST(symbol_map_test, update_lookup)
   HAPLO_TEST_FAILED;
 }
 
-Value my_test_symbol_2(ValueList *expr)
+Value my_test_symbol_2(Interpreter *interpreter, ValueList *expr)
 {
   return (Value){0};
 }

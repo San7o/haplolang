@@ -25,6 +25,7 @@
 #include "errors.h"
 
 #include <stdlib.h>
+#include <assert.h>
 
 int haplo_parser_init(HaploParser *parser, char *input, size_t len)
 {
@@ -117,6 +118,8 @@ bool haplo_parser_check_error(HaploParser *parser)
   return (parser->error < 0);
 }
 
+static_assert(_HAPLO_LEX_MAX == 6,
+              "Updated HaploToken, maybe update haplo_parser_parse_rec");
 HaploExpr *haplo_parser_parse_rec(HaploParser *parser)
 {
   if (parser == NULL) return NULL;  
@@ -138,6 +141,39 @@ HaploExpr *haplo_parser_parse_rec(HaploParser *parser)
   
   switch (parser->last_token)
   {
+  case HAPLO_LEX_QUOTE:
+    // Quote expects to be followed by an atom of type symbol
+    // eg: 'test
+    if (haplo_parser_next_token(parser) < 0)
+    {
+      haplo_expr_free(expr);
+      HAPLO_PARSER_ERROR();
+    }
+    if (haplo_parser_next_token(parser) < 0)
+    {
+      haplo_expr_free(expr);
+      HAPLO_PARSER_ERROR();
+    }
+    if (parser->last_token != HAPLO_LEX_ATOM)
+    {
+      parser->error = -HAPLO_ERROR_PARSER_UNEXPECTED_TOKEN;
+      haplo_expr_free(expr);
+      HAPLO_PARSER_ERROR();
+    }
+    if (parser->last_atom.type != HAPLO_ATOM_SYMBOL)
+    {
+      haplo_atom_free(parser->last_atom);
+      parser->error = -HAPLO_ERROR_PARSER_UNEXPECTED_TOKEN;
+      haplo_expr_free(expr);
+      HAPLO_PARSER_ERROR();
+    }
+    parser->last_atom.type = HAPLO_ATOM_QUOTE;
+    expr->head = malloc(sizeof(HaploExpr));
+    *expr->head = (HaploExpr){
+      .is_atom = true,
+      .atom = parser->last_atom,
+    };
+    break;
   case HAPLO_LEX_ATOM:
     haplo_atom_free(parser->last_atom);
     if (haplo_parser_next_token(parser) < 0)
@@ -197,6 +233,8 @@ HaploExpr *haplo_parser_parse_rec(HaploParser *parser)
 HaploExpr *haplo_parser_parse(HaploParser *parser)
 {
   if (parser == NULL) return NULL;
+  if (parser->input == NULL) return NULL;
+  if (parser->input_len == 0) return NULL;
   parser->error = 0;
 
   HaploExpr *expr = malloc(sizeof(HaploExpr));

@@ -37,7 +37,7 @@ extern HaploSymbolMap __haplo_std_symbol_map;
   HAPLO_STD_FUNC_STR(fn, #fn)
 
 #define HAPLO_STD_FUNC_STR(fn, func_string)    \
-    HaploValue __haplo_std_##fn(HaploValueList *); \
+    HaploValue __haplo_std_##fn(HaploInterpreter *, HaploValueList *); \
     __attribute__((constructor)) static void __haplo_std_register_##fn(void) \
     {                                                \
       if (__haplo_std_symbol_map._map == NULL) \
@@ -54,6 +54,6 @@ extern HaploSymbolMap __haplo_std_symbol_map;
                                 }               \
                               });               \
     } \
-    HaploValue __haplo_std_##fn(HaploValueList *args)
+    HaploValue __haplo_std_##fn(HaploInterpreter *interpreter, HaploValueList *args)
                                 
 #endif // _HAPLO_STDLIB_H_

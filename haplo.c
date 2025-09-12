@@ -37,7 +37,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void process_line(char* input, ssize_t len)
+void process_line(Interpreter *interpreter, char* input, ssize_t len)
 {
   int err;
   Parser parser = {0};
@@ -58,9 +58,7 @@ void process_line(char* input, ssize_t len)
     return;
   }
 
-  Interpreter interpreter = {0};
-  interpreter_init(&interpreter);
-  Value val = interpreter_interpret(&interpreter, expr);
+  Value val = interpreter_interpret(interpreter, expr);
   
   char buf[1024] = {0};
   
@@ -68,7 +66,6 @@ void process_line(char* input, ssize_t len)
   printf("%s\n", buf);
 
   haplo_value_free(val);
-  interpreter_destroy(&interpreter);
   expr_free(expr);
   return;
 }
@@ -131,7 +128,7 @@ void unmap_file(char* addr, size_t size) {
     }
 }
 
-void interpret_file(char* file)
+void interpret_file(Interpreter *interpreter, char* file)
 {
   size_t size;
   char* data = mmap_file(file, &size);
@@ -141,26 +138,29 @@ void interpret_file(char* file)
     return;
   }
   
-  process_line(data, size);
+  process_line(interpreter, data, size);
   
   unmap_file(data, size);
   return;
 }
 
-void interpret_cmdline()
+void interpret_cmdline(Interpreter *interpreter)
 {
   print_headline();
 
   while(1) {
     char *line = readline("> ");
     add_history(line);
-    process_line(line, strlen(line));
+    process_line(interpreter, line, strlen(line));
     free(line);
   }
 }
 
 int main(int argc, char** argv)
-{
+{ 
+  Interpreter interpreter = {0};
+  interpreter_init(&interpreter);
+  
   if (argc > 1)
   {
     if (strcmp(argv[1], "help") == 0)
@@ -169,11 +169,12 @@ int main(int argc, char** argv)
       return 0;
     }
 
-    interpret_file(argv[1]);
+    interpret_file(&interpreter, argv[1]);
     return 0;
   }
 
-  interpret_cmdline();
+  interpret_cmdline(&interpreter);
   
+  interpreter_destroy(&interpreter);
   return 0;
 }

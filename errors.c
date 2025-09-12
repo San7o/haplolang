@@ -76,6 +76,8 @@ const char* haplo_error_string(int error)
     return "ERROR_SYMBOL_MAP_LOOKUP_NOT_FOUND";
   case HAPLO_ERROR_VALUE_TYPE_UNRECOGNIZED:
     return "ERROR_VALUE_TYPE_UNRECOGNIZED";
+  case HAPLO_ERROR_PARSER_UNEXPECTED_TOKEN:
+    return "ERROR_PARSER_UNEXPECTED_TOKEN";
   }
   return "ERROR_UNKNOWN";
 }

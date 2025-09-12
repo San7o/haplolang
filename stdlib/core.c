@@ -22,48 +22,52 @@
 // SOFTWARE.
 //
 
-#ifndef _HAPLO_ATOM_H_
-#define _HAPLO_ATOM_H_
+#include "stdlib.h"
+#include "../value.h"
+#include "../errors.h"
 
-#include <stdbool.h>
+#include <stdio.h>
 
-// --- Macros ---
+HAPLO_STD_FUNC(setq)
+{
+  if (haplo_value_list_len(args) != 2)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_ERROR,
+      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+    };
+  }
 
-#ifdef HAPLO_NO_PREFIX
-  #define AtomType HaploAtomType
-  #define Atom HaploAtom
-  #define atom_free haplo_atom_free
-#endif // HAPLO_NO_PREFIX
+  HaploValue first, second;
+  first = args->val;
+  second = args->next->val;
+  
+  if (first.type == HAPLO_VAL_QUOTE && second.type != HAPLO_VAL_SYMBOL)
+  {
+    HaploSymbol var = (HaploSymbol) {
+      .type = HAPLO_SYMBOL_VARIABLE,
+      .var = haplo_value_deep_copy(second),
+    };
 
-#define HAPLO_ATOM_MAX_STRING_LEN 1024
-// --- Types ---
+    int err = haplo_symbol_map_update(interpreter->symbol_map,
+                                      first.quote,
+                                      var);
+    if (err < 0)
+    {
+      return (HaploValue) {
+        .type = HAPLO_VAL_ERROR,
+        .error = err,
+      };
+    }
+    
+    //printf("Registered symbol: %s\n", first.quote);
+    return var.var;
+  }
 
-enum HaploAtomType {
-  HAPLO_ATOM_STRING = 0,    // "Hello World"
-  HAPLO_ATOM_INTEGER,       // 69, -420
-  HAPLO_ATOM_FLOAT,         // 69.420
-  HAPLO_ATOM_BOOL,          // true, false
-  HAPLO_ATOM_SYMBOL,        // print, +
-  HAPLO_ATOM_QUOTE,         // 'test
-  _HAPLO_ATOM_MAX,
-};
-
-typedef struct HaploAtom {
-  enum HaploAtomType type;
-  union {
-    char* string;
-    long int integer;
-    double floating_point;
-    bool boolean;
-    char* symbol;
-    char* quote;
+  goto type_error;
+ type_error:
+  return (HaploValue) {
+    .type = HAPLO_VAL_ERROR,
+    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
-} HaploAtom;
-
-// --- Functios ---
-
-void haplo_atom_free(HaploAtom atom);
-// Writes to buff the string representation of the atom.
-void haplo_atom_string(HaploAtom atom, char buf[HAPLO_ATOM_MAX_STRING_LEN]);
-
-#endif // _HAPLO_ATOM_H_
+}

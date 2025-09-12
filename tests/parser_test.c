@@ -405,3 +405,53 @@ HAPLO_TEST(parser_test, nested_head_expr)
  test_failed:
   HAPLO_TEST_FAILED;
 }
+
+
+HAPLO_TEST(parser_test, quote)
+{
+  int err;
+  char* input = "'a";
+  char* expected_ast = "( 'a )";
+  
+  Parser parser = {0};
+  err = parser_init(&parser, input, strlen(input));
+  if (err < 0)
+  {
+    printf("Error %d after parser_init\n", err);
+    goto test_failed;
+  }
+
+  if (DEBUG_PRINT)
+  {
+    printf("original:     %s\n", input);
+    printf("expected_ast: %s\n", expected_ast);
+  }
+  
+  Expr *expr = parser_parse(&parser);
+  if (expr == NULL)
+  {
+    printf("Error parser_parse returned a null expression\n");
+    goto test_failed;
+  }
+
+  char str[50] = {0};
+  expr_string(expr, str);
+
+  if (DEBUG_PRINT)
+  {
+    printf("ast:          %s\n", str);
+  }
+
+  if (strcmp(expected_ast, str) != 0)
+  {
+    printf("Error reconstructed expression does not match the expected\n");
+    expr_free(expr);
+    goto test_failed;
+  }
+
+  expr_free(expr);
+  HAPLO_TEST_SUCCESS;
+  
+ test_failed:
+  HAPLO_TEST_FAILED;
+}

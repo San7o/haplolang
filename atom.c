@@ -26,7 +26,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
+static_assert(_HAPLO_ATOM_MAX == 6,
+              "Updated HaploAtomType, maybe update haplo_atom_free");
 void haplo_atom_free(HaploAtom atom)
 {
   switch(atom.type)
@@ -37,12 +40,17 @@ void haplo_atom_free(HaploAtom atom)
   case HAPLO_ATOM_SYMBOL:
     free(atom.symbol);
     return;
+  case HAPLO_ATOM_QUOTE:
+    free(atom.quote);
+    return;
   default:
     return;
   }
   return;
 }
 
+static_assert(_HAPLO_ATOM_MAX == 6,
+              "Updated HaploAtomType, maybe update haplo_atom_free");
 void haplo_atom_string(HaploAtom atom, char buf[HAPLO_ATOM_MAX_STRING_LEN])
 {
   switch(atom.type)
@@ -59,8 +67,13 @@ void haplo_atom_string(HaploAtom atom, char buf[HAPLO_ATOM_MAX_STRING_LEN])
   case HAPLO_ATOM_BOOL:
     sprintf(buf, "%s", atom.boolean ? "true" : "false");
     break;
+  case HAPLO_ATOM_QUOTE:
+    sprintf(buf, "'%s", atom.quote);
+    break;
   case HAPLO_ATOM_SYMBOL:
     sprintf(buf, "%s", atom.symbol);
+    break;
+  default:
     break;
   }
   return;

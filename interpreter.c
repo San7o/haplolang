@@ -22,7 +22,6 @@
 // SOFTWARE.
 //
 
-#include "interpreter.h"
 #include "errors.h"
 #include "symbol.h"
 #include "stdlib/stdlib.h"
@@ -31,12 +30,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 
 int haplo_interpreter_init(HaploInterpreter *interpreter)
 {
   if (interpreter == NULL) return -HAPLO_ERROR_INTERPRETER_NULL;
 
-  interpreter->symbol_map = haplo_symbol_map_deep_copy(__haplo_std_symbol_map);
+  interpreter->symbol_map = haplo_symbol_map_deep_copy(&__haplo_std_symbol_map);
   
   return 0;
 }
@@ -45,11 +45,14 @@ void haplo_interpreter_destroy(HaploInterpreter *interpreter)
 {
   if (interpreter == NULL) return;
 
-  haplo_symbol_map_destroy(&interpreter->symbol_map);
+  haplo_symbol_map_destroy(interpreter->symbol_map);
+  if (interpreter->symbol_map != NULL) free(interpreter->symbol_map);
 
   return;
 }
 
+static_assert(_HAPLO_ATOM_MAX == 6,
+              "updated HaploAtomType, update haplo_interpreter_eval_atom");
 HaploValue haplo_interpreter_eval_atom(HaploAtom atom)
 {
   HaploValue new_value = {0};
@@ -79,6 +82,12 @@ HaploValue haplo_interpreter_eval_atom(HaploAtom atom)
     new_value.type = HAPLO_VAL_SYMBOL;
     new_value.symbol = new_symbol;
     break;
+  case HAPLO_ATOM_QUOTE: ;
+    char* new_quote = (char*) malloc(strlen(atom.quote));
+    strcpy(new_quote, atom.quote);
+    new_value.type = HAPLO_VAL_QUOTE;
+    new_value.quote = new_quote;
+    break;
   default:
     new_value.type = HAPLO_VAL_ERROR;
     new_value.error = -HAPLO_ERROR_INTERPRETER_INVALID_ATOM;
@@ -87,7 +96,7 @@ HaploValue haplo_interpreter_eval_atom(HaploAtom atom)
 }
 
 HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
-                                         HaploExpr *expr)
+                                       HaploExpr *expr)
 {
   if (interpreter == NULL)
   {
@@ -162,7 +171,7 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
   }
 
   HaploSymbol symbol;
-  int err = haplo_symbol_map_lookup(&interpreter->symbol_map,
+  int err = haplo_symbol_map_lookup(interpreter->symbol_map,
                                     value.symbol,
                                     &symbol);
   if (err < 0)
@@ -176,9 +185,11 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
   switch(symbol.type)
   {
   case HAPLO_SYMBOL_FUNCTION:
-    return symbol.func.run(args);
+    return symbol.func.run(interpreter, args);
   case HAPLO_SYMBOL_VARIABLE:
     return symbol.var;
+  default:
+    break;
   }
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,

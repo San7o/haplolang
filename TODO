@@ -1,7 +1,8 @@
   TODO
 =========
 
-- Declare variables and functions
+- Declare functions
+- implement cond construct
 - Add control flow
 - Generated documentation
 - Release 0.1.0

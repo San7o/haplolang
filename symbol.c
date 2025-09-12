@@ -32,6 +32,22 @@
 #include <stdbool.h>
 #include <assert.h>
 
+static_assert(_HAPLO_SYMBOL_MAX == 2,
+              "Updated HaploSymbolType, should update haplo_symbol_type_string");
+const char* haplo_symbol_type_string(enum HaploSymbolType type)
+{
+  switch(type)
+  {
+  case HAPLO_SYMBOL_FUNCTION:
+    return "FUNCTION";
+  case HAPLO_SYMBOL_VARIABLE:
+    return "VARIABLE";
+  default:
+    break;
+  }
+  return "UNKNOWN_SYMBOL";
+}
+
 void haplo_symbol_list_free(HaploSymbolList *list)
 {
   if (list == NULL) return;
@@ -83,6 +99,8 @@ int haplo_symbol_map_destroy(HaploSymbolMap *map)
   return 0;
 }
 
+static_assert(_HAPLO_SYMBOL_MAX == 2,
+              "Updated HaploSymbolType, should update haplo_symbol_free");
 void haplo_symbol_free(HaploSymbol symbol)
 {
   if (symbol.type == HAPLO_SYMBOL_VARIABLE)
@@ -92,6 +110,8 @@ void haplo_symbol_free(HaploSymbol symbol)
   return;
 }
 
+static_assert(_HAPLO_SYMBOL_MAX == 2,
+              "Updated HaploSymbolType, should update haplo_symbol_deep_copy");
 HaploSymbol haplo_symbol_deep_copy(HaploSymbol symbol)
 {
   HaploSymbol new_symbol = {
@@ -105,22 +125,29 @@ HaploSymbol haplo_symbol_deep_copy(HaploSymbol symbol)
   case HAPLO_SYMBOL_VARIABLE:
     new_symbol.var = haplo_value_deep_copy(symbol.var);
     break;
+  default:
+    break;
   }
 
   return new_symbol;
 }
 
-HaploSymbolMap haplo_symbol_map_deep_copy(HaploSymbolMap map)
+HaploSymbolMap* haplo_symbol_map_deep_copy(HaploSymbolMap *map)
 {
-  HaploSymbolMap map_copy = {0};
-
-  if (map.capacity == 0) return map_copy;
-
-  map_copy.capacity = map.capacity;
-  map_copy._map = (HaploSymbolList**) calloc(sizeof(HaploSymbolList*), map.capacity);
-  for (int i = 0; i < map.capacity; ++i)
+  if (map == NULL)
   {
-    map_copy._map[i] = haplo_symbol_list_deep_copy(map._map[i]);
+    return NULL;
+  }
+  
+  HaploSymbolMap *map_copy = malloc(sizeof(HaploSymbolMap));
+
+  if (map->capacity == 0) return map_copy;
+
+  map_copy->capacity = map->capacity;
+  map_copy->_map = (HaploSymbolList**) calloc(sizeof(HaploSymbolList*), map->capacity);
+  for (int i = 0; i < map->capacity; ++i)
+  {
+    map_copy->_map[i] = haplo_symbol_list_deep_copy(map->_map[i]);
   }
   
   return map_copy;
@@ -172,16 +199,17 @@ int haplo_symbol_map_update(HaploSymbolMap *map,
   {
     symbol_list = (HaploSymbolList*) malloc(sizeof(HaploSymbolList));
     symbol_list->next = NULL;
-    symbol_list->val = symbol;
+    symbol_list->val = haplo_symbol_deep_copy(symbol);
     symbol_list->key = malloc(strlen(key));
     strcpy(symbol_list->key, key);
-    map->_map[hash] = symbol_list;    
+    map->_map[hash] = symbol_list;
     return 0;
   }
 
   if (strcmp(symbol_list->key, key) == 0)
   {
-    symbol_list->val = symbol;
+    haplo_symbol_free(symbol_list->val);
+    symbol_list->val = haplo_symbol_deep_copy(symbol);
     return 1;
   }
   
@@ -197,13 +225,14 @@ int haplo_symbol_map_update(HaploSymbolMap *map,
 
   if (found)
   {
-    symbol_list->val = symbol;
+    haplo_symbol_free(symbol_list->val);
+    symbol_list->val = haplo_symbol_deep_copy(symbol);
     return 1;
   }
 
   HaploSymbolList * new_list = (HaploSymbolList*) malloc(sizeof(HaploSymbolList));
   new_list->next = NULL;
-  new_list->val = symbol;
+  new_list->val = haplo_symbol_deep_copy(symbol);
   new_list->key = malloc(strlen(key));
   strcpy(new_list->key, key);
   symbol_list->next = new_list;
