@@ -1,8 +1,9 @@
 # Haplolang
 
-Haplolang an s-expression based imperative language implemented in C,
-greatly inspired by Lisp. The term "Haplo" is a Greek word meaning
-simple, which describes my philosophy in implementing the language.
+Haplolang an s-expression based, imperative programming language
+implemented in C, greatly inspired by Lisp. The term "Haplo" is a
+Greek word meaning simple, which describes my philosophy in
+implementing the language.
 
 This is a [recreational programming](https://giovanni-diary.netlify.app/programming/notes/recreational-programming) project.
 
@@ -97,11 +98,11 @@ Error: ERROR_INTERPRETER_UNKNOWN_FUNCTION
 > # The previous result was an error
 ```
 
-Functions are particular symbols that can be called with some
-arguments and will return a value. For example, the function `+` takes
-two integers and returns an integer value representing the sum of the
-two arguments, while the function `print` takes a value, then prints
-it and returns an `empty` value.
+Symbols are recognized as function, they can be called with some
+arguments and return a value. For example, the function `+` takes two
+integers and returns an integer value representing the sum of the two
+arguments, while the function `print` takes a value, prints it, and
+returns an `empty` value.
 
 ```lisp
 > + 68.1 0.9
@@ -111,8 +112,8 @@ it and returns an `empty` value.
 empty
 ```
 
-A quote is a symbol prepended with `'`. This symbol will not be called
-unlike functions, so symbols can be passed as arguments to other
+A quote is a symbol prepended with `'`. Unlike functions, this symbol
+will not be called, so symbols can be passed as arguments to other
 functions. For example, you can define a variable with `setq` by
 specifying the symbol that denotes the variable using a quote:
 
