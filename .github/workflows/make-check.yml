@@ -15,7 +15,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-      
+
+    - name: Install readline
+      run: sudo apt install -y libreadline-dev
+
     - name: Build
       run: make cli
 
