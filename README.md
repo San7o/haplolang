@@ -1,18 +1,12 @@
 # Haplolang
 
-I decided it is finally time for me to implement a proper programming
-language in C like a real programmer, so here is `Haplolang`. "Haplo"
-is a Greek word meaning simple, which describes my philosophy in
-implementing the language. Haplolang an s-expression based imperative
-language, greatly inspired by Lisp, and my main motivation is purely
-recreational.
+Haplolang an s-expression based imperative language implemented in C,
+greatly inspired by Lisp. The term "Haplo" is a Greek word meaning
+simple, which describes my philosophy in implementing the language.
 
-The current implementation was developed in two sittings: first the
-parser and then the interpreter + cli program. Some functions are
-implemented for basic math operations and printing, you cannot define
-functions yet.
+This is a recreational programming project.
 
-Everything is implemented in C. The project is composed of:
+The project is composed of:
 
 - `libhaplo`: the library containing all the logic
 - `haplostdlib.a`: the haplo standard library in C
@@ -144,7 +138,7 @@ $ ./haplo samples/sample2.haplo
 empty
 ```
 
-Parenthesys may be omitted, in which case the expression will be
+Parentheses may be omitted, in which case the expression will be
 considered right associative. For example, these are all equal
 expressions:
 
@@ -159,7 +153,7 @@ expressions:
 10
 ```
 
-The only data structure currenly present in the standard library is
+The only data structure currently present in the standard library is
 the list, and you can do the usual list operations:
 
 ```lisp
@@ -178,7 +172,7 @@ supplied. This happens because the parser is right associative and the
 first element is the deepest expression. This may be changed in the
 future.
 
-The grammas is as follows:
+The grammars is as follows:
 
 ```ebnf
 EXPR    ::= EXPR EXPR
