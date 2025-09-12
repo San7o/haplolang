@@ -40,14 +40,14 @@ HAPLO_TEST(setq_test, declare_variable)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
   Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
-    printf("Error parser_parse returned a null expression\n");
+    fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
   }
 
@@ -63,7 +63,7 @@ HAPLO_TEST(setq_test, declare_variable)
 
   if (strcmp(expected, str) != 0)
   {
-    printf("Error reconstructed expression does not match original\n");
+    fprintf(stderr, "Error reconstructed expression does not match original\n");
 
     expr_free(expr);
     goto test_failed;
@@ -74,14 +74,14 @@ HAPLO_TEST(setq_test, declare_variable)
   Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
-    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.error));
     expr_free(expr);
     haplo_interpreter_destroy(&interpreter);
     goto test_failed;
   }
   if (val.type != HAPLO_VAL_INTEGER)
   {
-    printf("Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
+    fprintf(stderr, "Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
            value_type_string(val.type));
     expr_free(expr);
     haplo_interpreter_destroy(&interpreter);
@@ -89,7 +89,7 @@ HAPLO_TEST(setq_test, declare_variable)
   }
   if (val.integer != expected_result)
   {
-    printf("Error in interpreter_interpret, expected result %ld, got %ld\n",
+    fprintf(stderr, "Error in interpreter_interpret, expected result %ld, got %ld\n",
            expected_result, val.integer);
     expr_free(expr);
     haplo_interpreter_destroy(&interpreter);
@@ -102,21 +102,21 @@ HAPLO_TEST(setq_test, declare_variable)
                           &symbol);
   if (err < 0)
   {
-    printf("Error in symbol_map_lookup: %s", error_string(err));
+    fprintf(stderr, "Error in symbol_map_lookup: %s", error_string(err));
     expr_free(expr);
     haplo_interpreter_destroy(&interpreter);
     goto test_failed;
   }
   if (symbol.type != HAPLO_SYMBOL_VARIABLE)
   {
-    printf("Error in symbol_map_lookup: symbol type is %s instead of HAPLO_SYMBOL_VARIABLE\n", symbol_type_string(symbol.type));
+    fprintf(stderr, "Error in symbol_map_lookup: symbol type is %s instead of HAPLO_SYMBOL_VARIABLE\n", symbol_type_string(symbol.type));
     expr_free(expr);
     haplo_interpreter_destroy(&interpreter);
     goto test_failed;
   }
  if (symbol.var.type != HAPLO_VAL_INTEGER)
   {
-    printf("Error in symbol_map_lookup, expected type HAPLO_VAL_INTEGER, got %s\n",
+    fprintf(stderr, "Error in symbol_map_lookup, expected type HAPLO_VAL_INTEGER, got %s\n",
            value_type_string(symbol.var.type));
     expr_free(expr);
     haplo_interpreter_destroy(&interpreter);
@@ -124,7 +124,7 @@ HAPLO_TEST(setq_test, declare_variable)
   }
   if (symbol.var.integer != expected_result)
   {
-    printf("Error in interpreter_interpret, expected result %ld, got %ld\n",
+    fprintf(stderr, "Error in interpreter_interpret, expected result %ld, got %ld\n",
            expected_result, symbol.var.integer);
     expr_free(expr);
     haplo_interpreter_destroy(&interpreter);

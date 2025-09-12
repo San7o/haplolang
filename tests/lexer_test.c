@@ -37,8 +37,8 @@ HAPLO_TEST(lexer_test, trim)
     int trimmed = lexer_trim_left(input, strlen(input), NULL, NULL);
     if (trimmed != expected_val)
     {
-      printf("Error lexer_trim_left on \"%s\", expected %d, got %d",
-             input, expected_val, trimmed);
+      fprintf(stderr, "Error lexer_trim_left on \"%s\", expected %d, got %d",
+              input, expected_val, trimmed);
       goto test_failed;
     }
   }
@@ -49,8 +49,8 @@ HAPLO_TEST(lexer_test, trim)
     int trimmed = lexer_trim_left(input, strlen(input), NULL, NULL);
     if (trimmed != expected_val)
     {
-      printf("Error lexer_trim_left on \"%s\", expected %d, got %d",
-             input, expected_val, trimmed);
+      fprintf(stderr, "Error lexer_trim_left on \"%s\", expected %d, got %d",
+              input, expected_val, trimmed);
       goto test_failed;
     }
   }
@@ -61,8 +61,8 @@ HAPLO_TEST(lexer_test, trim)
     int trimmed = lexer_trim_left(input, strlen(input), NULL, NULL);
     if (trimmed != expected_val)
     {
-      printf("Error lexer_trim_left on \"%s\", expected %d, got %d",
-             input, expected_val, trimmed);
+      fprintf(stderr, "Error lexer_trim_left on \"%s\", expected %d, got %d",
+              input, expected_val, trimmed);
       goto test_failed;
     }
   }
@@ -84,14 +84,14 @@ HAPLO_TEST(lexer_test, next)
     int token = lexer_next_token(input, strlen(input), &token_len, NULL, NULL);
     if (token != expected_token)
     {
-      printf("Error lexer_next_token on \"%s\", expected %d, got %d",
-             input, expected_token, token);
+      fprintf(stderr, "Error lexer_next_token on \"%s\", expected %d, got %d",
+              input, expected_token, token);
       goto test_failed;
     }
     if (token_len != expected_token_len)
     {
-      printf("Error lexer_next_token on \"%s\", expected token len %d, got %d",
-             input, expected_token_len, token_len);
+      fprintf(stderr, "Error lexer_next_token on \"%s\", expected token len %d, got %d",
+              input, expected_token_len, token_len);
       goto test_failed;
     }
   }
@@ -105,14 +105,14 @@ HAPLO_TEST(lexer_test, next)
     int token = lexer_next_token(input, strlen(input), &token_len, NULL, NULL);
     if (token != expected_token)
     {
-      printf("Error lexer_next_token on \"%s\", expected %d, got %d",
-             input, expected_token, token);
+      fprintf(stderr, "Error lexer_next_token on \"%s\", expected %d, got %d",
+              input, expected_token, token);
       goto test_failed;
     }
     if (token_len != expected_token_len)
     {
-      printf("Error lexer_next_token on \"%s\", expected token len %d, got %d",
-             input, expected_token_len, token_len);
+      fprintf(stderr, "Error lexer_next_token on \"%s\", expected token len %d, got %d",
+              input, expected_token_len, token_len);
       goto test_failed;
     }
   }
@@ -126,14 +126,14 @@ HAPLO_TEST(lexer_test, next)
     int token = lexer_next_token(input, strlen(input), &token_len, NULL, NULL);
     if (token != expected_token)
     {
-      printf("Error lexer_next_token on \"%s\", expected %d, got %d",
-             input, expected_token, token);
+      fprintf(stderr, "Error lexer_next_token on \"%s\", expected %d, got %d",
+              input, expected_token, token);
       goto test_failed;
     }
     if (token_len != expected_token_len)
     {
-      printf("Error lexer_next_token on \"%s\", expected token len %d, got %d",
-             input, expected_token_len, token_len);
+      fprintf(stderr, "Error lexer_next_token on \"%s\", expected token len %d, got %d",
+              input, expected_token_len, token_len);
       goto test_failed;
     }
   }
@@ -149,20 +149,20 @@ HAPLO_TEST(lexer_test, next)
     int token = lexer_next_token(input, strlen(input), &token_len, &atom, NULL);
     if (token != expected_token)
     {
-      printf("Error lexer_next_token on \"%s\", expected %d, got %d",
-             input, expected_token, token);
+      fprintf(stderr, "Error lexer_next_token on \"%s\", expected %d, got %d",
+              input, expected_token, token);
       goto test_failed;
     }
     if (token_len != expected_token_len)
     {
-      printf("Error lexer_next_token on \"%s\", expected token len %d, got %d",
-             input, expected_token_len, token_len);
+      fprintf(stderr, "Error lexer_next_token on \"%s\", expected token len %d, got %d",
+              input, expected_token_len, token_len);
       goto test_failed;
     }
     if (atom.type != HAPLO_ATOM_INTEGER || atom.integer != expected_atom)
     {
-      printf("Error lexer_next_token on \"%s\", expected atom value %ld, got %ld",
-             input, expected_atom, atom.integer);
+      fprintf(stderr, "Error lexer_next_token on \"%s\", expected atom value %ld, got %ld",
+              input, expected_atom, atom.integer);
       goto test_failed;
     }
   }
@@ -178,20 +178,20 @@ HAPLO_TEST(lexer_test, next)
     int token = lexer_next_token(input, strlen(input), &token_len, &atom, NULL);
     if (token != expected_token)
     {
-      printf("Error lexer_next_token on \"%s\", expected %d, got %d",
-             input, expected_token, token);
+      fprintf(stderr, "Error lexer_next_token on \"%s\", expected %d, got %d",
+              input, expected_token, token);
       goto test_failed;
     }
     if (token_len != expected_token_len)
     {
-      printf("Error lexer_next_token on \"%s\", expected token len %d, got %d",
-             input, expected_token_len, token_len);
+      fprintf(stderr, "Error lexer_next_token on \"%s\", expected token len %d, got %d",
+              input, expected_token_len, token_len);
       goto test_failed;
     }
     if (atom.type != HAPLO_ATOM_FLOAT || atom.floating_point != expected_atom)
     {
-      printf("Error lexer_next_token on \"%s\", expected atom value %f, got %f",
-             input, expected_atom, atom.floating_point);
+      fprintf(stderr, "Error lexer_next_token on \"%s\", expected atom value %f, got %f",
+              input, expected_atom, atom.floating_point);
       goto test_failed;
     }
   }

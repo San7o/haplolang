@@ -1,0 +1,23 @@
+name: Run make check
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ '*' ]
+
+env:
+  CC: gcc-14
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: Build
+      run: make cli
+
+    - name: Test
+      run: make check

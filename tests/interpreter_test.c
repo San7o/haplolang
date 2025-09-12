@@ -40,14 +40,14 @@ HAPLO_TEST(interpreter_test, simple_math)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
   Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
-    printf("Error parser_parse returned a null expression\n");
+    fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
   }
 
@@ -63,7 +63,7 @@ HAPLO_TEST(interpreter_test, simple_math)
 
   if (strcmp(expected, str) != 0)
   {
-    printf("Error reconstructed expression does not match expected\n");
+    fprintf(stderr, "Error reconstructed expression does not match expected\n");
 
     expr_free(expr);
     goto test_failed;
@@ -74,21 +74,24 @@ HAPLO_TEST(interpreter_test, simple_math)
   Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
-    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.error));
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }
   if (val.type != HAPLO_VAL_INTEGER)
   {
-    printf("Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
-           value_type_string(val.type));
+    fprintf(stderr, "Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
+            value_type_string(val.type));
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }
   if (val.integer != expected_result)
   {
-    printf("Error in interpreter_interpret, expected result %ld, got %ld\n",
-           expected_result, val.integer);
+    fprintf(stderr, "Error in interpreter_interpret, expected result %ld, got %ld\n",
+            expected_result, val.integer);
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }
@@ -113,14 +116,14 @@ HAPLO_TEST(interpreter_test, should_eval_head)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
   Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
-    printf("Error parser_parse returned a null expression\n");
+    fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
   }
 
@@ -136,7 +139,7 @@ HAPLO_TEST(interpreter_test, should_eval_head)
 
   if (strcmp(expected, str) != 0)
   {
-    printf("Error reconstructed expression does not match original\n");
+    fprintf(stderr, "Error reconstructed expression does not match original\n");
 
     expr_free(expr);
     goto test_failed;
@@ -147,21 +150,24 @@ HAPLO_TEST(interpreter_test, should_eval_head)
   Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
-    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.error));
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }
   if (val.type != HAPLO_VAL_INTEGER)
   {
-    printf("Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
-           value_type_string(val.type));
+    fprintf(stderr, "Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
+            value_type_string(val.type));
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }
   if (val.integer != expected_result)
   {
-    printf("Error in interpreter_interpret, expected result %ld, got %ld\n",
-           expected_result, val.integer);
+    fprintf(stderr, "Error in interpreter_interpret, expected result %ld, got %ld\n",
+            expected_result, val.integer);
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }
@@ -186,14 +192,14 @@ HAPLO_TEST(interpreter_test, simple_integer_val)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
   Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
-    printf("Error parser_parse returned a null expression\n");
+    fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
   }
 
@@ -209,7 +215,7 @@ HAPLO_TEST(interpreter_test, simple_integer_val)
 
   if (strcmp(expected, str) != 0)
   {
-    printf("Error reconstructed expression does not match expected\n");
+    fprintf(stderr, "Error reconstructed expression does not match expected\n");
 
     expr_free(expr);
     goto test_failed;
@@ -220,21 +226,24 @@ HAPLO_TEST(interpreter_test, simple_integer_val)
   Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
-    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.error));
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }
   if (val.type != HAPLO_VAL_INTEGER)
   {
-    printf("Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
-           value_type_string(val.type));
+    fprintf(stderr, "Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
+            value_type_string(val.type));
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }
   if (val.integer != expected_result)
   {
-    printf("Error in interpreter_interpret, expected result %ld, got %ld\n",
-           expected_result, val.integer);
+    fprintf(stderr, "Error in interpreter_interpret, expected result %ld, got %ld\n",
+            expected_result, val.integer);
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }
@@ -259,14 +268,14 @@ HAPLO_TEST(interpreter_test, simple_string_val)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
   Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
-    printf("Error parser_parse returned a null expression\n");
+    fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
   }
 
@@ -282,7 +291,7 @@ HAPLO_TEST(interpreter_test, simple_string_val)
 
   if (strcmp(expected, str) != 0)
   {
-    printf("Error reconstructed expression does not match expected\n");
+    fprintf(stderr, "Error reconstructed expression does not match expected\n");
 
     expr_free(expr);
     goto test_failed;
@@ -293,21 +302,24 @@ HAPLO_TEST(interpreter_test, simple_string_val)
   Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
-    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.error));
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }
   if (val.type != HAPLO_VAL_STRING)
   {
-    printf("Error in interpreter_interpret, expected type HAPLO_VAL_STRING, got %s\n",
-           value_type_string(val.type));
+    fprintf(stderr, "Error in interpreter_interpret, expected type HAPLO_VAL_STRING, got %s\n",
+            value_type_string(val.type));
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }
   if (strcmp(val.string, expected_result) != 0)
   {
-    printf("Error in interpreter_interpret, expected result %s, got %s\n",
-           expected_result, val.string);
+    fprintf(stderr, "Error in interpreter_interpret, expected result %s, got %s\n",
+            expected_result, val.string);
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }
@@ -332,14 +344,14 @@ HAPLO_TEST(interpreter_test, math)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
   Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
-    printf("Error parser_parse returned a null expression\n");
+    fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
   }
 
@@ -355,7 +367,7 @@ HAPLO_TEST(interpreter_test, math)
 
   if (strcmp(expected, str) != 0)
   {
-    printf("Error reconstructed expression does not match original\n");
+    fprintf(stderr, "Error reconstructed expression does not match original\n");
 
     expr_free(expr);
     goto test_failed;
@@ -366,21 +378,24 @@ HAPLO_TEST(interpreter_test, math)
   Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
-    printf("Error %s in interpreter_interpret\n", error_string(val.error));
+    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.error));
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }
   if (val.type != HAPLO_VAL_INTEGER)
   {
-    printf("Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
-           value_type_string(val.type));
+    fprintf(stderr, "Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
+            value_type_string(val.type));
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }
   if (val.integer != expected_result)
   {
-    printf("Error in interpreter_interpret, expected result %ld, got %ld\n",
-           expected_result, val.integer);
+    fprintf(stderr, "Error in interpreter_interpret, expected result %ld, got %ld\n",
+            expected_result, val.integer);
+    haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
   }

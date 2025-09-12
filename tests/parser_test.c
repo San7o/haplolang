@@ -39,14 +39,14 @@ HAPLO_TEST(parser_test, simple1)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
   Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
-    printf("Error parser_parse returned a null expression\n");
+    fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
   }
 
@@ -62,7 +62,7 @@ HAPLO_TEST(parser_test, simple1)
 
   if (strcmp(expected, str) != 0)
   {
-    printf("Error reconstructed expression does not match expected\n");
+    fprintf(stderr, "Error reconstructed expression does not match expected\n");
     expr_free(expr);
     goto test_failed;
   }
@@ -84,14 +84,14 @@ HAPLO_TEST(parser_test, no_parenthesis)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
   Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
-    printf("Error parser_parse returned a null expression\n");
+    fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
   }
 
@@ -107,7 +107,7 @@ HAPLO_TEST(parser_test, no_parenthesis)
 
   if (strcmp(expected, str) != 0)
   {
-    printf("Error reconstructed expression does not match expected\n");
+    fprintf(stderr, "Error reconstructed expression does not match expected\n");
     expr_free(expr);
     goto test_failed;
   }
@@ -133,14 +133,14 @@ HAPLO_TEST(parser_test, malformed_parenthesis)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
   Expr *expr = parser_parse(&parser);
   if (expr != NULL || parser.error == 0)
   {
-    printf("Error parser_parse should have returned an error\n");
+    fprintf(stderr, "Error parser_parse should have returned an error\n");
     goto test_failed;
   }
 
@@ -160,7 +160,7 @@ HAPLO_TEST(parser_test, simple2)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
@@ -172,7 +172,7 @@ HAPLO_TEST(parser_test, simple2)
   Expr *expr = parser_parse(&parser);  
   if (expr == NULL)
   {
-    printf("Error parser_parse returned a null expression\n");
+    fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
   }
 
@@ -187,7 +187,7 @@ HAPLO_TEST(parser_test, simple2)
 
   if (strcmp(str, expected_ast) != 0)
   {
-    printf("Error reconstructed expression does not match original\n");
+    fprintf(stderr, "Error reconstructed expression does not match original\n");
     expr_free(expr);
     goto test_failed;
   }
@@ -208,7 +208,7 @@ HAPLO_TEST(parser_test, hello_world)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
@@ -220,7 +220,7 @@ HAPLO_TEST(parser_test, hello_world)
   Expr *expr = parser_parse(&parser);  
   if (expr != NULL || parser.error != -HAPLO_ERROR_PARSER_STRING_LITERAL_END)
   {
-    printf("Error parser_parse returned the wrong error\n");
+    fprintf(stderr, "Error parser_parse returned the wrong error\n");
     expr_free(expr);
     goto test_failed;
   }
@@ -241,14 +241,14 @@ HAPLO_TEST(parser_test, hello_world_no_parenthesis)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
   Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
-    printf("Error parser_parse returned a null expression\n");
+    fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
   }
 
@@ -264,7 +264,7 @@ HAPLO_TEST(parser_test, hello_world_no_parenthesis)
 
   if (strcmp(expected_ast, str) != 0)
   {
-    printf("Error reconstructed expression does not match the expected\n");
+    fprintf(stderr, "Error reconstructed expression does not match the expected\n");
     expr_free(expr);
     goto test_failed;
   }
@@ -290,14 +290,14 @@ HAPLO_TEST(parser_test, comment)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
   
   Expr *expr = parser_parse(&parser);
   if (expr != NULL)
   {
-    printf("Error parser_parse should return null\n");
+    fprintf(stderr, "Error parser_parse should return null\n");
     expr_free(expr);
     goto test_failed;
   }
@@ -318,7 +318,7 @@ HAPLO_TEST(parser_test, nested_expr)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
@@ -331,7 +331,7 @@ HAPLO_TEST(parser_test, nested_expr)
   Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
-    printf("Error parser_parse returned a null expression\n");
+    fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
   }
 
@@ -345,7 +345,7 @@ HAPLO_TEST(parser_test, nested_expr)
 
   if (strcmp(expected_ast, str) != 0)
   {
-    printf("Error reconstructed expression does not match the expected\n");
+    fprintf(stderr, "Error reconstructed expression does not match the expected\n");
     expr_free(expr);
     goto test_failed;
   }
@@ -367,7 +367,7 @@ HAPLO_TEST(parser_test, nested_head_expr)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
@@ -380,7 +380,7 @@ HAPLO_TEST(parser_test, nested_head_expr)
   Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
-    printf("Error parser_parse returned a null expression\n");
+    fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
   }
 
@@ -394,7 +394,7 @@ HAPLO_TEST(parser_test, nested_head_expr)
 
   if (strcmp(expected_ast, str) != 0)
   {
-    printf("Error reconstructed expression does not match the expected\n");
+    fprintf(stderr, "Error reconstructed expression does not match the expected\n");
     expr_free(expr);
     goto test_failed;
   }
@@ -417,7 +417,7 @@ HAPLO_TEST(parser_test, quote)
   err = parser_init(&parser, input, strlen(input));
   if (err < 0)
   {
-    printf("Error %d after parser_init\n", err);
+    fprintf(stderr, "Error %d after parser_init\n", err);
     goto test_failed;
   }
 
@@ -430,7 +430,7 @@ HAPLO_TEST(parser_test, quote)
   Expr *expr = parser_parse(&parser);
   if (expr == NULL)
   {
-    printf("Error parser_parse returned a null expression\n");
+    fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
   }
 
@@ -444,7 +444,7 @@ HAPLO_TEST(parser_test, quote)
 
   if (strcmp(expected_ast, str) != 0)
   {
-    printf("Error reconstructed expression does not match the expected\n");
+    fprintf(stderr, "Error reconstructed expression does not match the expected\n");
     expr_free(expr);
     goto test_failed;
   }

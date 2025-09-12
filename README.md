@@ -61,17 +61,17 @@ user    0m0.125s
 sys     0m0.044s
 ```
 
-Build and run the tests and e2e tests:
-
-```
-make check
-```
-
 Build the cli interpreter, you need to have
 [readline](https://savannah.gnu.org/git/?group=readline) installed:
 
 ```
 make cli
+```
+
+Build and run the tests and e2e tests:
+
+```
+make check
 ```
 
 Clean object files:
