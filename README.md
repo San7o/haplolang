@@ -22,9 +22,8 @@ The Haplolang interpreter by Giovanni Santini
 > (print "Hello, World!")
 "Hello, World!"
 empty
-> (print (+ 69 420))
+> (+ 69 420)
 489
-empty
 ```
 
 You can also interpret a file:
@@ -77,9 +76,8 @@ make clean
 ## Quickstart
 
 The language is strictly typed. The default value types are `integer`,
-`float`, `string`, `bool`, `func`, `list`, `quote`, `empty` and
-`error`. If you evaluate a value that is not a function, you will get
-back the same value:
+`float`, `string`, `bool`, `list`, `quote`, `empty` and `error`. If
+you evaluate a value, you will get it back:
 
 ```lisp
 > 123            # An integer
@@ -115,8 +113,8 @@ empty
 
 A quote is a symbol prepended with `'`. This symbol will not be called
 unlike functions, so symbols can be passed as arguments to other
-functions. For example, you can define a variable with `setq` a
-specifying the symbol that denotes the variable using the quote:
+functions. For example, you can define a variable with `setq` by
+specifying the symbol that denotes the variable using a quote:
 
 ```lisp
 > (setq 'hello "Hello, World!")
@@ -129,10 +127,10 @@ You can nest function calls using s-expressions, like lisp.
 
 ```lisp
 $ cat samples/sample2.haplo 
-( print
- ( *
-  ( + 1 2 )
-  ( - 7 5 ) ) )
+(print
+ (*
+  (+ 1 2)
+  (- 7 5)))
 $ ./haplo samples/sample2.haplo 
 6
 empty
@@ -149,21 +147,19 @@ expressions:
 10
 > ( + ( 4 ) ( * ( 2 ) ( 3 ) ) ) ) )
 10
-> ( ( ( ( 10 ) ) ) )
-10
 ```
 
 The only data structure currently present in the standard library is
-the list, and you can do the usual list operations:
+the `list`, and you can do the usual list operations:
 
 ```lisp
-> ( list 1 2 3 )
+> (list 1 2 3)
 list: 3, 2, 1
-> ( append 4 ( list 1 2 3 ) )
+> (append 4 (list 1 2 3 ))
 list: 4, 3, 2, 1
-> ( head ( list 1 2 3 ) )
+> (head (list 1 2 3 ))
 3
-> ( tail ( list 1 2 3 ) )
+> (tail (list 1 2 3))
 list: 2, 1
 ```
 
@@ -184,11 +180,13 @@ ATOM    ::= STRING
           | FLOAT
           | BOOL
           | SYMBOL
+          | QUOTE
 STRING  ::= " * "
 INTEGER ::= [+-][0-9]*
 FLOAT   ::= [+-][0-9].[0-9]
 BOOL    ::= true | false
-SYMBOL  ::= [a-zA-Z0-9!@#$%^&*()_+{}|:"<>?[]\;',./_+]*
+SYMBOL  ::= [a-zA-Z0-9!@#$%^&*()_+{}|:"<>?[]\;,./_+]*
+QUOTE   ::= 'SYMBOL
 ```
 
 The number of new lines, spaces and tabs is ignored. Comments are
