@@ -26,6 +26,10 @@
 #include "../value.h"
 #include "../errors.h"
 
+// + INTEGER INTEGER
+// Returns: INTEGER
+// + FLOAT FLOAT
+// Returns: FLOAT
 HAPLO_STD_FUNC_STR(plus, "+")
 {
   if (haplo_value_list_len(args) != 2)
@@ -66,6 +70,10 @@ HAPLO_STD_FUNC_STR(plus, "+")
   };
 }
 
+// - INTEGER INTEGER
+// Returns: INTEGER
+// - FLOAT FLOAT
+// Returns: FLOAT
 HAPLO_STD_FUNC_STR(minus, "-")
 {
   if (haplo_value_list_len(args) != 2)
@@ -106,6 +114,10 @@ HAPLO_STD_FUNC_STR(minus, "-")
   };
 }
 
+// * INTEGER INTEGER
+// Returns: INTEGER
+// * FLOAT FLOAT
+// Returns: FLOAT
 HAPLO_STD_FUNC_STR(times, "*")
 {
   if (haplo_value_list_len(args) != 2)
@@ -146,6 +158,10 @@ HAPLO_STD_FUNC_STR(times, "*")
   };
 }
 
+// / INTEGER INTEGER
+// Returns: INTEGER
+// / FLOAT FLOAT
+// Returns: FLOAT
 HAPLO_STD_FUNC_STR(div, "/")
 {
   if (haplo_value_list_len(args) != 2)
@@ -171,6 +187,226 @@ HAPLO_STD_FUNC_STR(div, "/")
     return (HaploValue) {
       .type = HAPLO_VAL_FLOAT,
       .floating_point = a.floating_point / b.floating_point,
+    };
+  } else if (b.type == HAPLO_VAL_ERROR)
+  {
+    return b;
+  } else if (a.type == HAPLO_VAL_ERROR)
+  {
+    return a;
+  }
+  
+  return (HaploValue) {
+    .type = HAPLO_VAL_ERROR,
+    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+  };
+}
+
+// > INTEGER INTEGER
+// Returns: BOOL
+// > FLOAT FLOAT
+// Returns: BOOL
+HAPLO_STD_FUNC_STR(greater, ">")
+{
+  if (haplo_value_list_len(args) != 2)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_ERROR,
+      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+    };
+  }
+    
+  HaploValue a, b;
+  a = args->val;
+  b = args->next->val;
+
+  if (a.type == HAPLO_VAL_INTEGER && b.type == HAPLO_VAL_INTEGER)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_BOOL,
+      .boolean = (a.integer > b.integer),
+    };
+  } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_BOOL,
+      .boolean = (a.floating_point > b.floating_point),
+    };
+  } else if (b.type == HAPLO_VAL_ERROR)
+  {
+    return b;
+  } else if (a.type == HAPLO_VAL_ERROR)
+  {
+    return a;
+  }
+  
+  return (HaploValue) {
+    .type = HAPLO_VAL_ERROR,
+    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+  };
+}
+
+// < INTEGER INTEGER
+// Returns: BOOL
+// < FLOAT FLOAT
+// Returns: BOOL
+HAPLO_STD_FUNC_STR(lesser, "<")
+{
+  if (haplo_value_list_len(args) != 2)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_ERROR,
+      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+    };
+  }
+    
+  HaploValue a, b;
+  a = args->val;
+  b = args->next->val;
+
+  if (a.type == HAPLO_VAL_INTEGER && b.type == HAPLO_VAL_INTEGER)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_BOOL,
+      .boolean = (a.integer < b.integer),
+    };
+  } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_BOOL,
+      .boolean = (a.floating_point < b.floating_point),
+    };
+  } else if (b.type == HAPLO_VAL_ERROR)
+  {
+    return b;
+  } else if (a.type == HAPLO_VAL_ERROR)
+  {
+    return a;
+  }
+  
+  return (HaploValue) {
+    .type = HAPLO_VAL_ERROR,
+    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+  };
+}
+
+// = INTEGER INTEGER
+// Returns: BOOL
+// = FLOAT FLOAT
+// Returns: BOOL
+HAPLO_STD_FUNC_STR(equal, "=")
+{
+  if (haplo_value_list_len(args) != 2)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_ERROR,
+      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+    };
+  }
+    
+  HaploValue a, b;
+  a = args->val;
+  b = args->next->val;
+
+  if (a.type == HAPLO_VAL_INTEGER && b.type == HAPLO_VAL_INTEGER)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_BOOL,
+      .boolean = (a.integer == b.integer),
+    };
+  } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_BOOL,
+      .boolean = (a.floating_point == b.floating_point),
+    };
+  } else if (b.type == HAPLO_VAL_ERROR)
+  {
+    return b;
+  } else if (a.type == HAPLO_VAL_ERROR)
+  {
+    return a;
+  }
+  
+  return (HaploValue) {
+    .type = HAPLO_VAL_ERROR,
+    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+  };
+}
+
+// >= INTEGER INTEGER
+// Returns: BOOL
+// >= FLOAT FLOAT
+// Returns: BOOL
+HAPLO_STD_FUNC_STR(greater_or_equal, ">=")
+{
+  if (haplo_value_list_len(args) != 2)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_ERROR,
+      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+    };
+  }
+    
+  HaploValue a, b;
+  a = args->val;
+  b = args->next->val;
+
+  if (a.type == HAPLO_VAL_INTEGER && b.type == HAPLO_VAL_INTEGER)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_BOOL,
+      .boolean = (a.integer >= b.integer),
+    };
+  } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_BOOL,
+      .boolean = (a.floating_point >= b.floating_point),
+    };
+  } else if (b.type == HAPLO_VAL_ERROR)
+  {
+    return b;
+  } else if (a.type == HAPLO_VAL_ERROR)
+  {
+    return a;
+  }
+  
+  return (HaploValue) {
+    .type = HAPLO_VAL_ERROR,
+    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+  };
+}
+
+// <= INTEGER INTEGER
+// Returns: BOOL
+// <= FLOAT FLOAT
+// Returns: BOOL
+HAPLO_STD_FUNC_STR(lesser_or_equal, "<=")
+{
+  if (haplo_value_list_len(args) != 2)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_ERROR,
+      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+    };
+  }
+    
+  HaploValue a, b;
+  a = args->val;
+  b = args->next->val;
+
+  if (a.type == HAPLO_VAL_INTEGER && b.type == HAPLO_VAL_INTEGER)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_BOOL,
+      .boolean = (a.integer <= b.integer),
+    };
+  } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
+  {
+    return (HaploValue) {
+      .type = HAPLO_VAL_BOOL,
+      .boolean = (a.floating_point <= b.floating_point),
     };
   } else if (b.type == HAPLO_VAL_ERROR)
   {

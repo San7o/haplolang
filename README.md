@@ -17,7 +17,7 @@ The project is composed of:
 
 You can use the interactive interpreter by running the `haplo` cli:
 
-```
+```lisp
 $ ./haplo
 The Haplolang interpreter by Giovanni Santini
 > # Hello, this is a comment
@@ -30,7 +30,7 @@ empty
 
 You can also interpret a file:
 
-```
+```lisp
 $ ./haplo samples/hello_world.haplo 
 "Hello, World!"
 empty
@@ -40,7 +40,7 @@ empty
 
 To build the library, just run `make`:
 
-```bash
+```
 $ time make
 gcc -Wall -Werror -Wpedantic -ggdb -c atom.c -o atom.o
 gcc -Wall -Werror -Wpedantic -ggdb -c parser.c -o parser.o
@@ -107,9 +107,9 @@ arguments, while the function `print` takes a value, prints it, and
 returns an `empty` value.
 
 ```lisp
-> + 68.1 0.9
+> (+ 68.1 0.9)
 69.000000
-> print "Nice"
+> (print "Nice")
 "Nice"
 empty
 ```
@@ -166,7 +166,7 @@ TRUE) (CASE FALSE)`.
 
 ```lisp
 $ cat samples/if_condition_true.haplo
-(if (true)
+(if (> 100 5)
     (print "Correct!")
     (print "Wrong :("))
 $ ./haplo samples/if_condition_true.haplo
