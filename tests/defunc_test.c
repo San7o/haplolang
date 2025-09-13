@@ -107,7 +107,7 @@ HAPLO_TEST(defunc_test, declare_function)
     goto test_failed;
   }
 
-  char buff[1024];
+  char buff[1024] = {0};
   char* expected_func = "( + ( 2 ( 3 ) ) )";
   expr_string(symbol.func, &buff[0]);
   if (strcmp(buff, expected_func) != 0)
