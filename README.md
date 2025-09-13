@@ -126,7 +126,7 @@ specifying the symbol that denotes the variable using a quote:
 "Hello, World!"
 ```
 
-You can define functions with `defunc 'NAME (FUNCTION)`:
+You can define functions with `defunc 'NAME (FUNCTION_BODY)`:
 
 ```lisp
 > (defunc 'test (+ 2 3))
@@ -135,7 +135,11 @@ empty
 5
 ```
 
-You can nest function calls using s-expressions, like lisp.
+The real difference between a function and a variable is that
+variables can only hold values, while functions have their own AST
+which gets "jumped" to.
+
+You can nest function calls with s-expressions, like lisp.
 
 ```lisp
 $ cat samples/quick_math.haplo 

@@ -26,6 +26,8 @@
 #include "../value.h"
 #include "../errors.h"
 
+#include <stdio.h>
+
 // + INTEGER INTEGER
 // Returns: INTEGER | ERROR
 // + FLOAT FLOAT

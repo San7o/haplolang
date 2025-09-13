@@ -126,13 +126,13 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
   // Special symbols
   if (func.type == HAPLO_VAL_SYMBOL)
   {
-    // If statement
+    // If statement. "(if (CONDITION) (CASE TRUE) (CASE FALSE))"
     if (strcmp(func.symbol, "if") == 0)
     {
+      haplo_value_free(func);
       int expr_depth = haplo_expr_depth(expr->tail);
       if (expr_depth < 2 && expr_depth > 3)
       {
-        haplo_value_free(func);
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
           .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
@@ -142,7 +142,6 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
       HaploValue condition = haplo_interpreter_interpret(interpreter, expr->tail->head);
       if (condition.type != HAPLO_VAL_BOOL)
       {
-        haplo_value_free(func);
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
           .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
@@ -156,15 +155,52 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
       } else if (expr_depth == 3) {
         out_val = haplo_interpreter_interpret(interpreter, expr->tail->tail->tail->head);
       }
-      haplo_value_free(func);
       return out_val;
     }
-    // Function definition
-    if (strcmp(func.symbol, "defunc") == 0)
+    // While loop. "(while CONDITION FUNCTION)"
+    if (strcmp(func.symbol, "while") == 0)
     {
-      if (haplo_expr_depth(expr->tail) != 2)
+      int expr_depth = haplo_expr_depth(expr->tail);
+      if (expr_depth < 2)
       {
         haplo_value_free(func);
+        return (HaploValue) {
+          .type = HAPLO_VAL_ERROR,
+          .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+        };
+      }
+      haplo_value_free(func);
+
+      bool should_loop = true;
+      HaploValue condition = haplo_interpreter_interpret(interpreter, expr->tail->head);
+      if (condition.type != HAPLO_VAL_BOOL)
+      {
+        return (HaploValue) {
+          .type = HAPLO_VAL_ERROR,
+          .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+        };
+      }
+
+      should_loop = condition.boolean;
+      while (should_loop) {
+        HaploValue a_val = haplo_interpreter_interpret(interpreter, expr->tail->tail->head);
+        haplo_value_free(a_val); // Ignore the return value
+
+        // Update should_loop
+        condition = haplo_interpreter_interpret(interpreter, expr->tail->head);
+        should_loop = condition.boolean;
+      }
+
+      return (HaploValue) {
+        .type = HAPLO_VAL_EMPTY,
+      };
+    }
+    // Function definition. "(defunc 'FUNCTION_NAME (FUNCTION_BODY))"
+    if (strcmp(func.symbol, "defunc") == 0)
+    {
+      haplo_value_free(func);
+      if (haplo_expr_depth(expr->tail) != 2)
+      {
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
           .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
@@ -176,7 +212,6 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
 
       if (!func_name->is_atom || func_name->atom.type != HAPLO_ATOM_QUOTE)
       {
-        haplo_value_free(func);
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
           .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
@@ -193,14 +228,12 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
                                         new_function);
       if (err < 0)
       {
-        haplo_value_free(func);
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
           .error = err,
         };
       }
       
-      haplo_value_free(func);
       return (HaploValue) {
         .type = HAPLO_VAL_EMPTY,
       };

@@ -1,0 +1,9 @@
+(
+ (setq 'a 0)
+ (while (< (a) 20)
+   (
+    (print (a))
+    (setq 'a
+          (+ (a) 1)))
+   )
+ )
