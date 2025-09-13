@@ -63,6 +63,7 @@ typedef struct HaploAtom {
 // --- Functios ---
 
 void haplo_atom_free(HaploAtom atom);
+HaploAtom haplo_atom_deep_copy(HaploAtom atom);
 // Writes to buff the string representation of the atom.
 void haplo_atom_string(HaploAtom atom, char buf[HAPLO_ATOM_MAX_STRING_LEN]);
 

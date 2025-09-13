@@ -1,8 +1,6 @@
   TODO
 =========
 
-- Declare functions
-  - quote could have an ast
 - Generated documentation
 - Release 0.1.0
 - Lexical scoping

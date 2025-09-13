@@ -37,15 +37,13 @@ void haplo_expr_free(HaploExpr *expr)
   if (expr->is_atom)
   {
     haplo_atom_free(expr->atom);
-    return;
+  } else {
+    haplo_expr_free(expr->head);
+    haplo_expr_free(expr->tail);
   }
-  haplo_expr_free(expr->head);
-  haplo_expr_free(expr->tail);
-  
+  free(expr);
   return;
 }
-
-// Printing / Formatting
 
 void haplo_expr_print_rec(HaploExpr *expr)
 {
@@ -76,6 +74,23 @@ void haplo_expr_print(HaploExpr *expr)
   haplo_expr_print_rec(expr);
   printf("\n");
   return;
+}
+
+HaploExpr *haplo_expr_deep_copy(HaploExpr *expr)
+{
+  if (expr == NULL) return NULL;
+
+  HaploExpr *new_expr = malloc(sizeof(HaploExpr));
+  new_expr->is_atom = expr->is_atom;
+  if (expr->is_atom)
+  {
+    new_expr->atom = haplo_atom_deep_copy(expr->atom);
+  } else {
+    new_expr->head = haplo_expr_deep_copy(expr->head);
+    new_expr->tail = haplo_expr_deep_copy(expr->tail);
+  }
+
+  return new_expr;
 }
 
 int haplo_expr_depth(HaploExpr *expr)

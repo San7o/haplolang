@@ -237,15 +237,13 @@ HaploExpr *haplo_parser_parse(HaploParser *parser)
   if (parser->input_len == 0) return NULL;
   parser->error = 0;
 
-  HaploExpr *expr = malloc(sizeof(HaploExpr));
-  *expr = (HaploExpr){0};
-  
   if (setjmp(parser->jump_buf)) {
     // The parser jumps here when encountering an error
     haplo_parser_dump(parser);
     return NULL;
   }
 
+  HaploExpr *expr;  
   if (haplo_parser_peek_next_token(parser) < 0)
   {
     if (parser->last_token == HAPLO_LEX_ATOM)
@@ -258,12 +256,11 @@ HaploExpr *haplo_parser_parse(HaploParser *parser)
   
   if (parser->last_token == HAPLO_LEX_ATOM)
     haplo_atom_free(parser->last_atom);
-
+  
   if (parser->last_token == HAPLO_LEX_OPEN)
   {
     if (haplo_parser_next_token(parser) < 0)
     {
-      haplo_expr_free(expr);    
       HAPLO_PARSER_ERROR();
     }
     

@@ -312,6 +312,7 @@ HAPLO_TEST(interpreter_test, simple_string_val)
     fprintf(stderr, "Error in interpreter_interpret, expected type HAPLO_VAL_STRING, got %s\n",
             value_type_string(val.type));
     haplo_interpreter_destroy(&interpreter);
+    value_free(val);
     expr_free(expr);
     goto test_failed;
   }
@@ -320,12 +321,14 @@ HAPLO_TEST(interpreter_test, simple_string_val)
     fprintf(stderr, "Error in interpreter_interpret, expected result %s, got %s\n",
             expected_result, val.string);
     haplo_interpreter_destroy(&interpreter);
+    value_free(val);
     expr_free(expr);
     goto test_failed;
   }
 
-  haplo_interpreter_destroy(&interpreter);
   expr_free(expr);
+  value_free(val);
+  haplo_interpreter_destroy(&interpreter);
   
   HAPLO_TEST_SUCCESS;
 

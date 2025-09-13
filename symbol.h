@@ -26,6 +26,7 @@
 #define _HAPLO_SYMBOL_H_
 
 #include "value.h"
+#include "expr.h"
 #include "function.h"
 
 // --- Macros ---
@@ -52,7 +53,8 @@
 // --- Types ---
 
 enum HaploSymbolType {
-  HAPLO_SYMBOL_FUNCTION = 0,
+  HAPLO_SYMBOL_C_FUNCTION = 0,   // stdlib
+  HAPLO_SYMBOL_FUNCTION,
   HAPLO_SYMBOL_VARIABLE,
   _HAPLO_SYMBOL_MAX,
 };
@@ -62,8 +64,9 @@ typedef char* HaploSymbolKey;
 typedef struct HaploSymbol {
   enum HaploSymbolType type;
   union {
-    HaploFunction func;
-    HaploValue var;
+    HaploFunction c_func;    // function implemented in c
+    HaploExpr* func;         // function defined as an AST
+    HaploValue var;          // a variable
   };
 } HaploSymbol;
 

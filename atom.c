@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 
 static_assert(_HAPLO_ATOM_MAX == 6,
               "Updated HaploAtomType, maybe update haplo_atom_free");
@@ -47,6 +48,42 @@ void haplo_atom_free(HaploAtom atom)
     return;
   }
   return;
+}
+
+static_assert(_HAPLO_ATOM_MAX == 6,
+              "Updated HaploAtomType, maybe update haplo_atom_deep_copy");
+HaploAtom haplo_atom_deep_copy(HaploAtom atom)
+{
+  HaploAtom new_atom = {0};
+  new_atom.type = atom.type;
+  switch(atom.type)
+  {
+  case HAPLO_ATOM_STRING:
+    new_atom.string = malloc(strlen(atom.string)+1);
+    strcpy(new_atom.string, atom.string);
+    break;
+  case HAPLO_ATOM_SYMBOL:
+    new_atom.symbol = malloc(strlen(atom.symbol)+1);
+    strcpy(new_atom.symbol, atom.symbol);
+    break;
+  case HAPLO_ATOM_QUOTE:
+    new_atom.quote = malloc(strlen(atom.quote)+1);
+    strcpy(new_atom.quote, atom.quote);
+    break;
+  case HAPLO_ATOM_INTEGER:
+    new_atom.integer = atom.integer;
+    break;
+  case HAPLO_ATOM_FLOAT:
+    new_atom.floating_point = atom.floating_point;
+    break;
+  case HAPLO_ATOM_BOOL:
+    new_atom.boolean = atom.boolean;
+    break;
+  default:
+    new_atom.type = _HAPLO_ATOM_MAX;
+    break;
+  }
+  return new_atom;
 }
 
 static_assert(_HAPLO_ATOM_MAX == 6,

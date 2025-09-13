@@ -1,0 +1,1 @@
+(defunc 'test (print "We live in a simulation"))

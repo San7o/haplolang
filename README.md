@@ -100,7 +100,7 @@ Error: ERROR_INTERPRETER_UNKNOWN_FUNCTION
 > # The previous result was an error
 ```
 
-Symbols are recognized as function, they can be called with some
+Symbols are recognized as functions: they can be called with some
 arguments and return a value. For example, the function `+` takes two
 integers and returns an integer value representing the sum of the two
 arguments, while the function `print` takes a value, prints it, and
@@ -124,6 +124,15 @@ specifying the symbol that denotes the variable using a quote:
 "Hello, World!"
 > hello
 "Hello, World!"
+```
+
+You can define functions with `defunc 'NAME (FUNCTION)`:
+
+```lisp
+> (defunc 'test (+ 2 3))
+empty
+> test
+5
 ```
 
 You can nest function calls using s-expressions, like lisp.

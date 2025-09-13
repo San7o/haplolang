@@ -36,6 +36,7 @@
   #define Expr HaploExpr
   #define expr_free haplo_expr_free
   #define expr_print haplo_expr_print
+  #define expr_deep_copy haplo_expr_deep_copy
   #define expr_depth haplo_expr_depth
   #define expr_string haplo_expr_string
 #endif // HAPLO_NO_PREFIX
@@ -57,6 +58,7 @@ typedef struct HaploExpr {
 
 void haplo_expr_free(HaploExpr *expr);
 void haplo_expr_print(HaploExpr *expr);
+HaploExpr *haplo_expr_deep_copy(HaploExpr *expr);
 // Returns the rightmost depth of the expression
 int haplo_expr_depth(HaploExpr *expr);
 void haplo_expr_string(HaploExpr *expr, char *str);

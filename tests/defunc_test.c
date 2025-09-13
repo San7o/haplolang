@@ -29,12 +29,11 @@
 #include <stdio.h>
 #include <string.h>
 
-HAPLO_TEST(setq_test, declare_variable)
+HAPLO_TEST(defunc_test, declare_function)
 {
   int err;
-  char* input = "(setq 'test 123 )";
-  char* expected = "( setq ( 'test ( 123 ) ) )";
-  long expected_result = 123;
+  char* input = "(defunc 'test (+ 2 3) )";
+  char* expected = "( defunc ( 'test ( ( + ( 2 ( 3 ) ) ) ) ) )";
   
   Parser parser = {0};
   err = parser_init(&parser, input, strlen(input));
@@ -76,29 +75,18 @@ HAPLO_TEST(setq_test, declare_variable)
   {
     fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.error));
     expr_free(expr);
-    haplo_interpreter_destroy(&interpreter);
+    interpreter_destroy(&interpreter);
     goto test_failed;
   }
-  if (val.type != HAPLO_VAL_INTEGER)
+  if (val.type != HAPLO_VAL_EMPTY)
   {
-    fprintf(stderr, "Error in interpreter_interpret, expected type HAPLO_VAL_INTEGER, got %s\n",
+    fprintf(stderr, "Error in interpreter_interpret, expected type HAPLO_VAL_EMPTY, got %s\n",
            value_type_string(val.type));
     expr_free(expr);
-    value_free(val);
-    haplo_interpreter_destroy(&interpreter);
-    goto test_failed;
-  }
-  if (val.integer != expected_result)
-  {
-    fprintf(stderr, "Error in interpreter_interpret, expected result %ld, got %ld\n",
-           expected_result, val.integer);
-    expr_free(expr);
-    value_free(val);
-    haplo_interpreter_destroy(&interpreter);
+    interpreter_destroy(&interpreter);
     goto test_failed;
   }
   value_free(val);
-  expr_free(expr);
 
   Symbol symbol;
   err = symbol_map_lookup(interpreter.symbol_map,
@@ -107,31 +95,72 @@ HAPLO_TEST(setq_test, declare_variable)
   if (err < 0)
   {
     fprintf(stderr, "Error in symbol_map_lookup: %s\n", error_string(err));
-    haplo_interpreter_destroy(&interpreter);
+    expr_free(expr);
+    interpreter_destroy(&interpreter);
     goto test_failed;
   }
-  if (symbol.type != HAPLO_SYMBOL_VARIABLE)
+  if (symbol.type != HAPLO_SYMBOL_FUNCTION)
   {
     fprintf(stderr, "Error in symbol_map_lookup: symbol type is %s instead of HAPLO_SYMBOL_VARIABLE\n", symbol_type_string(symbol.type));
-    haplo_interpreter_destroy(&interpreter);
+    expr_free(expr);
+    interpreter_destroy(&interpreter);
     goto test_failed;
   }
- if (symbol.var.type != HAPLO_VAL_INTEGER)
+
+  char buff[1024];
+  char* expected_func = "( + ( 2 ( 3 ) ) )";
+  expr_string(symbol.func, &buff[0]);
+  if (strcmp(buff, expected_func) != 0)
   {
-    fprintf(stderr, "Error in symbol_map_lookup, expected type HAPLO_VAL_INTEGER, got %s\n",
-           value_type_string(symbol.var.type));
-    haplo_interpreter_destroy(&interpreter);
+    fprintf(stderr, "Error in symbol_map_lookup: expected %s, but got %s\n",
+            expected_func, buff);
+    expr_free(expr);
+    interpreter_destroy(&interpreter);
     goto test_failed;
   }
-  if (symbol.var.integer != expected_result)
+  expr_free(expr);
+
+  // Try to call the new function
+  char* input2 = "(test)";
+  Parser parser2 = {0};
+  err = parser_init(&parser2, input2, strlen(input2));
+  if (err < 0)
   {
-    fprintf(stderr, "Error in interpreter_interpret, expected result %ld, got %ld\n",
-           expected_result, symbol.var.integer);
-    haplo_interpreter_destroy(&interpreter);
+    fprintf(stderr, "Error %d after parser_init 2\n", err);
     goto test_failed;
   }
+  Expr *expr2 = parser_parse(&parser2);
+  Value val2 = interpreter_interpret(&interpreter, expr2);
+  int expected_result = 5;
+  if (val2.type == HAPLO_VAL_ERROR)
+  {
+    fprintf(stderr, "Error %s in interpreter_interpret 2\n", error_string(val2.error));
+    expr_free(expr2);
+    interpreter_destroy(&interpreter);
+    goto test_failed;
+  }
+  if (val2.type != HAPLO_VAL_INTEGER)
+  {
+    fprintf(stderr, "Error in interpreter_interpret 2, expected type HAPLO_VAL_INTEGER, got %s\n",
+           value_type_string(val2.type));
+    value_free(val2);
+    expr_free(expr2);
+    interpreter_destroy(&interpreter);
+    goto test_failed;
+  }
+  if (val2.integer != expected_result)
+  {
+    fprintf(stderr, "Error in interpreter_interpret 2, expected type HAPLO_VAL_INTEGER, got %s\n",
+            value_type_string(val2.type));
+    value_free(val2);
+    expr_free(expr2);
+    interpreter_destroy(&interpreter);
+    goto test_failed;    
+  }
+  expr_free(expr2);
+  value_free(val2);
   
-  haplo_interpreter_destroy(&interpreter);
+  interpreter_destroy(&interpreter);
   HAPLO_TEST_SUCCESS;
 
  test_failed:

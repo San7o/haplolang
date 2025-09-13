@@ -98,8 +98,8 @@ HAPLO_TEST(symbol_map_test, update_lookup)
 
   char* key = "test";
   Symbol symbol = {
-    .type = HAPLO_SYMBOL_FUNCTION,
-    .func = (HaploFunction) {
+    .type = HAPLO_SYMBOL_C_FUNCTION,
+    .c_func = (HaploFunction) {
       .run = &my_test_symbol_1,
     },
   };
@@ -124,13 +124,13 @@ HAPLO_TEST(symbol_map_test, update_lookup)
     symbol_map_destroy(&map);
     goto test_failed;
   }
-  if (lookup_symbol.type != HAPLO_SYMBOL_FUNCTION)
+  if (lookup_symbol.type != HAPLO_SYMBOL_C_FUNCTION)
   {
     fprintf(stderr, "Symbol map lookup type is not correct\n");
     symbol_map_destroy(&map);
     goto test_failed;
   }
-  if (lookup_symbol.func.run != symbol.func.run)
+  if (lookup_symbol.c_func.run != symbol.c_func.run)
   {
     fprintf(stderr, "Symbol map lookup function does not match\n");
     symbol_map_destroy(&map);
@@ -184,8 +184,8 @@ HAPLO_TEST(symbol_map_test, delete)
 
   char* key = "test_with_a_decently_long_name";
   Symbol symbol = {
-    .type = HAPLO_SYMBOL_FUNCTION,
-    .func = (HaploFunction) {
+    .type = HAPLO_SYMBOL_C_FUNCTION,
+    .c_func = (HaploFunction) {
       .run = &my_test_symbol_2,
     },
   };
@@ -210,13 +210,13 @@ HAPLO_TEST(symbol_map_test, delete)
     symbol_map_destroy(&map);
     goto test_failed;
   }
-  if (lookup_symbol.type != HAPLO_SYMBOL_FUNCTION)
+  if (lookup_symbol.type != HAPLO_SYMBOL_C_FUNCTION)
   {
     fprintf(stderr, "Symbol map lookup type does not match\n");
     symbol_map_destroy(&map);
     goto test_failed;
   }
-  if (lookup_symbol.func.run != symbol.func.run)
+  if (lookup_symbol.c_func.run != symbol.c_func.run)
   {
     fprintf(stderr, "Symbol map lookup function does not match\n");
     symbol_map_destroy(&map);

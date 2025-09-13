@@ -49,7 +49,8 @@ TEST_OBJ=tests/tests.o\
          tests/parser_test.o\
          tests/interpreter_test.o\
          tests/symbol_map_test.o\
-         tests/setq_test.o
+         tests/setq_test.o\
+         tests/defunc_test.o
 TEST_LINKER_SCRIPT=tests/linker.ld
 TEST_E2E_NAME=${NAME}_tests_e2e.sh
 CLI_OBJ=haplo.o

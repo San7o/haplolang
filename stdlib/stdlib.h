@@ -48,8 +48,8 @@ extern HaploSymbolMap __haplo_std_symbol_map;
       haplo_symbol_map_update(&__haplo_std_symbol_map,\
                               func_string,            \
                               (HaploSymbol){ \
-                                .type = HAPLO_SYMBOL_FUNCTION,  \
-                                .func = (HaploFunction) {\
+                                .type = HAPLO_SYMBOL_C_FUNCTION,  \
+                                .c_func = (HaploFunction) {\
                                   .run = __haplo_std_##fn \
                                 }               \
                               });               \

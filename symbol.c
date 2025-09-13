@@ -32,12 +32,14 @@
 #include <stdbool.h>
 #include <assert.h>
 
-static_assert(_HAPLO_SYMBOL_MAX == 2,
+static_assert(_HAPLO_SYMBOL_MAX == 3,
               "Updated HaploSymbolType, should update haplo_symbol_type_string");
 const char* haplo_symbol_type_string(enum HaploSymbolType type)
 {
   switch(type)
   {
+  case HAPLO_SYMBOL_C_FUNCTION:
+    return "C_FUNCTION";
   case HAPLO_SYMBOL_FUNCTION:
     return "FUNCTION";
   case HAPLO_SYMBOL_VARIABLE:
@@ -67,7 +69,7 @@ HaploSymbolList *haplo_symbol_list_deep_copy(HaploSymbolList *list)
 
   HaploSymbolList *new_list = malloc(sizeof(HaploSymbolList));
   new_list->val = haplo_symbol_deep_copy(list->val);
-  new_list->key = (HaploSymbolKey) malloc(strlen(list->key));
+  new_list->key = (HaploSymbolKey) malloc(strlen(list->key)+1);
   strcpy(new_list->key, list->key);
   new_list->next = haplo_symbol_list_deep_copy(list->next);
   return new_list;
@@ -92,25 +94,38 @@ int haplo_symbol_map_destroy(HaploSymbolMap *map)
     for (int i = 0; i < map->capacity; ++i)
     {
       haplo_symbol_list_free(map->_map[i]);
+      map->_map[i] = NULL;
     }
+    free(map->_map);
     map->_map = NULL;
   }
 
   return 0;
 }
 
-static_assert(_HAPLO_SYMBOL_MAX == 2,
+static_assert(_HAPLO_SYMBOL_MAX == 3,
               "Updated HaploSymbolType, should update haplo_symbol_free");
 void haplo_symbol_free(HaploSymbol symbol)
 {
-  if (symbol.type == HAPLO_SYMBOL_VARIABLE)
+  switch (symbol.type)
   {
+  case HAPLO_SYMBOL_VARIABLE:
     haplo_value_free(symbol.var);
+    break;
+  case HAPLO_SYMBOL_FUNCTION:
+    haplo_expr_free(symbol.func);
+    symbol.func = NULL;
+    break;
+  default:
+    break;
   }
+
+  // Invalidate symbol
+  symbol.type = _HAPLO_SYMBOL_MAX;
   return;
 }
 
-static_assert(_HAPLO_SYMBOL_MAX == 2,
+static_assert(_HAPLO_SYMBOL_MAX == 3,
               "Updated HaploSymbolType, should update haplo_symbol_deep_copy");
 HaploSymbol haplo_symbol_deep_copy(HaploSymbol symbol)
 {
@@ -119,8 +134,11 @@ HaploSymbol haplo_symbol_deep_copy(HaploSymbol symbol)
   };
   switch(symbol.type)
   {
+  case HAPLO_SYMBOL_C_FUNCTION:
+    new_symbol.c_func = symbol.c_func;
+    break;
   case HAPLO_SYMBOL_FUNCTION:
-    new_symbol.func = symbol.func;
+    new_symbol.func = haplo_expr_deep_copy(symbol.func);
     break;
   case HAPLO_SYMBOL_VARIABLE:
     new_symbol.var = haplo_value_deep_copy(symbol.var);
@@ -128,7 +146,6 @@ HaploSymbol haplo_symbol_deep_copy(HaploSymbol symbol)
   default:
     break;
   }
-
   return new_symbol;
 }
 
@@ -200,7 +217,7 @@ int haplo_symbol_map_update(HaploSymbolMap *map,
     symbol_list = (HaploSymbolList*) malloc(sizeof(HaploSymbolList));
     symbol_list->next = NULL;
     symbol_list->val = haplo_symbol_deep_copy(symbol);
-    symbol_list->key = malloc(strlen(key));
+    symbol_list->key = malloc(strlen(key)+1);
     strcpy(symbol_list->key, key);
     map->_map[hash] = symbol_list;
     return 0;
@@ -233,7 +250,7 @@ int haplo_symbol_map_update(HaploSymbolMap *map,
   HaploSymbolList * new_list = (HaploSymbolList*) malloc(sizeof(HaploSymbolList));
   new_list->next = NULL;
   new_list->val = haplo_symbol_deep_copy(symbol);
-  new_list->key = malloc(strlen(key));
+  new_list->key = malloc(strlen(key)+1);
   strcpy(new_list->key, key);
   symbol_list->next = new_list;
   

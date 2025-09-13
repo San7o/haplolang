@@ -30,8 +30,6 @@ SAMPLES_DIR=./samples
 SAMPLES=$(echo $SAMPLES_DIR/*.haplo)
 OK="true"
 
-set -e
-
 echo "Running E2E tests..."
 
 e2e_error()
@@ -50,7 +48,7 @@ if [ ! -e $HAPLO_EXECUTABLE ]; then
 fi
 
 for SAMPLE in $SAMPLES; do
-    OUTPUT=$($HAPLO_EXECUTABLE $SAMPLE)
+    OUTPUT=$("$HAPLO_EXECUTABLE" "$SAMPLE")
     EXPECTED_OUTPUT=$(cat $SAMPLE.out)
     if [ ! "$OUTPUT" = "$EXPECTED_OUTPUT"  ]; then
         e2e_error "e2e test failed for sample $SAMPLE"

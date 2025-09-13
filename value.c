@@ -154,7 +154,7 @@ HaploValue haplo_value_deep_copy(HaploValue value)
   case HAPLO_VAL_FLOAT:
     return value;
   case HAPLO_VAL_STRING: ;
-    char* new_string = (char*) malloc(strlen(value.string));
+    char* new_string = (char*) malloc(strlen(value.string)+1);
     strcpy(new_string, value.string);
     new_value.type = HAPLO_VAL_STRING;
     new_value.string = new_string;
@@ -162,7 +162,7 @@ HaploValue haplo_value_deep_copy(HaploValue value)
   case HAPLO_VAL_BOOL:
     return value;
   case HAPLO_VAL_SYMBOL: ;
-    char* new_symbol = (char*) malloc(strlen(value.symbol));
+    char* new_symbol = (char*) malloc(strlen(value.symbol)+1);
     strcpy(new_symbol, value.symbol);
     new_value.type = HAPLO_VAL_SYMBOL;
     new_value.symbol = new_symbol;
@@ -172,7 +172,7 @@ HaploValue haplo_value_deep_copy(HaploValue value)
     new_value.list = haplo_value_list_deep_copy(value.list);
     break;
   case HAPLO_VAL_QUOTE: ;
-    char* new_quote = (char*) malloc(strlen(value.quote));
+    char* new_quote = (char*) malloc(strlen(value.quote)+1);
     strcpy(new_quote, value.quote);
     new_value.type = HAPLO_VAL_QUOTE;
     new_value.string = new_quote;

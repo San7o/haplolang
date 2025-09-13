@@ -164,7 +164,7 @@ int haplo_lexer_next_token(char* input, int input_size,
     if (atom != NULL)
     {
       atom->type = HAPLO_ATOM_STRING;
-      atom->string = (char *) malloc(ret - 1);
+      atom->string = (char *) malloc(ret);
       strncpy(atom->string, input + 1, ret - 2); // Ignore the '"'
       atom->string[ret-1] = '\0';
     }

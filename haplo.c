@@ -79,9 +79,11 @@ void print_headline()
 void print_help()
 {
   print_headline();
-  printf("Usage:\n");
-  printf("    help    show help message\n");
-  printf("    <file>  interpret <file>\n");
+  printf("Usage:  haplo [options] [file]\n");
+  printf("\n");
+  printf("options:\n");
+  printf("      help    show help message\n");
+  printf("      -i      start REPL interpreter after evaluating file\n");
   return;
 }
 
@@ -150,6 +152,12 @@ void interpret_cmdline(Interpreter *interpreter)
 
   while(1) {
     char *line = readline("> ");
+    if (strcmp(line, "quit") == 0 || strcmp(line, "exit") == 0)
+    {
+      free(line);
+      return;
+    }
+
     add_history(line);
     process_line(interpreter, line, strlen(line));
     free(line);
@@ -160,7 +168,8 @@ int main(int argc, char** argv)
 { 
   Interpreter interpreter = {0};
   interpreter_init(&interpreter);
-  
+
+  bool interactive = false;
   if (argc > 1)
   {
     if (strcmp(argv[1], "help") == 0)
@@ -169,7 +178,18 @@ int main(int argc, char** argv)
       return 0;
     }
 
-    interpret_file(&interpreter, argv[1]);
+    if (strcmp(argv[1], "-i") == 0)
+    {
+      interactive = true;
+    }
+
+    interpret_file(&interpreter, argv[argc-1]);
+    if (interactive)
+    {
+      interpret_cmdline(&interpreter);
+    }
+    
+    interpreter_destroy(&interpreter);
     return 0;
   }
 
