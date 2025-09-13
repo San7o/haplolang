@@ -189,6 +189,17 @@ HaploValue haplo_value_deep_copy(HaploValue value)
   return new_value;
 }
 
+int haplo_value_list_string_rec(HaploValueList *this, char* buf, int buf_len, int offset)
+{
+  if (this == NULL) return offset;
+  
+  offset = haplo_value_list_string_rec(this->next, buf, buf_len, offset);
+  
+  offset += haplo_value_string(this->val, buf + offset, buf_len - offset);
+  offset += snprintf(buf + offset, buf_len - offset, " ");
+  return offset;
+}
+
 static_assert(_HAPLO_VAL_MAX == 9,
               "Added a new value type, update haplo_value_string");
 int haplo_value_string(HaploValue value, char* buf, int buf_len)
@@ -211,15 +222,7 @@ int haplo_value_string(HaploValue value, char* buf, int buf_len)
     HaploValueList *this = value.list;
     int offset = 0;
     offset += snprintf(buf, buf_len, "list: ");
-    while (this != NULL)
-    {
-      offset += haplo_value_string(this->val, buf + offset, buf_len - offset);
-      if (this->next != NULL)
-      {
-        offset += snprintf(buf + offset, buf_len - offset, ", ");
-      }
-      this = this->next;
-    }
+    offset = haplo_value_list_string_rec(this, buf, buf_len, offset);
     return offset;
   case HAPLO_VAL_QUOTE:
     return snprintf(buf, buf_len, "'%s", value.quote);

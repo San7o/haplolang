@@ -92,7 +92,7 @@ you evaluate a value, you will get it back:
 > true           # A bool
 true
 > list 1 2 3     # A list
-list 3 2 1
+list 1 2 3
 > 'hello         # A quote
 'hello
 > hello          # A function
@@ -179,19 +179,14 @@ the `list`, and you can do the usual list operations:
 
 ```lisp
 > (list 1 2 3)
-list: 3, 2, 1
+list: 1 2 3
 > (append 4 (list 1 2 3 ))
-list: 4, 3, 2, 1
+list: 1 2 3 4
 > (head (list 1 2 3 ))
 3
 > (tail (list 1 2 3))
-list: 2, 1
+list: 1 2
 ```
-
-Note that the elements are in reverse order from the order we
-supplied. This happens because the parser is right associative and the
-first element is the deepest expression. This may be changed in the
-future.
 
 The grammars is as follows:
 
