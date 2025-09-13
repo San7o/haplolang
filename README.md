@@ -1,8 +1,8 @@
 # Haplolang
 
-Haplolang an s-expression based, imperative programming language
-implemented in C, greatly inspired by Lisp. The term "Haplo" is a
-Greek word meaning simple, which describes my philosophy in
+Haplolang an s-expression based, imperative, interpreted programming
+language implemented in C, greatly inspired by Lisp. The term "Haplo"
+is a Greek word meaning simple, which describes my philosophy in
 implementing the language.
 
 This is a [recreational programming](https://giovanni-diary.netlify.app/programming/notes/recreational-programming) project.
@@ -56,7 +56,7 @@ user    0m0.125s
 sys     0m0.044s
 ```
 
-Tuild the cli interpreter, you need to have
+To build the cli interpreter, you need to have
 [readline](https://savannah.gnu.org/git/?group=readline) installed
 first, then run:
 
@@ -155,7 +155,7 @@ expressions:
 You can do `if` statements with the structure `if (CONDITION) (CASE
 TRUE) (CASE FALSE)`.
 
-```
+```lisp
 $ cat samples/if_condition_true.haplo
 (if (true)
     (print "Correct!")
@@ -163,7 +163,6 @@ $ cat samples/if_condition_true.haplo
 $ ./haplo samples/if_condition_true.haplo
 "Correct!"
 empty
-
 ```
 
 The only data structure currently present in the standard library is
