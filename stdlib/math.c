@@ -27,9 +27,9 @@
 #include "../errors.h"
 
 // + INTEGER INTEGER
-// Returns: INTEGER
+// Returns: INTEGER | ERROR
 // + FLOAT FLOAT
-// Returns: FLOAT
+// Returns: FLOAT | ERROR
 HAPLO_STD_FUNC_STR(plus, "+")
 {
   if (haplo_value_list_len(args) != 2)
@@ -71,9 +71,9 @@ HAPLO_STD_FUNC_STR(plus, "+")
 }
 
 // - INTEGER INTEGER
-// Returns: INTEGER
+// Returns: INTEGER | ERROR
 // - FLOAT FLOAT
-// Returns: FLOAT
+// Returns: FLOAT | ERROR
 HAPLO_STD_FUNC_STR(minus, "-")
 {
   if (haplo_value_list_len(args) != 2)
@@ -115,9 +115,9 @@ HAPLO_STD_FUNC_STR(minus, "-")
 }
 
 // * INTEGER INTEGER
-// Returns: INTEGER
+// Returns: INTEGER | ERROR
 // * FLOAT FLOAT
-// Returns: FLOAT
+// Returns: FLOAT | ERROR
 HAPLO_STD_FUNC_STR(times, "*")
 {
   if (haplo_value_list_len(args) != 2)
@@ -159,9 +159,9 @@ HAPLO_STD_FUNC_STR(times, "*")
 }
 
 // / INTEGER INTEGER
-// Returns: INTEGER
+// Returns: INTEGER | ERROR
 // / FLOAT FLOAT
-// Returns: FLOAT
+// Returns: FLOAT | ERROR
 HAPLO_STD_FUNC_STR(div, "/")
 {
   if (haplo_value_list_len(args) != 2)
@@ -203,9 +203,9 @@ HAPLO_STD_FUNC_STR(div, "/")
 }
 
 // > INTEGER INTEGER
-// Returns: BOOL
+// Returns: BOOL | ERROR
 // > FLOAT FLOAT
-// Returns: BOOL
+// Returns: BOOL | ERROR
 HAPLO_STD_FUNC_STR(greater, ">")
 {
   if (haplo_value_list_len(args) != 2)
@@ -247,9 +247,9 @@ HAPLO_STD_FUNC_STR(greater, ">")
 }
 
 // < INTEGER INTEGER
-// Returns: BOOL
+// Returns: BOOL | ERROR
 // < FLOAT FLOAT
-// Returns: BOOL
+// Returns: BOOL | ERROR
 HAPLO_STD_FUNC_STR(lesser, "<")
 {
   if (haplo_value_list_len(args) != 2)
@@ -291,9 +291,9 @@ HAPLO_STD_FUNC_STR(lesser, "<")
 }
 
 // = INTEGER INTEGER
-// Returns: BOOL
+// Returns: BOOL | ERROR
 // = FLOAT FLOAT
-// Returns: BOOL
+// Returns: BOOL | ERROR
 HAPLO_STD_FUNC_STR(equal, "=")
 {
   if (haplo_value_list_len(args) != 2)
@@ -335,9 +335,9 @@ HAPLO_STD_FUNC_STR(equal, "=")
 }
 
 // >= INTEGER INTEGER
-// Returns: BOOL
+// Returns: BOOL | ERROR
 // >= FLOAT FLOAT
-// Returns: BOOL
+// Returns: BOOL | ERROR
 HAPLO_STD_FUNC_STR(greater_or_equal, ">=")
 {
   if (haplo_value_list_len(args) != 2)
@@ -379,9 +379,9 @@ HAPLO_STD_FUNC_STR(greater_or_equal, ">=")
 }
 
 // <= INTEGER INTEGER
-// Returns: BOOL
+// Returns: BOOL | ERROR
 // <= FLOAT FLOAT
-// Returns: BOOL
+// Returns: BOOL | ERROR
 HAPLO_STD_FUNC_STR(lesser_or_equal, "<=")
 {
   if (haplo_value_list_len(args) != 2)

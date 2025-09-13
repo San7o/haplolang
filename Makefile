@@ -42,7 +42,8 @@ STDLIB_OBJ=stdlib/stdlib.o\
            stdlib/core.o\
            stdlib/io.o\
            stdlib/list.o\
-           stdlib/math.o
+           stdlib/math.o\
+           stdlib/logic.o
 TEST_NAME=${NAME}_tests
 TEST_OBJ=tests/tests.o\
          tests/lexer_test.o\
