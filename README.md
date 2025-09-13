@@ -31,9 +31,22 @@ empty
 You can also interpret a file:
 
 ```lisp
-$ ./haplo samples/hello_world.haplo 
-"Hello, World!"
-empty
+$ cat samples/while_loop.haplo
+(
+ (setq 'a 0)
+ (while (< (a) 20)
+   (
+    (print (a))
+    (setq 'a
+          (+ (a) 1)))
+   )
+ )
+$ ./haplo samples/while_loop.haplo
+0
+1
+2
+3
+...
 ```
 
 ## Building
