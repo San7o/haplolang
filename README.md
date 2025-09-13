@@ -13,6 +13,7 @@ The project is composed of:
 - `haplostdlib.a`: the haplo standard library in C
 - `haplo`: cli-based REPL interpreter
 - `haplo_tests`: unit tests
+- `haplo_tests_e2e.sh`: cli tool tests
 
 You can use the interactive interpreter by running the `haplo` cli:
 
@@ -37,7 +38,7 @@ empty
 
 ## Building
 
-Build the library, just run `make`:
+To build the library, just run `make`:
 
 ```bash
 $ time make
@@ -55,8 +56,9 @@ user    0m0.125s
 sys     0m0.044s
 ```
 
-Build the cli interpreter, you need to have
-[readline](https://savannah.gnu.org/git/?group=readline) installed:
+Tuild the cli interpreter, you need to have
+[readline](https://savannah.gnu.org/git/?group=readline) installed
+first, then run:
 
 ```
 make cli
@@ -150,6 +152,20 @@ expressions:
 10
 ```
 
+You can do `if` statements with the structure `if (CONDITION) (CASE
+TRUE) (CASE FALSE)`.
+
+```
+$ cat samples/if_condition_true.haplo
+(if (true)
+    (print "Correct!")
+    (print "Wrong :("))
+$ ./haplo samples/if_condition_true.haplo
+"Correct!"
+empty
+
+```
+
 The only data structure currently present in the standard library is
 the `list`, and you can do the usual list operations:
 
@@ -182,12 +198,15 @@ ATOM    ::= STRING
           | BOOL
           | SYMBOL
           | QUOTE
-STRING  ::= " * "
-INTEGER ::= [+-][0-9]*
-FLOAT   ::= [+-][0-9].[0-9]
+STRING  ::= " [CHAR* | TERMINATOR] "
+INTEGER ::= [+-]NUMBER*
+FLOAT   ::= [+-]NUMBER*.NUMBER*
+NUMBER  ::= [0-9]
 BOOL    ::= true | false
-SYMBOL  ::= [a-zA-Z0-9!@#$%^&*()_+{}|:"<>?[]\;,./_+]*
+SYMBOL  ::= CHAR*
 QUOTE   ::= 'SYMBOL
+CHAR    ::= [a-zA-Z0-9!@#$%^&*()_+{}|:"<>?[]\;,./_+]
+TERMINATOR ::= [ |\n|\t]
 ```
 
 The number of new lines, spaces and tabs is ignored. Comments are

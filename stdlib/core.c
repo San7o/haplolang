@@ -28,6 +28,8 @@
 
 #include <stdio.h>
 
+// setq QUOTE VALUE
+// Returns: VALUE
 HAPLO_STD_FUNC(setq)
 {
   if (haplo_value_list_len(args) != 2)

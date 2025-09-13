@@ -78,6 +78,13 @@ void haplo_expr_print(HaploExpr *expr)
   return;
 }
 
+int haplo_expr_depth(HaploExpr *expr)
+{
+  if (expr == NULL) return 0;
+  if (expr->is_atom) return 0;
+  return 1 + haplo_expr_depth(expr->tail);
+}
+
 void haplo_expr_string_rec(HaploExpr *expr, char *str)
 {
   if (expr == NULL) return;

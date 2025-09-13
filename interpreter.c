@@ -115,13 +115,47 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
   if (expr->is_atom)
     return haplo_interpreter_eval_atom(expr->atom);
 
+  HaploValue out_val;
   HaploValue func = haplo_interpreter_interpret(interpreter, expr->head);
+
+  // Special symbols
+  if (func.type == HAPLO_VAL_SYMBOL)
+  {
+    if (strcmp(func.symbol, "if") == 0)
+    {
+      if (haplo_expr_depth(expr->tail) < 3)
+      {
+        return (HaploValue) {
+          .type = HAPLO_VAL_ERROR,
+          .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+        };
+      }
+      HaploValue condition = haplo_interpreter_interpret(interpreter, expr->tail->head);
+      if (condition.type != HAPLO_VAL_BOOL)
+      {
+        return (HaploValue) {
+          .type = HAPLO_VAL_ERROR,
+          .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+        };
+      }
+
+      // Decision
+      if (condition.boolean)
+      {
+        out_val = haplo_interpreter_interpret(interpreter, expr->tail->tail->head);
+      } else {
+        out_val = haplo_interpreter_interpret(interpreter, expr->tail->tail->tail->head);
+      }
+      return out_val;
+    }
+  }
+  
   HaploValueList *args = haplo_interpreter_interpret_tail(interpreter, expr->tail);
 
-  HaploValue val = haplo_interpreter_call(interpreter, func, args);
+  out_val = haplo_interpreter_call(interpreter, func, args);
 
   haplo_value_list_free(args);
-  return val;
+  return out_val;
 }
 
 HaploValueList *haplo_interpreter_interpret_tail(HaploInterpreter *interpreter,

@@ -2,7 +2,7 @@
 =========
 
 - Declare functions
-- implement cond construct
-- Add control flow
+  - quote could have an ast
 - Generated documentation
 - Release 0.1.0
+- Lexical scoping
