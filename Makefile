@@ -100,3 +100,16 @@ clean:
 
 distclean:
 	rm ${LIB_NAME} ${STDLIB_NAME} ${NAME} ${TEST_NAME} 2>/dev/null || :
+
+# --- Docs ---
+
+INDEX_FILE=docs/index.md
+HTML_INTRO=docs/html/intro.html
+HTML_OUTRO=docs/html/outro.html
+TMP_FILE=/tmp/html.tmp
+HTML_DIR=docs/html
+html: ${INDEX_FILE} ${HTML_INTRO} ${HTML_OUTRO} 
+	pandoc ${INDEX_FILE} -o ${TMP_FILE} ${PANDOC_FLAGS}
+	cp ${HTML_INTRO} ${HTML_DIR}/index.html
+	cat ${TMP_FILE} >> ${HTML_DIR}/index.html
+	cat ${HTML_OUTRO} >> ${HTML_DIR}/index.html

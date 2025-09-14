@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="syntax.css" />
+</head>
+<body>
+  <div class="topnav">
+    <a href="https://github.com/San7o/haplolang">Github</a>
+  </div> 
+<h1
+id="print-the-design-and-implementation-of-haplolang">(<code>print</code>
+The Design and Implementation of Haplolang)</h1>
+<h2
+id="print-a-lisp-like-programming-language-to-have-fun">(<code>print</code>
+A lisp-like programming language (to have fun))</h2>
+<p>(<code>print</code> Haplolang is an imperative, interpreted
+programming language inspired by Emacs Lisp.)</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> (<span class="kw">print</span> <span class="st">&quot;Hello, World!&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;Hello, World!&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>empty</span></code></pre></div>
+<hr />
+<h3 id="print-here-are-some-examples">(<code>print</code> Here are some
+examples!)</h3>
+<p>(<code>print</code> Define variables)</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> (<span class="kw">setq</span> <span class="dt">&#39;hello</span> <span class="st">&quot;Hello, World!&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;Hello, World!&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> hello</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;Hello, World!&quot;</span></span></code></pre></div>
+<p>(<code>print</code> Define functions)</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> (defunc <span class="dt">&#39;test</span> (<span class="op">+</span> <span class="dv">2</span> <span class="dv">3</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>empty</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> test</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span></span></code></pre></div>
+<p>(<code>print</code> <code>If</code> statements)</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>$ cat samples/if_condition_true.haplo</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>(<span class="kw">if</span> (<span class="op">&gt;</span> <span class="dv">100</span> <span class="dv">5</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">print</span> <span class="st">&quot;Correct!&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">print</span> <span class="st">&quot;Wrong :(&quot;</span>))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>$ ./haplo samples/if_condition_true.haplo</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;Correct!&quot;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>empty</span></code></pre></div>
+<p>(<code>print</code> List operations.)</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> (<span class="kw">list</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>list: <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> (<span class="kw">append</span> <span class="dv">4</span> (<span class="kw">list</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> ))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>list: <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> (head (<span class="kw">list</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> ))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> (tail (<span class="kw">list</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span>))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>list: <span class="dv">1</span> <span class="dv">2</span></span></code></pre></div>
+<p>(<code>print</code> While loops.)</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode lisp"><code class="sourceCode commonlisp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>$ cat samples/while_loop.haplo</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a> (<span class="kw">setq</span> <span class="dt">&#39;a</span> <span class="dv">0</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a> (while (<span class="op">&lt;</span> (a) <span class="dv">20</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>   (</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">print</span> (a))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">setq</span> <span class="dt">&#39;a</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>          (<span class="op">+</span> (a) <span class="dv">1</span>)))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>   )</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a> )</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>$ ./haplo samples/while_loop.haplo</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>...</span></code></pre></div>
+<hr />
+<h3 id="print-design">(<code>print</code> Design)</h3>
+<p>(<code>print</code> The design and implementation of Haplolang is
+quite simple and elegant. In this document I will give you an high-level
+description of the inner workings of the language. My hope is that,
+after reading this document, you will have a better idea on how to
+implement a similar thing yourself, and to demystify the idea that
+writing programming languages is really hard.)</p>
+<p>(<code>print</code> More specifically, we will take a look at the
+following sections.)</p>
+<p>(<code>list</code> <a href="#print-lexer">lexer</a> <a
+href="#print-parser">parser</a> <a
+href="#print-interpreter">interpreter</a> <a
+href="#print-standard-library">standard-library</a> <a
+href="#print-cli-interpreter">cli-interpreter</a> <a
+href="#print-testing">testing</a>)</p>
+<hr />
+<h3 id="print-lexer">(<code>print</code> Lexer)</h3>
+<p>(<code>print</code> The syntax of any language in the Lisp family is
+notoriously minimalist, with only a few syntax characters namely
+<code>(</code>, <code>)</code>, <code>#</code>, <code>'</code>,
+<code>"</code>. The lexer looks for these characters and returns a
+corresponding enum value. If the lexer does not find any of them, then
+we are lexing an <code>atom</code> which is either a
+<code>string</code>, <code>integer</code>, <code>float</code>,
+<code>bool</code> or <code>symbol</code>. The lexer returns the length
+of the atom and its type to the parser.)</p>
+<p>(<code>code</code> lexer.h)</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> HaploToken <span class="op">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  HAPLO_LEX_OPEN <span class="op">=</span> <span class="dv">0</span><span class="op">,</span>  <span class="co">// &#39;(&#39;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  HAPLO_LEX_CLOSE<span class="op">,</span>     <span class="co">// &#39;)&#39;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  HAPLO_LEX_ATOM<span class="op">,</span>      <span class="co">// see struct HaploAtom in atom.h</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  HAPLO_LEX_COMMENT<span class="op">,</span>   <span class="co">// &#39;#&#39;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  HAPLO_LEX_QUOTE<span class="op">,</span>     <span class="co">// &#39;&#39;&#39;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  HAPLO_LEX_NONE<span class="op">,</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  _HAPLO_LEX_MAX<span class="op">,</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">// On success, returns a non-negative integer representing an</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">// HaploToken.  On failure, returns a negative integer with the error</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">// value.  If token_len is specified, its value will be set to the</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">// length of the token. If atom is specified and the type of token is</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">// ATOM, a new Atom will be allocated and the user will be responsible</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">// to free it using haplo_atom_free. If token_char is non null, it</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">// will be used to map the HaploToken enum to a char, otherwise a</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">// default HaploTokenChar will be used instead</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">// (haplo_default_token_char).</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> haplo_lexer_next_token<span class="op">(</span><span class="dt">char</span><span class="op">*</span> input<span class="op">,</span> <span class="dt">int</span> input_size<span class="op">,</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>                           <span class="dt">int</span><span class="op">*</span> token_len<span class="op">,</span> HaploAtom <span class="op">*</span>atom<span class="op">,</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>                           HaploTokenChar token_char<span class="op">);</span></span></code></pre></div>
+<p>(<code>code</code> atom.h)</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> HaploAtomType <span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  HAPLO_ATOM_STRING <span class="op">=</span> <span class="dv">0</span><span class="op">,</span>    <span class="co">// &quot;Hello World&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  HAPLO_ATOM_INTEGER<span class="op">,</span>       <span class="co">// 69, -420</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  HAPLO_ATOM_FLOAT<span class="op">,</span>         <span class="co">// 69.420</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  HAPLO_ATOM_BOOL<span class="op">,</span>          <span class="co">// true, false</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  HAPLO_ATOM_SYMBOL<span class="op">,</span>        <span class="co">// print, +</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  HAPLO_ATOM_QUOTE<span class="op">,</span>         <span class="co">// &#39;test</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  _HAPLO_ATOM_MAX<span class="op">,</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> HaploAtom <span class="op">{</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">enum</span> HaploAtomType type<span class="op">;</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">union</span> <span class="op">{</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span><span class="op">*</span> string<span class="op">;</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">long</span> <span class="dt">int</span> integer<span class="op">;</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> floating_point<span class="op">;</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> boolean<span class="op">;</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span><span class="op">*</span> symbol<span class="op">;</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span><span class="op">*</span> quote<span class="op">;</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> HaploAtom<span class="op">;</span></span></code></pre></div>
+<hr />
+<h3 id="print-parser">(<code>print</code> Parser)</h3>
+<p>(<code>print</code> The parser is responsible to build the AST, which
+is represented as a binary tree of expressions. An expression contains
+either an atom or both an <code>head</code> and <code>tail</code>
+expressions.)</p>
+<p>(<code>file</code> expr.h)</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> HaploExpr <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bool</span> is_atom<span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">union</span> <span class="op">{</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    HaploAtom atom<span class="op">;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>      <span class="kw">struct</span> HaploExpr<span class="op">*</span> head<span class="op">;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      <span class="kw">struct</span> HaploExpr<span class="op">*</span> tail<span class="op">;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> HaploExpr<span class="op">;</span></span></code></pre></div>
+<p>(<code>print</code> When an atom is lexed, the head of the current
+expressions is set with the atom, and the parser moves to the tail of
+the expression. If an open parentheses is encountered, then the current
+head is set as a new expression and the parser moves to this expression.
+Additionally, the parser ensures that for every open parentheses there
+is a closing one.)</p>
+<p>(<code>file</code> parser.c) # Not super pretty code</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>HaploExpr <span class="op">*</span>haplo_parser_parse_rec<span class="op">(</span>HaploParser <span class="op">*</span>parser<span class="op">)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>parser <span class="op">==</span> NULL<span class="op">)</span> <span class="cf">return</span> NULL<span class="op">;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  parser<span class="op">-&gt;</span>error <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  HaploExpr <span class="op">*</span>expr <span class="op">=</span> calloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span>HaploExpr<span class="op">),</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Head expression</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>haplo_parser_peek_next_token<span class="op">(</span>parser<span class="op">)</span> <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    haplo_expr_free<span class="op">(</span>expr<span class="op">);</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>parser<span class="op">-&gt;</span>error <span class="op">==</span> <span class="op">-</span>HAPLO_ERROR_LEXER_END_OF_INPUT<span class="op">)</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> NULL<span class="op">;</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    HAPLO_PARSER_ERROR<span class="op">();</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span> <span class="op">(</span>parser<span class="op">-&gt;</span>last_token<span class="op">)</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> HAPLO_LEX_QUOTE<span class="op">:</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Quote expects to be followed by an atom of type symbol</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">// eg: &#39;test</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>haplo_parser_next_token<span class="op">(</span>parser<span class="op">)</span> <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>      haplo_expr_free<span class="op">(</span>expr<span class="op">);</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>      HAPLO_PARSER_ERROR<span class="op">();</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>haplo_parser_next_token<span class="op">(</span>parser<span class="op">)</span> <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>      haplo_expr_free<span class="op">(</span>expr<span class="op">);</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>      HAPLO_PARSER_ERROR<span class="op">();</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>parser<span class="op">-&gt;</span>last_token <span class="op">!=</span> HAPLO_LEX_ATOM<span class="op">)</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>      parser<span class="op">-&gt;</span>error <span class="op">=</span> <span class="op">-</span>HAPLO_ERROR_PARSER_UNEXPECTED_TOKEN<span class="op">;</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>      haplo_expr_free<span class="op">(</span>expr<span class="op">);</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>      HAPLO_PARSER_ERROR<span class="op">();</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>parser<span class="op">-&gt;</span>last_atom<span class="op">.</span>type <span class="op">!=</span> HAPLO_ATOM_SYMBOL<span class="op">)</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>      haplo_atom_free<span class="op">(</span>parser<span class="op">-&gt;</span>last_atom<span class="op">);</span></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>      parser<span class="op">-&gt;</span>error <span class="op">=</span> <span class="op">-</span>HAPLO_ERROR_PARSER_UNEXPECTED_TOKEN<span class="op">;</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>      haplo_expr_free<span class="op">(</span>expr<span class="op">);</span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>      HAPLO_PARSER_ERROR<span class="op">();</span></span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>    parser<span class="op">-&gt;</span>last_atom<span class="op">.</span>type <span class="op">=</span> HAPLO_ATOM_QUOTE<span class="op">;</span></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>    expr<span class="op">-&gt;</span>head <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span>HaploExpr<span class="op">));</span></span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>expr<span class="op">-&gt;</span>head <span class="op">=</span> <span class="op">(</span>HaploExpr<span class="op">){</span></span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>is_atom <span class="op">=</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>atom <span class="op">=</span> parser<span class="op">-&gt;</span>last_atom<span class="op">,</span></span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> HAPLO_LEX_ATOM<span class="op">:</span></span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>    haplo_atom_free<span class="op">(</span>parser<span class="op">-&gt;</span>last_atom<span class="op">);</span></span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>haplo_parser_next_token<span class="op">(</span>parser<span class="op">)</span> <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>      haplo_expr_free<span class="op">(</span>expr<span class="op">);</span></span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>      HAPLO_PARSER_ERROR<span class="op">();</span></span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>    expr<span class="op">-&gt;</span>head <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span>HaploExpr<span class="op">));</span></span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>expr<span class="op">-&gt;</span>head <span class="op">=</span> <span class="op">(</span>HaploExpr<span class="op">){</span></span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>is_atom <span class="op">=</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>atom <span class="op">=</span> parser<span class="op">-&gt;</span>last_atom<span class="op">,</span></span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> HAPLO_LEX_OPEN<span class="op">:</span></span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>haplo_parser_next_token<span class="op">(</span>parser<span class="op">)</span> <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>      haplo_expr_free<span class="op">(</span>expr<span class="op">);</span></span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>      HAPLO_PARSER_ERROR<span class="op">();</span></span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>    expr<span class="op">-&gt;</span>head <span class="op">=</span> haplo_parser_parse_rec<span class="op">(</span>parser<span class="op">);</span></span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>haplo_parser_peek_next_token<span class="op">(</span>parser<span class="op">)</span> <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a>      haplo_expr_free<span class="op">(</span>expr<span class="op">);</span></span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>      HAPLO_PARSER_ERROR<span class="op">();</span></span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>parser<span class="op">-&gt;</span>last_token <span class="op">!=</span> HAPLO_LEX_CLOSE<span class="op">)</span></span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a>      haplo_expr_free<span class="op">(</span>expr<span class="op">);</span></span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> <span class="op">(</span>parser<span class="op">-&gt;</span>last_token <span class="op">==</span> HAPLO_LEX_ATOM<span class="op">)</span></span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>        haplo_atom_free<span class="op">(</span>parser<span class="op">-&gt;</span>last_atom<span class="op">);</span></span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>      parser<span class="op">-&gt;</span>error <span class="op">=</span> <span class="op">-</span>HAPLO_ERROR_MALFORMED_PARENTHESIS<span class="op">;</span></span>
+<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a>      HAPLO_PARSER_ERROR<span class="op">();</span></span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>haplo_parser_next_token<span class="op">(</span>parser<span class="op">)</span> <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>      haplo_expr_free<span class="op">(</span>expr<span class="op">);</span></span>
+<span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>      HAPLO_PARSER_ERROR<span class="op">();</span></span>
+<span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb10-96"><a href="#cb10-96" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> HAPLO_LEX_CLOSE<span class="op">:</span></span>
+<span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a>    haplo_expr_free<span class="op">(</span>expr<span class="op">);</span></span>
+<span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> NULL<span class="op">;</span></span>
+<span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a>  <span class="cf">default</span><span class="op">:</span></span>
+<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a>    haplo_expr_free<span class="op">(</span>expr<span class="op">);</span></span>
+<span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a>    parser<span class="op">-&gt;</span>error <span class="op">=</span> <span class="op">-</span>HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED<span class="op">;</span></span>
+<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a>    HAPLO_PARSER_ERROR<span class="op">();</span></span>
+<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-105"><a href="#cb10-105" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Optional tail expression</span></span>
+<span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a>  expr<span class="op">-&gt;</span>tail <span class="op">=</span> haplo_parser_parse_rec<span class="op">(</span>parser<span class="op">);</span></span>
+<span id="cb10-107"><a href="#cb10-107" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> expr<span class="op">;</span></span>
+<span id="cb10-108"><a href="#cb10-108" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h3 id="print-interpreter">(<code>print</code> Interpreter)</h3>
+<p>(<code>print</code> The interpreter always evaluates the head with
+the tail set as argument. When a non symbol is evaluated, it just
+returns a copy of itself, otherwise the symbol is looked for in a symbol
+table which contains either a haplo function (AST), a c function, or a
+variable (which is a value).)</p>
+<p>(<code>file</code> interpreter.c)</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>HaploValue haplo_interpreter_interpret<span class="op">(</span>HaploInterpreter <span class="op">*</span>interpreter<span class="op">,</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                                       HaploExpr <span class="op">*</span>expr<span class="op">)</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>interpreter <span class="op">==</span> NULL<span class="op">)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>HaploValue<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>type <span class="op">=</span> HAPLO_VAL_ERROR<span class="op">,</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>error <span class="op">=</span> <span class="op">-</span>HAPLO_ERROR_INTERPRETER_NULL<span class="op">,</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>expr <span class="op">==</span> NULL<span class="op">)</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>HaploValue<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>type <span class="op">=</span> HAPLO_VAL_EMPTY<span class="op">,</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>expr<span class="op">-&gt;</span>is_atom<span class="op">)</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> haplo_interpreter_eval_atom<span class="op">(</span>expr<span class="op">-&gt;</span>atom<span class="op">);</span> <span class="co">// Returns a copy of itself</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  HaploValue out_val<span class="op">;</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  HaploValue func <span class="op">=</span> haplo_interpreter_interpret<span class="op">(</span>interpreter<span class="op">,</span> expr<span class="op">-&gt;</span>head<span class="op">);</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Handle Special symbols</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ...</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  HaploValueList <span class="op">*</span>args <span class="op">=</span> haplo_interpreter_interpret_tail<span class="op">(</span>interpreter<span class="op">,</span> expr<span class="op">-&gt;</span>tail<span class="op">);</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>  out_val <span class="op">=</span> haplo_interpreter_call<span class="op">(</span>interpreter<span class="op">,</span> func<span class="op">,</span> args<span class="op">);</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  haplo_value_free<span class="op">(</span>func<span class="op">);</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  haplo_value_list_free<span class="op">(</span>args<span class="op">);</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> out_val<span class="op">;</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>HaploValueList <span class="op">*</span>haplo_interpreter_interpret_tail<span class="op">(</span>HaploInterpreter <span class="op">*</span>interpreter<span class="op">,</span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>                                                   HaploExpr <span class="op">*</span>expr<span class="op">)</span></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>interpreter <span class="op">==</span> NULL <span class="op">||</span> expr <span class="op">==</span> NULL<span class="op">)</span></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> NULL<span class="op">;</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>  HaploValue head <span class="op">=</span> haplo_interpreter_interpret<span class="op">(</span>interpreter<span class="op">,</span> expr<span class="op">-&gt;</span>head<span class="op">);</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>  HaploValueList <span class="op">*</span>tail <span class="op">=</span> haplo_interpreter_interpret_tail<span class="op">(</span>interpreter<span class="op">,</span> expr<span class="op">-&gt;</span>tail<span class="op">);</span></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>head<span class="op">.</span>type <span class="op">==</span> HAPLO_VAL_SYMBOL<span class="op">)</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>    head <span class="op">=</span> haplo_interpreter_call<span class="op">(</span>interpreter<span class="op">,</span> head<span class="op">,</span> tail<span class="op">);</span></span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>    haplo_value_list_free<span class="op">(</span>tail<span class="op">);</span></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> haplo_value_list_push_front<span class="op">(</span>head<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> haplo_value_list_push_front<span class="op">(</span>head<span class="op">,</span> tail<span class="op">);</span></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a><span class="co">// Should not free args here</span></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>HaploValue haplo_interpreter_call<span class="op">(</span>HaploInterpreter <span class="op">*</span>interpreter<span class="op">,</span></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a>                                  HaploValue value<span class="op">,</span></span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>                                  HaploValueList<span class="op">*</span> args<span class="op">)</span></span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>interpreter <span class="op">==</span> NULL<span class="op">)</span></span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>HaploValue<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>type <span class="op">=</span> HAPLO_VAL_ERROR<span class="op">,</span></span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>error <span class="op">=</span> <span class="op">-</span>HAPLO_ERROR_INTERPRETER_NULL<span class="op">,</span></span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>value<span class="op">.</span>type <span class="op">!=</span> HAPLO_VAL_SYMBOL<span class="op">)</span></span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> haplo_value_deep_copy<span class="op">(</span>value<span class="op">);</span></span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a>  HaploSymbol symbol<span class="op">;</span></span>
+<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> err <span class="op">=</span> haplo_symbol_map_lookup<span class="op">(</span>interpreter<span class="op">-&gt;</span>symbol_map<span class="op">,</span></span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>                                    value<span class="op">.</span>symbol<span class="op">,</span></span>
+<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a>                                    <span class="op">&amp;</span>symbol<span class="op">);</span></span>
+<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>err <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>HaploValue<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>type <span class="op">=</span> HAPLO_VAL_ERROR<span class="op">,</span></span>
+<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>error <span class="op">=</span> <span class="op">-</span>HAPLO_ERROR_INTERPRETER_UNKNOWN_SYMBOL<span class="op">,</span></span>
+<span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span><span class="op">(</span>symbol<span class="op">.</span>type<span class="op">)</span></span>
+<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> HAPLO_SYMBOL_C_FUNCTION<span class="op">:</span></span>
+<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> symbol<span class="op">.</span>c_func<span class="op">.</span>run<span class="op">(</span>interpreter<span class="op">,</span> args<span class="op">);</span></span>
+<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> HAPLO_SYMBOL_FUNCTION<span class="op">:</span></span>
+<span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> haplo_interpreter_interpret<span class="op">(</span>interpreter<span class="op">,</span> symbol<span class="op">.</span>func<span class="op">);</span></span>
+<span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> HAPLO_SYMBOL_VARIABLE<span class="op">:</span></span>
+<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> symbol<span class="op">.</span>var<span class="op">;</span></span>
+<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a>  <span class="cf">default</span><span class="op">:</span></span>
+<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="op">(</span>HaploValue<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>type <span class="op">=</span> HAPLO_VAL_ERROR<span class="op">,</span></span>
+<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>error <span class="op">=</span> <span class="op">-</span>HAPLO_ERROR_INTERPRETER_UNKNOWN_SYMBOL_TYPE<span class="op">,</span></span>
+<span id="cb11-100"><a href="#cb11-100" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb11-101"><a href="#cb11-101" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>(<code>print</code> The symbol table is an hashmap where the values
+are list of symbols.)</p>
+<p>(<code>file</code> symbol.h)</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> HaploSymbolMap <span class="op">{</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  HaploSymbolList <span class="op">**</span>_map<span class="op">;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> capacity<span class="op">;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> HaploSymbolMap<span class="op">;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> HaploSymbolList <span class="op">{</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  HaploSymbolKey key<span class="op">;</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">struct</span> HaploSymbolList <span class="op">*</span>next<span class="op">;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  HaploSymbol val<span class="op">;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> HaploSymbolList<span class="op">;</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="dt">char</span><span class="op">*</span> HaploSymbolKey<span class="op">;</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> HaploSymbolType <span class="op">{</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  HAPLO_SYMBOL_C_FUNCTION <span class="op">=</span> <span class="dv">0</span><span class="op">,</span>   <span class="co">// stdlib</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  HAPLO_SYMBOL_FUNCTION<span class="op">,</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  HAPLO_SYMBOL_VARIABLE<span class="op">,</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  _HAPLO_SYMBOL_MAX<span class="op">,</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> HaploSymbol <span class="op">{</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  <span class="kw">enum</span> HaploSymbolType type<span class="op">;</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  <span class="kw">union</span> <span class="op">{</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    HaploFunction c_func<span class="op">;</span>    <span class="co">// function implemented in c</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    HaploExpr<span class="op">*</span> func<span class="op">;</span>         <span class="co">// function defined as an AST</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    HaploValue var<span class="op">;</span>          <span class="co">// a variable</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> HaploSymbol<span class="op">;</span></span></code></pre></div>
+<p>(<code>print</code> <code>If</code>, <code>While</code>,
+<code>defunc</code> are special symbols for the interpreter as they
+handle the arguments differently. For example, the <code>if</code>
+statement evaluates one expression or the other depending on the outcome
+of a condition. If we implemented <code>if</code> as a regular function
+then all of its arguments would be evaluated first therefore executing
+both outcomes. For this reason, we need to walk the AST differently for
+certain functionalities.)</p>
+<hr />
+<h3 id="print-standard-library">(<code>print</code> Standard
+Library)</h3>
+<p>(<code>print</code> By default, the symbol table in the interpreter
+is initialized by default with some functions from the standard library,
+the code of these functions lives under the <code>stdlib</code>
+directory. These functions are implemented in C and automatically
+registered via a macro. This macro uses a compiler directive to register
+a constructor function, this may not be the best choice since it relies
+on a compiler specific flag, but I thought it would not be an issue for
+now.)</p>
+<p>(<code>print</code> The standard library implements things like
+integer and floating point operations and comparisons, logical
+operators, lists and printing)</p>
+<p>(<code>file</code> stdlib/stdlib.h)</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define HAPLO_STD_FUNC</span><span class="op">(</span><span class="pp">fn</span><span class="op">)</span><span class="pp">    </span><span class="op">\</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="pp">  HAPLO_STD_FUNC_STR</span><span class="op">(</span><span class="pp">fn</span><span class="op">,</span><span class="pp"> </span><span class="op">#</span><span class="pp">fn</span><span class="op">)</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define HAPLO_STD_FUNC_STR</span><span class="op">(</span><span class="pp">fn</span><span class="op">,</span><span class="pp"> func_string</span><span class="op">)</span><span class="pp">    </span><span class="op">\</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="pp">    HaploValue __haplo_std_</span><span class="op">##</span><span class="pp">fn</span><span class="op">(</span><span class="pp">HaploInterpreter </span><span class="op">*,</span><span class="pp"> HaploValueList </span><span class="op">*);</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="pp">    __attribute__</span><span class="op">((</span><span class="pp">constructor</span><span class="op">))</span><span class="pp"> </span><span class="dt">static</span><span class="pp"> </span><span class="dt">void</span><span class="pp"> __haplo_std_register_</span><span class="op">##</span><span class="pp">fn</span><span class="op">(</span><span class="dt">void</span><span class="op">)</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="pp">    </span><span class="op">{</span><span class="pp">                                                </span><span class="op">\</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="pp">      </span><span class="cf">if</span><span class="pp"> </span><span class="op">(</span><span class="pp">__haplo_std_symbol_map</span><span class="op">.</span><span class="pp">_map </span><span class="op">==</span><span class="pp"> NULL</span><span class="op">)</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="pp">      </span><span class="op">{</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="pp">        haplo_symbol_map_init</span><span class="op">(&amp;</span><span class="pp">__haplo_std_symbol_map</span><span class="op">,</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="pp">                              HAPLO_INTERPRETER_SYMBOL_MAP_CAPACITY</span><span class="op">);</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="pp">      </span><span class="op">}</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="pp">      haplo_symbol_map_update</span><span class="op">(&amp;</span><span class="pp">__haplo_std_symbol_map</span><span class="op">,\</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="pp">                              func_string</span><span class="op">,</span><span class="pp">            </span><span class="op">\</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="pp">                              </span><span class="op">(</span><span class="pp">HaploSymbol</span><span class="op">){</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="pp">                                </span><span class="op">.</span><span class="pp">type </span><span class="op">=</span><span class="pp"> HAPLO_SYMBOL_C_FUNCTION</span><span class="op">,</span><span class="pp">  </span><span class="op">\</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="pp">                                </span><span class="op">.</span><span class="pp">c_func </span><span class="op">=</span><span class="pp"> </span><span class="op">(</span><span class="pp">HaploFunction</span><span class="op">)</span><span class="pp"> </span><span class="op">{\</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="pp">                                  </span><span class="op">.</span><span class="pp">run </span><span class="op">=</span><span class="pp"> __haplo_std_</span><span class="op">##</span><span class="pp">fn </span><span class="op">\</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="pp">                                </span><span class="op">}</span><span class="pp">               </span><span class="op">\</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="pp">                              </span><span class="op">});</span><span class="pp">               </span><span class="op">\</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="pp">    </span><span class="op">}</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="pp">    HaploValue __haplo_std_</span><span class="op">##</span><span class="pp">fn</span><span class="op">(</span><span class="pp">HaploInterpreter </span><span class="op">*</span><span class="pp">interpreter</span><span class="op">,</span><span class="pp"> HaploValueList </span><span class="op">*</span><span class="pp">args</span><span class="op">)</span></span></code></pre></div>
+<p>(<code>print</code> For example, the implementation of the
+<code>and</code> function is shown below.)</p>
+<p>(<code>file</code> stdlib/logic.c)</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">// and BOOLEAN ...</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Returns: BOOLEAN | ERROR</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>HAPLO_STD_FUNC_STR<span class="op">(</span>logical_and<span class="op">,</span> <span class="st">&quot;and&quot;</span><span class="op">)</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>haplo_value_list_len<span class="op">(</span>args<span class="op">)</span> <span class="op">&lt;</span> <span class="dv">2</span><span class="op">)</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>HaploValue<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>type <span class="op">=</span> HAPLO_VAL_ERROR<span class="op">,</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>error <span class="op">=</span> <span class="op">-</span>HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS<span class="op">,</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  HaploValueList <span class="op">*</span>this <span class="op">=</span> args<span class="op">;</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bool</span> result <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span><span class="op">(</span>this <span class="op">!=</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>this<span class="op">-&gt;</span>val<span class="op">.</span>type <span class="op">!=</span> HAPLO_VAL_BOOL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="op">(</span>HaploValue<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>type <span class="op">=</span> HAPLO_VAL_ERROR<span class="op">,</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>error <span class="op">=</span> <span class="op">-</span>HAPLO_ERROR_INTERPRETER_INVALID_TYPE<span class="op">,</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>      <span class="op">};</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    result <span class="op">&amp;=</span> this<span class="op">-&gt;</span>val<span class="op">.</span>boolean<span class="op">;</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    this <span class="op">=</span> this<span class="op">-&gt;</span>next<span class="op">;</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="op">(</span>HaploValue<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>type <span class="op">=</span> HAPLO_VAL_BOOL<span class="op">,</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>boolean <span class="op">=</span> result<span class="op">,</span></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h3 id="print-cli-interpreter">(<code>print</code> Cli interpreter)</h3>
+<p>(<code>print</code> The cli interpreter simply calls the interpreter
+either with input from stdin or from a file. It also supports a few
+flags.)</p>
+<p>(<code>file</code> haplo.c)</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> process_line<span class="op">(</span>Interpreter <span class="op">*</span>interpreter<span class="op">,</span> <span class="dt">char</span><span class="op">*</span> input<span class="op">,</span> <span class="dt">ssize_t</span> len<span class="op">)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> err<span class="op">;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  Parser parser <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  err <span class="op">=</span> parser_init<span class="op">(&amp;</span>parser<span class="op">,</span> input<span class="op">,</span> len<span class="op">);</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>err <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;Error </span><span class="sc">%d</span><span class="st"> after parser_init</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> err<span class="op">);</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  Expr <span class="op">*</span>expr <span class="op">=</span> parser_parse<span class="op">(&amp;</span>parser<span class="op">);</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>expr <span class="op">==</span> NULL<span class="op">)</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>parser<span class="op">.</span>error <span class="op">!=</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>      fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;Error parser_parse returned a null expression</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  Value val <span class="op">=</span> interpreter_interpret<span class="op">(</span>interpreter<span class="op">,</span> expr<span class="op">);</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="dt">char</span> buf<span class="op">[</span><span class="dv">1024</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  haplo_value_string<span class="op">(</span>val<span class="op">,</span> buf<span class="op">,</span> <span class="dv">1024</span><span class="op">);</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>  printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> buf<span class="op">);</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>  haplo_value_free<span class="op">(</span>val<span class="op">);</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>  expr_free<span class="op">(</span>expr<span class="op">);</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h3 id="print-testing">(<code>print</code> Testing)</h3>
+<p>(<code>print</code> This project comes with a decent amount of
+testing. Unit tests live under <code>samples/</code> and can be run via
+<code>make tests</code>, while the tests for the cli tool are under
+<code>samples/</code> and can be run via
+<code>haplo_tests_e2e.sh</code>. In both cases, tests only need to be
+implemented without the need to register them somewhere. I think it is
+interesting to look at how the unit tests are registered because it is
+pretty cool, it uses a neat trick with the linker.)</p>
+<p>(<code>file</code> tests/tests/h)</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Register a test case, It should end with HAPLO_TEST_SUCCESS or</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">// HAPLO_TEST_FAILED</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Thanks Sam P.</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define HAPLO_TEST</span><span class="op">(</span><span class="pp">suiteName</span><span class="op">,</span><span class="pp"> </span>uTtestName<span class="op">)</span><span class="pp">                      </span><span class="op">\</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="pp">    </span><span class="dt">static</span><span class="pp"> </span><span class="dt">int</span><span class="pp"> suiteName</span><span class="op">##</span><span class="pp">_</span><span class="op">##</span>uTtestName<span class="op">(</span><span class="dt">void</span><span class="op">);</span><span class="pp">                 </span><span class="op">\</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="pp">    </span><span class="dt">static</span><span class="pp"> HaploTest </span>Record_<span class="op">##</span><span class="pp">suiteName</span><span class="op">##</span><span class="pp">_</span><span class="op">##</span>uTtestName<span class="pp">         </span><span class="op">\</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="pp">    __attribute__</span><span class="op">((</span>used<span class="op">,</span><span class="pp"> section</span><span class="op">(</span><span class="st">&quot;.utest_records&quot;</span><span class="op">),</span><span class="pp"> aligned</span><span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span><span class="kw">_Alignof</span><span class="op">(</span><span class="pp">HaploTest</span><span class="op">)))))</span><span class="pp"> </span><span class="op">=</span><span class="pp"> </span><span class="op">{</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="pp">        </span><span class="op">.</span><span class="pp">marker </span><span class="op">=</span><span class="pp"> </span><span class="bn">0xDeadBeaf</span><span class="op">,</span><span class="pp">                                  </span><span class="op">\</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="pp">        </span><span class="op">.</span><span class="pp">testSuite </span><span class="op">=</span><span class="pp"> </span><span class="op">#</span><span class="pp">suiteName</span><span class="op">,</span><span class="pp">                               </span><span class="op">\</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="pp">        </span><span class="op">.</span><span class="pp">functionName </span><span class="op">=</span><span class="pp"> </span><span class="op">#</span>uTtestName<span class="op">,</span><span class="pp">                           </span><span class="op">\</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="pp">        </span><span class="op">.</span><span class="pp">testName </span><span class="op">=</span><span class="pp"> </span><span class="op">#</span><span class="pp">suiteName </span><span class="st">&quot;_&quot;</span><span class="pp"> </span><span class="op">#</span>uTtestName<span class="op">,</span><span class="pp">                </span><span class="op">\</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="pp">        </span><span class="op">.</span><span class="pp">fileName </span><span class="op">=</span><span class="pp"> __FILE__</span><span class="op">,</span><span class="pp">                                  </span><span class="op">\</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="pp">        </span><span class="op">.</span><span class="pp">lineNumber </span><span class="op">=</span><span class="pp"> __LINE__</span><span class="op">,</span><span class="pp">                                </span><span class="op">\</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="pp">        </span><span class="op">.</span><span class="pp">functionPointer </span><span class="op">=</span><span class="pp"> suiteName</span><span class="op">##</span><span class="pp">_</span><span class="op">##</span>uTtestName<span class="pp">            </span><span class="op">\</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="pp">    </span><span class="op">};</span><span class="pp">                                                         </span><span class="op">\</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="pp">    </span><span class="dt">static</span><span class="pp"> </span><span class="dt">int</span><span class="pp"> suiteName</span><span class="op">##</span><span class="pp">_</span><span class="op">##</span>uTtestName<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="pp">#define HAPLO_TEST_SUCCESS </span><span class="op">\</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="pp">  </span><span class="cf">do</span><span class="pp"> </span><span class="op">{</span><span class="pp"> </span><span class="cf">return</span><span class="pp"> </span><span class="dv">0</span><span class="op">;</span><span class="pp"> </span><span class="op">}</span><span class="pp"> </span><span class="cf">while</span><span class="op">(</span><span class="dv">0</span><span class="op">)</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="pp">#define HAPLO_TEST_FAILED </span><span class="op">\</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="pp">  </span><span class="cf">do</span><span class="pp"> </span><span class="op">{</span><span class="pp"> </span><span class="cf">return</span><span class="pp"> </span><span class="op">-</span><span class="dv">1</span><span class="op">;</span><span class="pp"> </span><span class="op">}</span><span class="pp"> </span><span class="cf">while</span><span class="op">(</span><span class="dv">0</span><span class="op">)</span></span></code></pre></div>
+<p>(<code>print</code> A test may look like the following.)</p>
+<p>(<code>file</code> tests/lexer_test.c)</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>HAPLO_TEST<span class="op">(</span>lexer_test<span class="op">,</span> trim<span class="op">)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>input <span class="op">=</span> <span class="st">&quot;  ( 123&quot;</span><span class="op">;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> expected_val <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> trimmed <span class="op">=</span> lexer_trim_left<span class="op">(</span>input<span class="op">,</span> strlen<span class="op">(</span>input<span class="op">),</span> NULL<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>trimmed <span class="op">!=</span> expected_val<span class="op">)</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>      fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;Error lexer_trim_left on </span><span class="sc">\&quot;%s\&quot;</span><span class="st">, expected </span><span class="sc">%d</span><span class="st">, got </span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>              input<span class="op">,</span> expected_val<span class="op">,</span> trimmed<span class="op">);</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">goto</span> test_failed<span class="op">;</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ...</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  HAPLO_TEST_SUCCESS<span class="op">;</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a> test_failed<span class="op">:</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  HAPLO_TEST_FAILED<span class="op">;</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+
+<footer>
+  
+<hr>
+
+<p>(<code>setq</code> 'author Giovanni Santini)</p>
+<p>(<code>setq</code> 'email (<code>link</code> <a href="mailto:giovanni.santini@proton.me">giovanni.santini@proton.me</a>))
+<p>(<code>setq</code> 'blog (<code>link</code> <a href="https://giovanni-diary.netlify.app/">giovanni-diary.netlify.app</a>))</p>
+<p>(<code>setq</code> 'code (<code>link</code> <a href="https://github.com/San7o/haplolang/tree/main">GitHub@San7o/haplolang</a>))
+<p>(<code>setq</code> 'license (<code>link</code> <a href="https://github.com/San7o/haplolang/blob/main/LICENSE.md">MIT</a>))
+  </p>
+</footer>
+
+</body>
+</html>

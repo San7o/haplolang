@@ -125,10 +125,9 @@ HaploExpr *haplo_parser_parse_rec(HaploParser *parser)
   if (parser == NULL) return NULL;  
   parser->error = 0;
 
-  HaploExpr *expr = malloc(sizeof(HaploExpr));
-  *expr = (HaploExpr){0};
+  HaploExpr *expr = calloc(sizeof(HaploExpr), 1);
   
-  // First expression
+  // Head expression
   
   if (haplo_parser_peek_next_token(parser) < 0)
   {
