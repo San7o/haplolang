@@ -10,7 +10,7 @@ programming](https://giovanni-diary.netlify.app/programming/notes/recreational-p
 project.
 
 Read more about the [design and implementation](
-san7o.github.io/haplolang/) of the language in the official website.
+https://san7o.github.io/haplolang/) of the language in the official website.
 
 The project is composed of:
 
