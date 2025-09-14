@@ -434,7 +434,7 @@ Library)</h3>
 <p>(<code>print</code> By default, the symbol table in the interpreter
 is initialized by default with some functions from the standard library,
 the code of these functions lives under the <code>stdlib</code>
-directory. These functions are implemented in C and automatically
+directory. These functions are implemented in C and are automatically
 registered via a macro. This macro uses a compiler directive to register
 a constructor function, this may not be the best choice since it relies
 on a compiler specific flag, but I thought it would not be an issue for
@@ -541,13 +541,14 @@ flags.)</p>
 <hr />
 <h3 id="print-testing">(<code>print</code> Testing)</h3>
 <p>(<code>print</code> This project comes with a decent amount of
-testing. Unit tests live under <code>samples/</code> and can be run via
+testing. Unit tests live under <code>tests/</code> and can be run via
 <code>make tests</code>, while the tests for the cli tool are under
 <code>samples/</code> and can be run via
 <code>haplo_tests_e2e.sh</code>. In both cases, tests only need to be
 implemented without the need to register them somewhere. I think it is
 interesting to look at how the unit tests are registered because it is
-pretty cool, it uses a neat trick with the linker.)</p>
+pretty cool, it uses a neat trick with the linker but I will not explain
+it here.)</p>
 <p>(<code>file</code> tests/tests/h)</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Register a test case, It should end with HAPLO_TEST_SUCCESS or</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">// HAPLO_TEST_FAILED</span></span>

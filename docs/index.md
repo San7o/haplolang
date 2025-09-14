@@ -471,7 +471,7 @@ for certain functionalities.)
 (`print` By default, the symbol table in the interpreter is
 initialized by default with some functions from the standard library,
 the code of these functions lives under the `stdlib` directory. These
-functions are implemented in C and automatically registered via a
+functions are implemented in C and are automatically registered via a
 macro. This macro uses a compiler directive to register a constructor
 function, this may not be the best choice since it relies on a
 compiler specific flag, but I thought it would not be an issue for
@@ -597,12 +597,13 @@ void process_line(Interpreter *interpreter, char* input, ssize_t len)
 ### (`print` Testing)
 
 (`print` This project comes with a decent amount of testing. Unit
-tests live under `samples/` and can be run via `make tests`, while the
+tests live under `tests/` and can be run via `make tests`, while the
 tests for the cli tool are under `samples/` and can be run via
 `haplo_tests_e2e.sh`. In both cases, tests only need to be implemented
-without the need to register them somewhere. I think it is
-interesting to look at how the unit tests are registered because it is
-pretty cool, it uses a neat trick with the linker.)
+without the need to register them somewhere. I think it is interesting
+to look at how the unit tests are registered because it is pretty
+cool, it uses a neat trick with the linker but I will not explain it
+here.)
 
 (`file` tests/tests/h)
 
