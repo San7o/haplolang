@@ -80,7 +80,7 @@ $ ./haplo samples/while_loop.haplo
 
 -----
 
-### (`print` Design)
+### (`print` Design and implementation)
 
 (`print` The design and implementation of Haplolang is quite simple
 and elegant. In this document I will give you an high-level
@@ -88,6 +88,9 @@ description of the inner workings of the language. My hope is that,
 after reading this document, you will have a better idea on how to
 implement a similar thing yourself, and to demystify the idea that
 writing programming languages is really hard.)
+
+(`print` Haplolang is greatly inspired by Emacs Lisp, since it is the
+Lisp language I use more and I am more familiar with.)
 
 (`print` More specifically, we will take a look at the following
 sections.)

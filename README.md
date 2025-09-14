@@ -5,7 +5,12 @@ language implemented in C, greatly inspired by Emacs Lisp. The term
 "Haplo" is a Greek word meaning simple, which describes my philosophy
 in implementing the language.
 
-This is a [recreational programming](https://giovanni-diary.netlify.app/programming/notes/recreational-programming) project.
+This is a [recreational
+programming](https://giovanni-diary.netlify.app/programming/notes/recreational-programming)
+project.
+
+Read more about the [design and implementation](
+san7o.github.io/haplolang/) of the language in the official website.
 
 The project is composed of:
 
