@@ -101,7 +101,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
   if (expr->is_atom)
     return haplo_interpreter_eval_atom(expr->atom);
 
-  HaploValue out_val;
+  HaploValue out_val = {0};
   HaploValue func = haplo_interpreter_interpret(interpreter, expr->head);
 
   // Special symbols
@@ -112,7 +112,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
     {
       haplo_value_free(func);
       int expr_depth = haplo_expr_depth(expr->tail);
-      if (expr_depth < 2 && expr_depth > 3)
+      if (expr_depth != 3)
       {
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,

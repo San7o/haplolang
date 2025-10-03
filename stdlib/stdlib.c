@@ -32,6 +32,6 @@ HaploSymbolMap __haplo_std_symbol_map = {
 };
 
 __attribute__((destructor))
-static void __haplo_std_symbol_map_free() {
+static void __haplo_std_symbol_map_free(void) {
   haplo_symbol_map_destroy(&__haplo_std_symbol_map);
 }
