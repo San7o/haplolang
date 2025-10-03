@@ -43,13 +43,19 @@
   }                           \
   while(0)
 
+#if __STDC_VERSION__ >= 201112L
+  #define __ALIGNOF(T) _Alignof(T)
+#else
+  #define __ALIGNOF(T) __alignof__(T)
+#endif
+
 // Register a test case, It should end with HAPLO_TEST_SUCCESS or
 // HAPLO_TEST_FAILED
 // Thanks Sam P.
 #define HAPLO_TEST(suiteName, uTtestName)                      \
     static int suiteName##_##uTtestName(void);                 \
     static HaploTest Record_##suiteName##_##uTtestName         \
-    __attribute__((used, section(".utest_records"), aligned(sizeof(_Alignof(HaploTest))))) = { \
+    __attribute__((used, section(".utest_records"), aligned(sizeof(__ALIGNOF(HaploTest))))) = { \
         .marker = 0xDeadBeaf,                                  \
         .testSuite = #suiteName,                               \
         .functionName = #uTtestName,                           \

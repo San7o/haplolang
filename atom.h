@@ -38,7 +38,7 @@ typedef struct {
     bool boolean;
     char* symbol;
     char* quote;
-  };
+  } value;
 } HaploAtom;
 
 // --- Functios ---

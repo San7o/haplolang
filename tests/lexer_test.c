@@ -159,10 +159,10 @@ HAPLO_TEST(lexer_test, next)
               input, expected_token_len, token_len);
       goto test_failed;
     }
-    if (atom.type != HAPLO_ATOM_INTEGER || atom.integer != expected_atom)
+    if (atom.type != HAPLO_ATOM_INTEGER || atom.value.integer != expected_atom)
     {
       fprintf(stderr, "Error lexer_next_token on \"%s\", expected atom value %ld, got %ld",
-              input, expected_atom, atom.integer);
+              input, expected_atom, atom.value.integer);
       goto test_failed;
     }
   }
@@ -188,10 +188,10 @@ HAPLO_TEST(lexer_test, next)
               input, expected_token_len, token_len);
       goto test_failed;
     }
-    if (atom.type != HAPLO_ATOM_FLOAT || atom.floating_point != expected_atom)
+    if (atom.type != HAPLO_ATOM_FLOAT || atom.value.floating_point != expected_atom)
     {
       fprintf(stderr, "Error lexer_next_token on \"%s\", expected atom value %f, got %f",
-              input, expected_atom, atom.floating_point);
+              input, expected_atom, atom.value.floating_point);
       goto test_failed;
     }
   }

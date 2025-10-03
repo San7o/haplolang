@@ -13,7 +13,7 @@
 #include <stdbool.h>
 #include <assert.h>
 
-static_assert(_HAPLO_SYMBOL_MAX == 3,
+_Static_assert(_HAPLO_SYMBOL_MAX == 3,
               "Updated HaploSymbolType, should update haplo_symbol_type_string");
 const char* haplo_symbol_type_string(HaploSymbolType type)
 {
@@ -84,7 +84,7 @@ int haplo_symbol_map_destroy(HaploSymbolMap *map)
   return 0;
 }
 
-static_assert(_HAPLO_SYMBOL_MAX == 3,
+_Static_assert(_HAPLO_SYMBOL_MAX == 3,
               "Updated HaploSymbolType, should update haplo_symbol_free");
 void haplo_symbol_free(HaploSymbol symbol)
 {
@@ -106,7 +106,7 @@ void haplo_symbol_free(HaploSymbol symbol)
   return;
 }
 
-static_assert(_HAPLO_SYMBOL_MAX == 3,
+_Static_assert(_HAPLO_SYMBOL_MAX == 3,
               "Updated HaploSymbolType, should update haplo_symbol_deep_copy");
 HaploSymbol haplo_symbol_deep_copy(HaploSymbol symbol)
 {

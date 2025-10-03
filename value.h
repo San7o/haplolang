@@ -53,7 +53,7 @@ typedef struct {
     char* quote;
     HaploValueList *list;
     int error;
-  };
+  } value;
 } HaploValue;
 
 struct HaploValueList {

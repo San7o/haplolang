@@ -36,7 +36,7 @@ HAPLO_STD_FUNC(print)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     

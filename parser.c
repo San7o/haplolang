@@ -100,7 +100,7 @@ bool haplo_parser_check_error(HaploParser *parser)
   return (parser->error < 0);
 }
 
-static_assert(_HAPLO_LEX_MAX == 6,
+_Static_assert(_HAPLO_LEX_MAX == 6,
               "Updated HaploToken, maybe update haplo_parser_parse_rec");
 HaploExpr *haplo_parser_parse_rec(HaploParser *parser)
 {

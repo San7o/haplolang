@@ -11,7 +11,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-static_assert(_HAPLO_LEX_MAX == 6,
+_Static_assert(_HAPLO_LEX_MAX == 6,
               "Number of tokens changed, maybe defaults should be updated?");
 HaploTokenChar haplo_default_token_char = {
   [HAPLO_LEX_OPEN] = '(',
@@ -20,7 +20,7 @@ HaploTokenChar haplo_default_token_char = {
   [HAPLO_LEX_QUOTE] = '\'',
 };
 
-static_assert(_HAPLO_LEX_MAX == 6,
+_Static_assert(_HAPLO_LEX_MAX == 6,
                 "Number of tokens changed, maybe strings need to be updated?");
 const char* haplo_lexer_token_string(HaploToken token)
 {
@@ -105,7 +105,7 @@ int haplo_lexer_trim_left(char* input, int input_size,
   return pos;
 }
 
-static_assert(_HAPLO_LEX_MAX == 6,
+_Static_assert(_HAPLO_LEX_MAX == 6,
               "Number of tokens changed, maybe haplo_lexer_next_token needs to be updated?");
 int haplo_lexer_next_token(char* input, int input_size,
                            int *token_len, HaploAtom *atom,
@@ -145,9 +145,9 @@ int haplo_lexer_next_token(char* input, int input_size,
     if (atom != NULL)
     {
       atom->type = HAPLO_ATOM_STRING;
-      atom->string = (char *) malloc(ret);
-      strncpy(atom->string, input + 1, ret - 2); // Ignore the '"'
-      atom->string[ret-1] = '\0';
+      atom->value.string = (char *) malloc(ret);
+      strncpy(atom->value.string, input + 1, ret - 2); // Ignore the '"'
+      atom->value.string[ret-1] = '\0';
     }
     return HAPLO_LEX_ATOM;
   }
@@ -161,13 +161,13 @@ int haplo_lexer_next_token(char* input, int input_size,
   if (strncmp(input, "true", ret) == 0)
   {
     atom->type = HAPLO_ATOM_BOOL;
-    atom->boolean = true;
+    atom->value.boolean = true;
     return HAPLO_LEX_ATOM;
   }
   if (strncmp(input, "false", ret) == 0)
   {
     atom->type = HAPLO_ATOM_BOOL;
-    atom->boolean = false;
+    atom->value.boolean = false;
     return HAPLO_LEX_ATOM;
   }
   
@@ -177,7 +177,7 @@ int haplo_lexer_next_token(char* input, int input_size,
   if (endptr == input + ret)
   {
     atom->type = HAPLO_ATOM_INTEGER;
-    atom->integer = integer;
+    atom->value.integer = integer;
     return HAPLO_LEX_ATOM;
   }
 
@@ -186,7 +186,7 @@ int haplo_lexer_next_token(char* input, int input_size,
   if (endptr == input + ret)
   {
     atom->type = HAPLO_ATOM_FLOAT;
-    atom->floating_point = floating_point;
+    atom->value.floating_point = floating_point;
     return HAPLO_LEX_ATOM;
   }
 
@@ -194,9 +194,9 @@ int haplo_lexer_next_token(char* input, int input_size,
   atom->type = HAPLO_ATOM_SYMBOL;
   if (atom != NULL)
   {
-    atom->symbol = (char *) malloc(ret + 1);
-    strncpy(atom->symbol, input, ret);
-    atom->symbol[ret] = '\0';
+    atom->value.symbol = (char *) malloc(ret + 1);
+    strncpy(atom->value.symbol, input, ret);
+    atom->value.symbol[ret] = '\0';
   }
   return HAPLO_LEX_ATOM;
 

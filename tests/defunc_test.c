@@ -73,7 +73,7 @@ HAPLO_TEST(defunc_test, declare_function)
   Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
-    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.error));
+    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.value.error));
     expr_free(expr);
     interpreter_destroy(&interpreter);
     goto test_failed;
@@ -134,7 +134,7 @@ HAPLO_TEST(defunc_test, declare_function)
   int expected_result = 5;
   if (val2.type == HAPLO_VAL_ERROR)
   {
-    fprintf(stderr, "Error %s in interpreter_interpret 2\n", error_string(val2.error));
+    fprintf(stderr, "Error %s in interpreter_interpret 2\n", error_string(val2.value.error));
     expr_free(expr2);
     interpreter_destroy(&interpreter);
     goto test_failed;
@@ -148,7 +148,7 @@ HAPLO_TEST(defunc_test, declare_function)
     interpreter_destroy(&interpreter);
     goto test_failed;
   }
-  if (val2.integer != expected_result)
+  if (val2.value.integer != expected_result)
   {
     fprintf(stderr, "Error in interpreter_interpret 2, expected type HAPLO_VAL_INTEGER, got %s\n",
             value_type_string(val2.type));

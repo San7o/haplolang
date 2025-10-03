@@ -69,23 +69,23 @@ void haplo_value_list_free(HaploValueList *list)
   return;
 }
 
-static_assert(_HAPLO_VAL_MAX == 9,
+_Static_assert(_HAPLO_VAL_MAX == 9,
               "Added a new value type, maybe update haplo_value_free");
 void haplo_value_free(HaploValue value)
 {
   switch(value.type)
   {
   case HAPLO_VAL_STRING:
-    if (value.string != NULL) free(value.string);
+    if (value.value.string != NULL) free(value.value.string);
     break;
   case HAPLO_VAL_QUOTE:
-    if (value.quote != NULL) free(value.quote);
+    if (value.value.quote != NULL) free(value.value.quote);
     break;
   case HAPLO_VAL_SYMBOL:
-    if (value.symbol != NULL) free(value.symbol);
+    if (value.value.symbol != NULL) free(value.value.symbol);
     break;
   case HAPLO_VAL_LIST:
-    if (value.list != NULL) haplo_value_list_free(value.list);
+    if (value.value.list != NULL) haplo_value_list_free(value.value.list);
     break;
   default:
     break;
@@ -93,7 +93,7 @@ void haplo_value_free(HaploValue value)
   return;
 }
 
-static_assert(_HAPLO_VAL_MAX == 9,
+_Static_assert(_HAPLO_VAL_MAX == 9,
               "Added a new value type, update haplo_value_type_string");
 const char* haplo_value_type_string(HaploValueType type)
 {
@@ -123,7 +123,7 @@ const char* haplo_value_type_string(HaploValueType type)
   return "HAPLO_VAL_UNKNOWN_VALUE";
 }
 
-static_assert(_HAPLO_VAL_MAX == 9,
+_Static_assert(_HAPLO_VAL_MAX == 9,
               "Added a new value type, update haplo_value_deep_copy");
 HaploValue haplo_value_deep_copy(HaploValue value)
 {
@@ -135,28 +135,28 @@ HaploValue haplo_value_deep_copy(HaploValue value)
   case HAPLO_VAL_FLOAT:
     return value;
   case HAPLO_VAL_STRING: ;
-    char* new_string = (char*) malloc(strlen(value.string)+1);
-    strcpy(new_string, value.string);
+    char* new_string = (char*) malloc(strlen(value.value.string)+1);
+    strcpy(new_string, value.value.string);
     new_value.type = HAPLO_VAL_STRING;
-    new_value.string = new_string;
+    new_value.value.string = new_string;
     break;
   case HAPLO_VAL_BOOL:
     return value;
   case HAPLO_VAL_SYMBOL: ;
-    char* new_symbol = (char*) malloc(strlen(value.symbol)+1);
-    strcpy(new_symbol, value.symbol);
+    char* new_symbol = (char*) malloc(strlen(value.value.symbol)+1);
+    strcpy(new_symbol, value.value.symbol);
     new_value.type = HAPLO_VAL_SYMBOL;
-    new_value.symbol = new_symbol;
+    new_value.value.symbol = new_symbol;
     break;
   case HAPLO_VAL_LIST:
     new_value.type = HAPLO_VAL_LIST;
-    new_value.list = haplo_value_list_deep_copy(value.list);
+    new_value.value.list = haplo_value_list_deep_copy(value.value.list);
     break;
   case HAPLO_VAL_QUOTE: ;
-    char* new_quote = (char*) malloc(strlen(value.quote)+1);
-    strcpy(new_quote, value.quote);
+    char* new_quote = (char*) malloc(strlen(value.value.quote)+1);
+    strcpy(new_quote, value.value.quote);
     new_value.type = HAPLO_VAL_QUOTE;
-    new_value.string = new_quote;
+    new_value.value.string = new_quote;
     break;
   case HAPLO_VAL_EMPTY:
     return value;
@@ -164,7 +164,7 @@ HaploValue haplo_value_deep_copy(HaploValue value)
     return value;
   default:
     new_value.type = HAPLO_VAL_ERROR;
-    new_value.error = -HAPLO_ERROR_VALUE_TYPE_UNRECOGNIZED;
+    new_value.value.error = -HAPLO_ERROR_VALUE_TYPE_UNRECOGNIZED;
     break;
   }
   return new_value;
@@ -181,7 +181,7 @@ int haplo_value_list_string_rec(HaploValueList *this, char* buf, int buf_len, in
   return offset;
 }
 
-static_assert(_HAPLO_VAL_MAX == 9,
+_Static_assert(_HAPLO_VAL_MAX == 9,
               "Added a new value type, update haplo_value_string");
 int haplo_value_string(HaploValue value, char* buf, int buf_len)
 {
@@ -190,27 +190,27 @@ int haplo_value_string(HaploValue value, char* buf, int buf_len)
   switch(value.type)
   {
   case HAPLO_VAL_INTEGER:
-    return snprintf(buf, buf_len, "%ld", value.integer);
+    return snprintf(buf, buf_len, "%ld", value.value.integer);
   case HAPLO_VAL_FLOAT:
-    return snprintf(buf, buf_len, "%f", value.floating_point);
+    return snprintf(buf, buf_len, "%f", value.value.floating_point);
   case HAPLO_VAL_STRING:
-    return snprintf(buf, buf_len, "\"%s\"", value.string);
+    return snprintf(buf, buf_len, "\"%s\"", value.value.string);
   case HAPLO_VAL_BOOL:
-    return snprintf(buf, buf_len, "%s", value.boolean ? "true" : "false");
+    return snprintf(buf, buf_len, "%s", value.value.boolean ? "true" : "false");
   case HAPLO_VAL_SYMBOL:
-    return snprintf(buf, buf_len, "%s", value.symbol);
+    return snprintf(buf, buf_len, "%s", value.value.symbol);
   case HAPLO_VAL_LIST: ;
-    HaploValueList *this = value.list;
+    HaploValueList *this = value.value.list;
     int offset = 0;
     offset += snprintf(buf, buf_len, "list: ");
     offset = haplo_value_list_string_rec(this, buf, buf_len, offset);
     return offset;
   case HAPLO_VAL_QUOTE:
-    return snprintf(buf, buf_len, "'%s", value.quote);
+    return snprintf(buf, buf_len, "'%s", value.value.quote);
   case HAPLO_VAL_EMPTY:
     return snprintf(buf, buf_len, "empty");
   case HAPLO_VAL_ERROR:
-    return snprintf(buf, buf_len, "Error: %s", haplo_error_string(value.error));
+    return snprintf(buf, buf_len, "Error: %s", haplo_error_string(value.value.error));
   default:
     break;
   }

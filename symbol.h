@@ -44,11 +44,9 @@ typedef char* HaploSymbolKey;
 
 typedef struct HaploSymbol {
   HaploSymbolType type;
-  union {
-    HaploFunction c_func;    // function implemented in c
-    HaploExpr* func;         // function defined as an AST
-    HaploValue var;          // a variable
-  };
+  HaploFunction c_func;    // function implemented in c
+  HaploExpr* func;         // function defined as an AST
+  HaploValue var;          // a variable
 } HaploSymbol;
 
 struct HaploSymbolList;

@@ -74,7 +74,7 @@ HAPLO_TEST(interpreter_test, simple_math)
   Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
-    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.error));
+    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.value.error));
     haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
@@ -87,10 +87,10 @@ HAPLO_TEST(interpreter_test, simple_math)
     expr_free(expr);
     goto test_failed;
   }
-  if (val.integer != expected_result)
+  if (val.value.integer != expected_result)
   {
     fprintf(stderr, "Error in interpreter_interpret, expected result %ld, got %ld\n",
-            expected_result, val.integer);
+            expected_result, val.value.integer);
     haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
@@ -150,7 +150,7 @@ HAPLO_TEST(interpreter_test, should_eval_head)
   Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
-    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.error));
+    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.value.error));
     haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
@@ -163,10 +163,10 @@ HAPLO_TEST(interpreter_test, should_eval_head)
     expr_free(expr);
     goto test_failed;
   }
-  if (val.integer != expected_result)
+  if (val.value.integer != expected_result)
   {
     fprintf(stderr, "Error in interpreter_interpret, expected result %ld, got %ld\n",
-            expected_result, val.integer);
+            expected_result, val.value.integer);
     haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
@@ -226,7 +226,7 @@ HAPLO_TEST(interpreter_test, simple_integer_val)
   Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
-    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.error));
+    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.value.error));
     haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
@@ -239,10 +239,10 @@ HAPLO_TEST(interpreter_test, simple_integer_val)
     expr_free(expr);
     goto test_failed;
   }
-  if (val.integer != expected_result)
+  if (val.value.integer != expected_result)
   {
     fprintf(stderr, "Error in interpreter_interpret, expected result %ld, got %ld\n",
-            expected_result, val.integer);
+            expected_result, val.value.integer);
     haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
@@ -302,7 +302,7 @@ HAPLO_TEST(interpreter_test, simple_string_val)
   Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
-    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.error));
+    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.value.error));
     haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
@@ -316,10 +316,10 @@ HAPLO_TEST(interpreter_test, simple_string_val)
     expr_free(expr);
     goto test_failed;
   }
-  if (strcmp(val.string, expected_result) != 0)
+  if (strcmp(val.value.string, expected_result) != 0)
   {
     fprintf(stderr, "Error in interpreter_interpret, expected result %s, got %s\n",
-            expected_result, val.string);
+            expected_result, val.value.string);
     haplo_interpreter_destroy(&interpreter);
     value_free(val);
     expr_free(expr);
@@ -381,7 +381,7 @@ HAPLO_TEST(interpreter_test, math)
   Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
-    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.error));
+    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.value.error));
     haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;
@@ -394,10 +394,10 @@ HAPLO_TEST(interpreter_test, math)
     expr_free(expr);
     goto test_failed;
   }
-  if (val.integer != expected_result)
+  if (val.value.integer != expected_result)
   {
     fprintf(stderr, "Error in interpreter_interpret, expected result %ld, got %ld\n",
-            expected_result, val.integer);
+            expected_result, val.value.integer);
     haplo_interpreter_destroy(&interpreter);
     expr_free(expr);
     goto test_failed;

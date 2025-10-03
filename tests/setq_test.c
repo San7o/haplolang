@@ -74,7 +74,7 @@ HAPLO_TEST(setq_test, declare_variable)
   Value val = interpreter_interpret(&interpreter, expr);
   if (val.type == HAPLO_VAL_ERROR)
   {
-    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.error));
+    fprintf(stderr, "Error %s in interpreter_interpret\n", error_string(val.value.error));
     expr_free(expr);
     haplo_interpreter_destroy(&interpreter);
     goto test_failed;
@@ -88,10 +88,10 @@ HAPLO_TEST(setq_test, declare_variable)
     haplo_interpreter_destroy(&interpreter);
     goto test_failed;
   }
-  if (val.integer != expected_result)
+  if (val.value.integer != expected_result)
   {
     fprintf(stderr, "Error in interpreter_interpret, expected result %ld, got %ld\n",
-           expected_result, val.integer);
+           expected_result, val.value.integer);
     expr_free(expr);
     value_free(val);
     haplo_interpreter_destroy(&interpreter);
@@ -123,10 +123,10 @@ HAPLO_TEST(setq_test, declare_variable)
     haplo_interpreter_destroy(&interpreter);
     goto test_failed;
   }
-  if (symbol.var.integer != expected_result)
+  if (symbol.var.value.integer != expected_result)
   {
     fprintf(stderr, "Error in interpreter_interpret, expected result %ld, got %ld\n",
-           expected_result, symbol.var.integer);
+           expected_result, symbol.var.value.integer);
     haplo_interpreter_destroy(&interpreter);
     goto test_failed;
   }

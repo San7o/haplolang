@@ -29,13 +29,9 @@ typedef struct HaploExpr HaploExpr;
 
 struct HaploExpr {
   bool is_atom;
-  union {
-    HaploAtom atom;
-    struct {
-      HaploExpr* head;
-      HaploExpr* tail;
-    };
-  };
+  HaploAtom atom;
+  HaploExpr* head;
+  HaploExpr* tail;
 };
 
 // --- Functions ---

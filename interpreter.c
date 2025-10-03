@@ -36,7 +36,7 @@ void haplo_interpreter_destroy(HaploInterpreter *interpreter)
   return;
 }
 
-static_assert(_HAPLO_ATOM_MAX == 6,
+_Static_assert(_HAPLO_ATOM_MAX == 6,
               "updated HaploAtomType, update haplo_interpreter_eval_atom");
 HaploValue haplo_interpreter_eval_atom(HaploAtom atom)
 {
@@ -44,38 +44,38 @@ HaploValue haplo_interpreter_eval_atom(HaploAtom atom)
   switch(atom.type)
   {
   case HAPLO_ATOM_STRING: ;
-    char* new_string = (char*) malloc(strlen(atom.string)+1);
-    strcpy(new_string, atom.string);
+    char* new_string = (char*) malloc(strlen(atom.value.string)+1);
+    strcpy(new_string, atom.value.string);
     new_value.type = HAPLO_VAL_STRING;
-    new_value.string = new_string;
+    new_value.value.string = new_string;
     break;
   case HAPLO_ATOM_INTEGER:
     new_value.type = HAPLO_VAL_INTEGER;
-    new_value.integer = atom.integer;
+    new_value.value.integer = atom.value.integer;
     break;
   case HAPLO_ATOM_FLOAT:
     new_value.type = HAPLO_VAL_FLOAT;
-    new_value.floating_point = atom.floating_point;
+    new_value.value.floating_point = atom.value.floating_point;
     break;
   case HAPLO_ATOM_BOOL:
     new_value.type = HAPLO_VAL_BOOL;
-    new_value.boolean = atom.boolean;
+    new_value.value.boolean = atom.value.boolean;
     break;
   case HAPLO_ATOM_SYMBOL: ;
-    char* new_symbol = (char*) malloc(strlen(atom.symbol)+1);
-    strcpy(new_symbol, atom.symbol);
+    char* new_symbol = (char*) malloc(strlen(atom.value.symbol)+1);
+    strcpy(new_symbol, atom.value.symbol);
     new_value.type = HAPLO_VAL_SYMBOL;
-    new_value.symbol = new_symbol;
+    new_value.value.symbol = new_symbol;
     break;
   case HAPLO_ATOM_QUOTE: ;
-    char* new_quote = (char*) malloc(strlen(atom.quote)+1);
-    strcpy(new_quote, atom.quote);
+    char* new_quote = (char*) malloc(strlen(atom.value.quote)+1);
+    strcpy(new_quote, atom.value.quote);
     new_value.type = HAPLO_VAL_QUOTE;
-    new_value.quote = new_quote;
+    new_value.value.quote = new_quote;
     break;
   default:
     new_value.type = HAPLO_VAL_ERROR;
-    new_value.error = -HAPLO_ERROR_INTERPRETER_INVALID_ATOM;
+    new_value.value.error = -HAPLO_ERROR_INTERPRETER_INVALID_ATOM;
     break;
   }
   return new_value;
@@ -88,7 +88,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_NULL,
+      .value.error = -HAPLO_ERROR_INTERPRETER_NULL,
     };
   }
   if (expr == NULL)
@@ -108,7 +108,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
   if (func.type == HAPLO_VAL_SYMBOL)
   {
     // If statement. "(if (CONDITION) (CASE TRUE) (CASE FALSE))"
-    if (strcmp(func.symbol, "if") == 0)
+    if (strcmp(func.value.symbol, "if") == 0)
     {
       haplo_value_free(func);
       int expr_depth = haplo_expr_depth(expr->tail);
@@ -116,7 +116,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
       {
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
-          .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+          .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
         };
       }
       
@@ -125,12 +125,12 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
       {
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
-          .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+          .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
         };
       }
 
       // Decision
-      if (condition.boolean)
+      if (condition.value.boolean)
       {
         out_val = haplo_interpreter_interpret(interpreter, expr->tail->tail->head);
       } else if (expr_depth == 3) {
@@ -139,7 +139,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
       return out_val;
     }
     // While loop. "(while CONDITION FUNCTION)"
-    if (strcmp(func.symbol, "while") == 0)
+    if (strcmp(func.value.symbol, "while") == 0)
     {
       int expr_depth = haplo_expr_depth(expr->tail);
       if (expr_depth < 2)
@@ -147,7 +147,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
         haplo_value_free(func);
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
-          .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+          .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
         };
       }
       haplo_value_free(func);
@@ -158,18 +158,18 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
       {
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
-          .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+          .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
         };
       }
 
-      should_loop = condition.boolean;
+      should_loop = condition.value.boolean;
       while (should_loop) {
         HaploValue a_val = haplo_interpreter_interpret(interpreter, expr->tail->tail->head);
         haplo_value_free(a_val); // Ignore the return value
 
         // Update should_loop
         condition = haplo_interpreter_interpret(interpreter, expr->tail->head);
-        should_loop = condition.boolean;
+        should_loop = condition.value.boolean;
       }
 
       return (HaploValue) {
@@ -177,14 +177,14 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
       };
     }
     // Function definition. "(defunc 'FUNCTION_NAME (FUNCTION_BODY))"
-    if (strcmp(func.symbol, "defunc") == 0)
+    if (strcmp(func.value.symbol, "defunc") == 0)
     {
       haplo_value_free(func);
       if (haplo_expr_depth(expr->tail) != 2)
       {
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
-          .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+          .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
         };
       }
 
@@ -195,7 +195,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
       {
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
-          .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+          .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
         };
       }
 
@@ -205,13 +205,13 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
         .func = func_body,
       };
       int err = haplo_symbol_map_update(interpreter->symbol_map,
-                                        func_name->atom.quote,
+                                        func_name->atom.value.quote,
                                         new_function);
       if (err < 0)
       {
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
-          .error = err,
+          .value.error = err,
         };
       }
       
@@ -249,7 +249,7 @@ HaploValueList *haplo_interpreter_interpret_tail(HaploInterpreter *interpreter,
   return haplo_value_list_push_front(head, tail);
 }
 
-static_assert(_HAPLO_SYMBOL_MAX == 3,
+_Static_assert(_HAPLO_SYMBOL_MAX == 3,
               "Updated HaploSymbolType, maybe should update haplo_interpreter_call");
 // Should not free args here
 HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
@@ -260,7 +260,7 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_NULL,
+      .value.error = -HAPLO_ERROR_INTERPRETER_NULL,
     };
   }
 
@@ -280,13 +280,13 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
 
   HaploSymbol symbol;
   int err = haplo_symbol_map_lookup(interpreter->symbol_map,
-                                    value.symbol,
+                                    value.value.symbol,
                                     &symbol);
   if (err < 0)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_UNKNOWN_SYMBOL,
+      .value.error = -HAPLO_ERROR_INTERPRETER_UNKNOWN_SYMBOL,
     };
   }
 
@@ -303,6 +303,6 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
   }
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .error = -HAPLO_ERROR_INTERPRETER_UNKNOWN_SYMBOL_TYPE,
+    .value.error = -HAPLO_ERROR_INTERPRETER_UNKNOWN_SYMBOL_TYPE,
   };
 }

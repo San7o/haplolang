@@ -34,7 +34,7 @@ HAPLO_STD_FUNC_STR(logical_and, "and")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
 
@@ -45,17 +45,17 @@ HAPLO_STD_FUNC_STR(logical_and, "and")
     if (this->val.type != HAPLO_VAL_BOOL) {
       return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+        .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
       };
     }
     
-    result &= this->val.boolean;
+    result &= this->val.value.boolean;
     this = this->next;
   }
 
   return (HaploValue) {
     .type = HAPLO_VAL_BOOL,
-    .boolean = result,
+    .value.boolean = result,
   };
 }
 
@@ -67,7 +67,7 @@ HAPLO_STD_FUNC_STR(logical_or, "or")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
 
@@ -78,16 +78,16 @@ HAPLO_STD_FUNC_STR(logical_or, "or")
     if (this->val.type != HAPLO_VAL_BOOL) {
       return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
-        .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+        .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
       };
     }
     
-    result |= this->val.boolean;
+    result |= this->val.value.boolean;
     this = this->next;
   }
 
   return (HaploValue) {
     .type = HAPLO_VAL_BOOL,
-    .boolean = result,
+    .value.boolean = result,
   };
 }

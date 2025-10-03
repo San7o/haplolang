@@ -38,7 +38,7 @@ HAPLO_STD_FUNC_STR(plus, "+")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -50,13 +50,13 @@ HAPLO_STD_FUNC_STR(plus, "+")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_INTEGER,
-      .integer = a.integer + b.integer,
+      .value.integer = a.value.integer + b.value.integer,
     };
   } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_FLOAT,
-      .floating_point = a.floating_point + b.floating_point,
+      .value.floating_point = a.value.floating_point + b.value.floating_point,
     };
   } else if (b.type == HAPLO_VAL_ERROR)
   {
@@ -68,7 +68,7 @@ HAPLO_STD_FUNC_STR(plus, "+")
     
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -82,7 +82,7 @@ HAPLO_STD_FUNC_STR(minus, "-")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -94,13 +94,13 @@ HAPLO_STD_FUNC_STR(minus, "-")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_INTEGER,
-      .integer = a.integer - b.integer,
+      .value.integer = a.value.integer - b.value.integer,
     };
   } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_FLOAT,
-      .floating_point = a.floating_point - b.floating_point,
+      .value.floating_point = a.value.floating_point - b.value.floating_point,
     };
   } else if (b.type == HAPLO_VAL_ERROR)
   {
@@ -112,7 +112,7 @@ HAPLO_STD_FUNC_STR(minus, "-")
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -126,7 +126,7 @@ HAPLO_STD_FUNC_STR(times, "*")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
 
@@ -138,13 +138,13 @@ HAPLO_STD_FUNC_STR(times, "*")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_INTEGER,
-      .integer = a.integer * b.integer,
+      .value.integer = a.value.integer * b.value.integer,
     };
   } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_FLOAT,
-      .floating_point = a.floating_point * b.floating_point,
+      .value.floating_point = a.value.floating_point * b.value.floating_point,
     };
   } else if (b.type == HAPLO_VAL_ERROR)
   {
@@ -156,7 +156,7 @@ HAPLO_STD_FUNC_STR(times, "*")
     
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -170,7 +170,7 @@ HAPLO_STD_FUNC_STR(div, "/")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -182,13 +182,13 @@ HAPLO_STD_FUNC_STR(div, "/")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_INTEGER,
-      .integer = a.integer / b.integer,
+      .value.integer = a.value.integer / b.value.integer,
     };
   } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_FLOAT,
-      .floating_point = a.floating_point / b.floating_point,
+      .value.floating_point = a.value.floating_point / b.value.floating_point,
     };
   } else if (b.type == HAPLO_VAL_ERROR)
   {
@@ -200,7 +200,7 @@ HAPLO_STD_FUNC_STR(div, "/")
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -214,7 +214,7 @@ HAPLO_STD_FUNC_STR(greater, ">")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -226,13 +226,13 @@ HAPLO_STD_FUNC_STR(greater, ">")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_BOOL,
-      .boolean = (a.integer > b.integer),
+      .value.boolean = (a.value.integer > b.value.integer),
     };
   } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_BOOL,
-      .boolean = (a.floating_point > b.floating_point),
+      .value.boolean = (a.value.floating_point > b.value.floating_point),
     };
   } else if (b.type == HAPLO_VAL_ERROR)
   {
@@ -244,7 +244,7 @@ HAPLO_STD_FUNC_STR(greater, ">")
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -258,7 +258,7 @@ HAPLO_STD_FUNC_STR(lesser, "<")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -270,13 +270,13 @@ HAPLO_STD_FUNC_STR(lesser, "<")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_BOOL,
-      .boolean = (a.integer < b.integer),
+      .value.boolean = (a.value.integer < b.value.integer),
     };
   } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_BOOL,
-      .boolean = (a.floating_point < b.floating_point),
+      .value.boolean = (a.value.floating_point < b.value.floating_point),
     };
   } else if (b.type == HAPLO_VAL_ERROR)
   {
@@ -288,7 +288,7 @@ HAPLO_STD_FUNC_STR(lesser, "<")
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -302,7 +302,7 @@ HAPLO_STD_FUNC_STR(equal, "=")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -314,13 +314,13 @@ HAPLO_STD_FUNC_STR(equal, "=")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_BOOL,
-      .boolean = (a.integer == b.integer),
+      .value.boolean = (a.value.integer == b.value.integer),
     };
   } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_BOOL,
-      .boolean = (a.floating_point == b.floating_point),
+      .value.boolean = (a.value.floating_point == b.value.floating_point),
     };
   } else if (b.type == HAPLO_VAL_ERROR)
   {
@@ -332,7 +332,7 @@ HAPLO_STD_FUNC_STR(equal, "=")
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -346,7 +346,7 @@ HAPLO_STD_FUNC_STR(greater_or_equal, ">=")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -358,13 +358,13 @@ HAPLO_STD_FUNC_STR(greater_or_equal, ">=")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_BOOL,
-      .boolean = (a.integer >= b.integer),
+      .value.boolean = (a.value.integer >= b.value.integer),
     };
   } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_BOOL,
-      .boolean = (a.floating_point >= b.floating_point),
+      .value.boolean = (a.value.floating_point >= b.value.floating_point),
     };
   } else if (b.type == HAPLO_VAL_ERROR)
   {
@@ -376,7 +376,7 @@ HAPLO_STD_FUNC_STR(greater_or_equal, ">=")
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -390,7 +390,7 @@ HAPLO_STD_FUNC_STR(lesser_or_equal, "<=")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -402,13 +402,13 @@ HAPLO_STD_FUNC_STR(lesser_or_equal, "<=")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_BOOL,
-      .boolean = (a.integer <= b.integer),
+      .value.boolean = (a.value.integer <= b.value.integer),
     };
   } else if (a.type == HAPLO_VAL_FLOAT && b.type == HAPLO_VAL_FLOAT)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_BOOL,
-      .boolean = (a.floating_point <= b.floating_point),
+      .value.boolean = (a.value.floating_point <= b.value.floating_point),
     };
   } else if (b.type == HAPLO_VAL_ERROR)
   {
@@ -420,6 +420,6 @@ HAPLO_STD_FUNC_STR(lesser_or_equal, "<=")
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }

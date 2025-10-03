@@ -42,7 +42,7 @@ HAPLO_STD_FUNC(list)
     
   return (HaploValue) {
     .type = HAPLO_VAL_LIST,
-    .list = new_list,
+    .value.list = new_list,
   };
 }
 
@@ -54,7 +54,7 @@ HAPLO_STD_FUNC(append)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -64,11 +64,11 @@ HAPLO_STD_FUNC(append)
 
   if (val.type != HAPLO_VAL_LIST && list.type == HAPLO_VAL_LIST)
   {
-    HaploValueList *new_list = haplo_value_list_deep_copy(list.list);
+    HaploValueList *new_list = haplo_value_list_deep_copy(list.value.list);
     HaploValue new_val = haplo_value_deep_copy(val);
     return (HaploValue) {
       .type = HAPLO_VAL_LIST,
-      .list = haplo_value_list_push_front(new_val, new_list),
+      .value.list = haplo_value_list_push_front(new_val, new_list),
     };
   } else if (list.type == HAPLO_VAL_ERROR)
   {
@@ -77,7 +77,7 @@ HAPLO_STD_FUNC(append)
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -89,7 +89,7 @@ HAPLO_STD_FUNC(head)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -99,7 +99,7 @@ HAPLO_STD_FUNC(head)
   if (val.type == HAPLO_VAL_LIST)
   {
     HaploValue head, new_head;
-    head = val.list->val;
+    head = val.value.list->val;
     new_head = haplo_value_deep_copy(head);
     return new_head;
   } else if (val.type == HAPLO_VAL_ERROR)
@@ -109,7 +109,7 @@ HAPLO_STD_FUNC(head)
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -121,7 +121,7 @@ HAPLO_STD_FUNC(tail)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -131,11 +131,11 @@ HAPLO_STD_FUNC(tail)
   if (val.type == HAPLO_VAL_LIST)
   {
     HaploValueList *list, *new_list;
-    list = val.list->next;
+    list = val.value.list->next;
     new_list = haplo_value_list_deep_copy(list);
     return (HaploValue) {
       .type = HAPLO_VAL_LIST,
-      .list = new_list,
+      .value.list = new_list,
     };
   } else if (val.type == HAPLO_VAL_ERROR)
   {
@@ -144,6 +144,6 @@ HAPLO_STD_FUNC(tail)
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }

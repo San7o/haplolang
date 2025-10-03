@@ -36,7 +36,7 @@ HAPLO_STD_FUNC(setq)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
 
@@ -52,13 +52,13 @@ HAPLO_STD_FUNC(setq)
     };
 
     int err = haplo_symbol_map_update(interpreter->symbol_map,
-                                      first.quote,
+                                      first.value.quote,
                                       var);
     if (err < 0)
     {
       return (HaploValue) {
         .type = HAPLO_VAL_ERROR,
-        .error = err,
+        .value.error = err,
       };
     }
     
@@ -70,6 +70,6 @@ HAPLO_STD_FUNC(setq)
  type_error:
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
