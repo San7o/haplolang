@@ -1,26 +1,7 @@
-//
-// MIT License
-//
-// Copyright (c) 2025 Giovanni Santini
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//
+// SPDX-License-Identifier: MIT
+// Author:  Giovanni Santini
+// Mail:    giovanni.santini@proton.me
+// Github:  @San7o
 
 #ifndef _HAPLO_SYMBOL_H_
 #define _HAPLO_SYMBOL_H_
@@ -52,17 +33,17 @@
 
 // --- Types ---
 
-enum HaploSymbolType {
+typedef enum {
   HAPLO_SYMBOL_C_FUNCTION = 0,   // stdlib
   HAPLO_SYMBOL_FUNCTION,
   HAPLO_SYMBOL_VARIABLE,
   _HAPLO_SYMBOL_MAX,
-};
+} HaploSymbolType;
 
 typedef char* HaploSymbolKey;
 
 typedef struct HaploSymbol {
-  enum HaploSymbolType type;
+  HaploSymbolType type;
   union {
     HaploFunction c_func;    // function implemented in c
     HaploExpr* func;         // function defined as an AST
@@ -70,20 +51,23 @@ typedef struct HaploSymbol {
   };
 } HaploSymbol;
 
-typedef struct HaploSymbolList {
-  HaploSymbolKey key;
-  struct HaploSymbolList *next;
-  HaploSymbol val;
-} HaploSymbolList;
+struct HaploSymbolList;
+typedef struct HaploSymbolList HaploSymbolList;
 
-typedef struct HaploSymbolMap {
+struct HaploSymbolList {
+  HaploSymbolKey key;
+  HaploSymbolList *next;
+  HaploSymbol val;
+};
+
+struct HaploSymbolMap {
   HaploSymbolList **_map;
   int capacity;
-} HaploSymbolMap;
+};
 
 // --- Functions ---
 
-const char* haplo_symbol_type_string(enum HaploSymbolType type);
+const char* haplo_symbol_type_string(HaploSymbolType type);
 void haplo_symbol_list_free(HaploSymbolList *list);
 // Returns a deep copy of the list
 HaploSymbolList *haplo_symbol_list_deep_copy(HaploSymbolList *list);

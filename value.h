@@ -1,26 +1,7 @@
-//
-// MIT License
-//
-// Copyright (c) 2025 Giovanni Santini
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//
+// SPDX-License-Identifier: MIT
+// Author:  Giovanni Santini
+// Mail:    giovanni.santini@proton.me
+// Github:  @San7o
 
 #ifndef _HAPLO_VALUE_H_
 #define _HAPLO_VALUE_H_
@@ -45,7 +26,7 @@
 
 // --- Types ---
 
-enum HaploValueType {
+typedef enum {
   HAPLO_VAL_INTEGER = 0,
   HAPLO_VAL_FLOAT,
   HAPLO_VAL_STRING,
@@ -56,12 +37,13 @@ enum HaploValueType {
   HAPLO_VAL_EMPTY,
   HAPLO_VAL_ERROR,
   _HAPLO_VAL_MAX,
-};
+} HaploValueType;
 
 struct HaploValueList;
+typedef struct HaploValueList HaploValueList;
 
-typedef struct HaploValue {
-  enum HaploValueType type;
+typedef struct {
+  HaploValueType type;
   union {
     long integer;
     double floating_point;
@@ -69,15 +51,15 @@ typedef struct HaploValue {
     bool boolean;
     char* symbol;
     char* quote;
-    struct HaploValueList *list;
+    HaploValueList *list;
     int error;
   };
 } HaploValue;
 
-typedef struct HaploValueList {
-  struct HaploValueList *next;
+struct HaploValueList {
+  HaploValueList *next;
   HaploValue val;
-} HaploValueList;
+};
 
 // --- Functions ---
 
@@ -89,7 +71,7 @@ void haplo_value_list_free(HaploValueList *list);
 void haplo_value_list_print(HaploValueList *list);
 // Returns a deep copy of the argument list
 HaploValueList *haplo_value_list_deep_copy(HaploValueList *list);
-const char* haplo_value_type_string(enum HaploValueType type);
+const char* haplo_value_type_string(HaploValueType type);
 // Returns a deep copy of the argument value
 HaploValue haplo_value_deep_copy(HaploValue value);
 void haplo_value_free(HaploValue value);

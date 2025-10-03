@@ -80,7 +80,7 @@ HAPLO_TEST(lexer_test, next)
     int token_len = 0;
     
     int expected_token_len = 1;
-    enum Token expected_token = HAPLO_LEX_OPEN;
+    Token expected_token = HAPLO_LEX_OPEN;
     int token = lexer_next_token(input, strlen(input), &token_len, NULL, NULL);
     if (token != expected_token)
     {
@@ -101,7 +101,7 @@ HAPLO_TEST(lexer_test, next)
     int token_len = 0;
     
     int expected_token_len = 1;
-    enum Token expected_token = HAPLO_LEX_CLOSE;
+    Token expected_token = HAPLO_LEX_CLOSE;
     int token = lexer_next_token(input, strlen(input), &token_len, NULL, NULL);
     if (token != expected_token)
     {
@@ -122,7 +122,7 @@ HAPLO_TEST(lexer_test, next)
     int token_len = 0;
     
     int expected_token_len = 1;
-    enum Token expected_token = HAPLO_LEX_COMMENT;
+    Token expected_token = HAPLO_LEX_COMMENT;
     int token = lexer_next_token(input, strlen(input), &token_len, NULL, NULL);
     if (token != expected_token)
     {
@@ -143,7 +143,7 @@ HAPLO_TEST(lexer_test, next)
     int token_len = 0;
     
     int expected_token_len = 3;
-    enum Token expected_token = HAPLO_LEX_ATOM;
+    Token expected_token = HAPLO_LEX_ATOM;
     long int expected_atom = 123;
     Atom atom;
     int token = lexer_next_token(input, strlen(input), &token_len, &atom, NULL);
@@ -172,7 +172,7 @@ HAPLO_TEST(lexer_test, next)
     int token_len = 0;
     
     int expected_token_len = 6;
-    enum Token expected_token = HAPLO_LEX_ATOM;
+    Token expected_token = HAPLO_LEX_ATOM;
     double expected_atom = 69.420;
     Atom atom;
     int token = lexer_next_token(input, strlen(input), &token_len, &atom, NULL);

@@ -111,7 +111,7 @@ and its type to the parser.)
 
 (`code` lexer.h)
 ```c
-enum HaploToken {
+typedef enum {
   HAPLO_LEX_OPEN = 0,  // '('
   HAPLO_LEX_CLOSE,     // ')'
   HAPLO_LEX_ATOM,      // see struct HaploAtom in atom.h
@@ -119,7 +119,7 @@ enum HaploToken {
   HAPLO_LEX_QUOTE,     // '''
   HAPLO_LEX_NONE,
   _HAPLO_LEX_MAX,
-};
+} HaploToken;
 
 // On success, returns a non-negative integer representing an
 // HaploToken.  On failure, returns a negative integer with the error
@@ -138,7 +138,7 @@ int haplo_lexer_next_token(char* input, int input_size,
 (`code` atom.h)
 
 ```c
-enum HaploAtomType {
+typedef enum {
   HAPLO_ATOM_STRING = 0,    // "Hello World"
   HAPLO_ATOM_INTEGER,       // 69, -420
   HAPLO_ATOM_FLOAT,         // 69.420
@@ -146,10 +146,10 @@ enum HaploAtomType {
   HAPLO_ATOM_SYMBOL,        // print, +
   HAPLO_ATOM_QUOTE,         // 'test
   _HAPLO_ATOM_MAX,
-};
+} HaploAtomType;
 
-typedef struct HaploAtom {
-  enum HaploAtomType type;
+typedef struct {
+  HaploAtomType type;
   union {
     char* string;
     long int integer;
@@ -172,16 +172,16 @@ either an atom or both an `head` and `tail` expressions.)
 (`file` expr.h)
 
 ```c
-typedef struct HaploExpr {
+struct HaploExpr {
   bool is_atom;
   union {
     HaploAtom atom;
     struct {
-      struct HaploExpr* head;
-      struct HaploExpr* tail;
+      HaploExpr* head;
+      HaploExpr* tail;
     };
   };
-} HaploExpr;
+};
 ```
 
 (`print` When an atom is lexed, the head of the current expressions is
@@ -214,88 +214,7 @@ HaploExpr *haplo_parser_parse_rec(HaploParser *parser)
   
   switch (parser->last_token)
   {
-  case HAPLO_LEX_QUOTE:
-    // Quote expects to be followed by an atom of type symbol
-    // eg: 'test
-    if (haplo_parser_next_token(parser) < 0)
-    {
-      haplo_expr_free(expr);
-      HAPLO_PARSER_ERROR();
-    }
-    if (haplo_parser_next_token(parser) < 0)
-    {
-      haplo_expr_free(expr);
-      HAPLO_PARSER_ERROR();
-    }
-    if (parser->last_token != HAPLO_LEX_ATOM)
-    {
-      parser->error = -HAPLO_ERROR_PARSER_UNEXPECTED_TOKEN;
-      haplo_expr_free(expr);
-      HAPLO_PARSER_ERROR();
-    }
-    if (parser->last_atom.type != HAPLO_ATOM_SYMBOL)
-    {
-      haplo_atom_free(parser->last_atom);
-      parser->error = -HAPLO_ERROR_PARSER_UNEXPECTED_TOKEN;
-      haplo_expr_free(expr);
-      HAPLO_PARSER_ERROR();
-    }
-    parser->last_atom.type = HAPLO_ATOM_QUOTE;
-    expr->head = malloc(sizeof(HaploExpr));
-    *expr->head = (HaploExpr){
-      .is_atom = true,
-      .atom = parser->last_atom,
-    };
-    break;
-  case HAPLO_LEX_ATOM:
-    haplo_atom_free(parser->last_atom);
-    if (haplo_parser_next_token(parser) < 0)
-    {
-      haplo_expr_free(expr);
-      HAPLO_PARSER_ERROR();
-    }
-    expr->head = malloc(sizeof(HaploExpr));
-    *expr->head = (HaploExpr){
-      .is_atom = true,
-      .atom = parser->last_atom,
-    };
-    break;
-  case HAPLO_LEX_OPEN:
-
-    if (haplo_parser_next_token(parser) < 0)
-    {
-      haplo_expr_free(expr);
-      HAPLO_PARSER_ERROR();
-    }
-    
-    expr->head = haplo_parser_parse_rec(parser);
-    
-    if (haplo_parser_peek_next_token(parser) < 0)
-    {
-      haplo_expr_free(expr);
-      HAPLO_PARSER_ERROR();
-    }
-    if (parser->last_token != HAPLO_LEX_CLOSE)
-    {
-      haplo_expr_free(expr);
-      if (parser->last_token == HAPLO_LEX_ATOM)
-        haplo_atom_free(parser->last_atom);
-      parser->error = -HAPLO_ERROR_MALFORMED_PARENTHESIS;
-      HAPLO_PARSER_ERROR();
-    }
-    if (haplo_parser_next_token(parser) < 0)
-    {
-      haplo_expr_free(expr);
-      HAPLO_PARSER_ERROR();
-    }
-    break;
-  case HAPLO_LEX_CLOSE:
-    haplo_expr_free(expr);
-    return NULL;
-  default:
-    haplo_expr_free(expr);
-    parser->error = -HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED;
-    HAPLO_PARSER_ERROR();
+  // Cases...
   }
 
   // Optional tail expression
@@ -426,12 +345,12 @@ symbols.)
 (`file` symbol.h)
 
 ```c
-typedef struct HaploSymbolMap {
+typedef struct {
   HaploSymbolList **_map;
   int capacity;
 } HaploSymbolMap;
 
-typedef struct HaploSymbolList {
+typedef struct {
   HaploSymbolKey key;
   struct HaploSymbolList *next;
   HaploSymbol val;
@@ -439,15 +358,15 @@ typedef struct HaploSymbolList {
 
 typedef char* HaploSymbolKey;
 
-enum HaploSymbolType {
+typedef enum {
   HAPLO_SYMBOL_C_FUNCTION = 0,   // stdlib
   HAPLO_SYMBOL_FUNCTION,
   HAPLO_SYMBOL_VARIABLE,
   _HAPLO_SYMBOL_MAX,
-};
+} HaploSymbolType;
 
-typedef struct HaploSymbol {
-  enum HaploSymbolType type;
+typedef struct {
+  HaploSymbolType type;
   union {
     HaploFunction c_func;    // function implemented in c
     HaploExpr* func;         // function defined as an AST

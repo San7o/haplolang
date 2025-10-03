@@ -1,26 +1,7 @@
-//
-// MIT License
-//
-// Copyright (c) 2025 Giovanni Santini
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//
+// SPDX-License-Identifier: MIT
+// Author:  Giovanni Santini
+// Mail:    giovanni.santini@proton.me
+// Github:  @San7o
 
 #ifndef _HAPLO_LEXER_H_
 #define _HAPLO_LEXER_H_
@@ -41,7 +22,7 @@
 
 // --- Types ---
 
-enum HaploToken {
+typedef enum {
   HAPLO_LEX_OPEN = 0,  // '('
   HAPLO_LEX_CLOSE,     // ')'
   HAPLO_LEX_ATOM,      // see struct HaploAtom in atom.h
@@ -49,7 +30,7 @@ enum HaploToken {
   HAPLO_LEX_QUOTE,     // '''
   HAPLO_LEX_NONE,
   _HAPLO_LEX_MAX,
-};
+} HaploToken;
 
 // HaploTokenChar is used to define a mapping between the HaploToken
 // enum and a char
@@ -60,7 +41,7 @@ extern HaploTokenChar haplo_default_token_char;
 // --- Functions ---
 
 // Returns the string representation of a token enum
-const char* haplo_lexer_token_string(enum HaploToken token);
+const char* haplo_lexer_token_string(HaploToken token);
 // Returns the length of an atom
 int haplo_lexer_atom_len(char* input, int input_size);
 

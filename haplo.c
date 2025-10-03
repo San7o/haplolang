@@ -1,26 +1,7 @@
-//
-// MIT License
-//
-// Copyright (c) 2025 Giovanni Santini
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//
+// SPDX-License-Identifier: MIT
+// Author:  Giovanni Santini
+// Mail:    giovanni.santini@proton.me
+// Github:  @San7o
 
 // The Haplolang cli interpreter
 
@@ -91,20 +72,23 @@ void print_help()
 // contents in a new buffer. Not portable.
 char* mmap_file(const char* filename, size_t* out_size) {
     int fd = open(filename, O_RDONLY);
-    if (fd == -1) {
+    if (fd == -1)
+    {
         perror("open");
         return NULL;
     }
 
     struct stat st;
-    if (fstat(fd, &st) == -1) {
+    if (fstat(fd, &st) == -1)
+    {
         perror("fstat");
         close(fd);
         return NULL;
     }
 
     size_t size = st.st_size;
-    if (size == 0) {
+    if (size == 0)
+    {
         // empty file
         close(fd);
         if (out_size) *out_size = 0;
@@ -113,21 +97,22 @@ char* mmap_file(const char* filename, size_t* out_size) {
 
     void* addr = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
     close(fd);
-    if (addr == MAP_FAILED) {
+    if (addr == MAP_FAILED)
+    {
         perror("mmap");
         return NULL;
     }
 
-    if (out_size) {
+    if (out_size)
+    {
         *out_size = size;
     }
     return (char*)addr;
 }
 
 void unmap_file(char* addr, size_t size) {
-    if (addr) {
+    if (addr)
         munmap(addr, size);
-    }
 }
 
 void interpret_file(Interpreter *interpreter, char* file)
