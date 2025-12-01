@@ -17,6 +17,14 @@
 
 #define cleanup_free __attribute__ ((cleanup (cleanup_freep)))
 
+#ifdef __GNUC__
+  #define LIKELY(x)     __builtin_expect(!!(x), 1)
+  #define UNLIKELY(x)   __builtin_expect(!!(x), 0)
+#else
+ #define LIKELY(x)     (x)
+ #define UNLIKELY(x)   (x)
+#endif
+
 // --- Functions ---
 
 static inline void cleanup_freep(void *p) {

@@ -1,6 +1,5 @@
   TODO
 =========
 
-- Release 0.1.0
 - Replace readline with a custom implementation
 - Lexical scoping
