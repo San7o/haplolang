@@ -35,7 +35,7 @@ HAPLO_STD_FUNC(append)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -58,7 +58,7 @@ HAPLO_STD_FUNC(append)
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -70,7 +70,7 @@ HAPLO_STD_FUNC(head)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -90,7 +90,7 @@ HAPLO_STD_FUNC(head)
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -102,7 +102,7 @@ HAPLO_STD_FUNC(tail)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -125,6 +125,6 @@ HAPLO_STD_FUNC(tail)
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }

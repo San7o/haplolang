@@ -15,7 +15,7 @@
 
 int haplo_interpreter_init(HaploInterpreter *interpreter)
 {
-  if (!interpreter) return -HAPLO_ERROR_INTERPRETER_NULL;
+  if (!interpreter) return HAPLO_ERROR_INTERPRETER_NULL;
 
   interpreter->symbol_map = haplo_symbol_map_deep_copy(&__haplo_std_symbol_map);
   
@@ -75,7 +75,7 @@ HaploValue haplo_interpreter_eval_atom(HaploAtom atom)
     break;
   default:
     new_value.type = HAPLO_VAL_ERROR;
-    new_value.value.error = -HAPLO_ERROR_INTERPRETER_INVALID_ATOM;
+    new_value.value.error = HAPLO_ERROR_INTERPRETER_INVALID_ATOM;
     break;
   }
   return new_value;
@@ -88,7 +88,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_NULL,
+      .value.error = HAPLO_ERROR_INTERPRETER_NULL,
     };
   }
   if (!expr)
@@ -116,7 +116,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
       {
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
-          .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+          .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
         };
       }
       
@@ -125,7 +125,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
       {
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
-          .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+          .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
         };
       }
 
@@ -147,7 +147,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
         haplo_value_free(func);
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
-          .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+          .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
         };
       }
       haplo_value_free(func);
@@ -158,7 +158,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
       {
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
-          .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+          .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
         };
       }
 
@@ -184,7 +184,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
       {
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
-          .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+          .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
         };
       }
 
@@ -195,7 +195,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
       {
         return (HaploValue) {
           .type = HAPLO_VAL_ERROR,
-          .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+          .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
         };
       }
 
@@ -260,7 +260,7 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_NULL,
+      .value.error = HAPLO_ERROR_INTERPRETER_NULL,
     };
   }
 
@@ -286,7 +286,7 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_UNKNOWN_SYMBOL,
+      .value.error = HAPLO_ERROR_INTERPRETER_UNKNOWN_SYMBOL,
     };
   }
 
@@ -303,6 +303,6 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
   }
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .value.error = -HAPLO_ERROR_INTERPRETER_UNKNOWN_SYMBOL_TYPE,
+    .value.error = HAPLO_ERROR_INTERPRETER_UNKNOWN_SYMBOL_TYPE,
   };
 }

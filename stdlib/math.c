@@ -19,7 +19,7 @@ HAPLO_STD_FUNC_STR(plus, "+")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -49,7 +49,7 @@ HAPLO_STD_FUNC_STR(plus, "+")
     
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -63,7 +63,7 @@ HAPLO_STD_FUNC_STR(minus, "-")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -93,7 +93,7 @@ HAPLO_STD_FUNC_STR(minus, "-")
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -107,7 +107,7 @@ HAPLO_STD_FUNC_STR(times, "*")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
 
@@ -137,7 +137,7 @@ HAPLO_STD_FUNC_STR(times, "*")
     
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -151,7 +151,7 @@ HAPLO_STD_FUNC_STR(div, "/")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -181,7 +181,7 @@ HAPLO_STD_FUNC_STR(div, "/")
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -195,7 +195,7 @@ HAPLO_STD_FUNC_STR(greater, ">")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -225,7 +225,7 @@ HAPLO_STD_FUNC_STR(greater, ">")
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -239,7 +239,7 @@ HAPLO_STD_FUNC_STR(lesser, "<")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -269,7 +269,7 @@ HAPLO_STD_FUNC_STR(lesser, "<")
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -283,7 +283,7 @@ HAPLO_STD_FUNC_STR(equal, "=")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -313,7 +313,7 @@ HAPLO_STD_FUNC_STR(equal, "=")
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -327,7 +327,7 @@ HAPLO_STD_FUNC_STR(greater_or_equal, ">=")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -357,7 +357,7 @@ HAPLO_STD_FUNC_STR(greater_or_equal, ">=")
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }
 
@@ -371,7 +371,7 @@ HAPLO_STD_FUNC_STR(lesser_or_equal, "<=")
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
-      .value.error = -HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
+      .value.error = HAPLO_ERROR_INTERPRETER_WRONG_NUMBER_OF_ARGS,
     };
   }
     
@@ -401,6 +401,6 @@ HAPLO_STD_FUNC_STR(lesser_or_equal, "<=")
   
   return (HaploValue) {
     .type = HAPLO_VAL_ERROR,
-    .value.error = -HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
+    .value.error = HAPLO_ERROR_INTERPRETER_INVALID_TYPE,
   };
 }

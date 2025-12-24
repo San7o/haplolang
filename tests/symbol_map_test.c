@@ -217,7 +217,7 @@ HAPLO_TEST(symbol_map_test, delete)
   }
 
   err = haplo_symbol_map_lookup(&map, key, &lookup_symbol);
-  if (err != -HAPLO_ERROR_SYMBOL_MAP_LOOKUP_NOT_FOUND)
+  if (err != HAPLO_ERROR_SYMBOL_MAP_LOOKUP_NOT_FOUND)
   {
     fprintf(stderr, "Symbol map lookup unexpected error %s\n", error_string(err));
     symbol_map_destroy(&map);

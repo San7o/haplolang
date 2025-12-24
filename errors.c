@@ -7,7 +7,7 @@
 
 const char* haplo_error_string(int error)
 {
-  switch(-error)
+  switch(error)
   {
   case HAPLO_ERROR_LEXER_END_OF_INPUT:
     return "ERROR_LEXER_END_OF_INPUT";

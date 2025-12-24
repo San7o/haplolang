@@ -199,7 +199,7 @@ HAPLO_TEST(parser_test, hello_world)
   }
   
   Expr *expr = parser_parse(&parser);  
-  if (expr != NULL || parser.error != -HAPLO_ERROR_PARSER_STRING_LITERAL_END)
+  if (expr != NULL || parser.error != HAPLO_ERROR_PARSER_STRING_LITERAL_END)
   {
     fprintf(stderr, "Error parser_parse returned the wrong error\n");
     expr_free(expr);

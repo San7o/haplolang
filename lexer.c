@@ -66,7 +66,7 @@ int haplo_lexer_atom_len(HaploLexer *l)
     }
     if (l->cursor + i == l->input_size)
     {
-      return -HAPLO_ERROR_PARSER_STRING_LITERAL_END;
+      return HAPLO_ERROR_PARSER_STRING_LITERAL_END;
     }
     len++;
   }
@@ -89,7 +89,7 @@ int haplo_lexer_atom_len(HaploLexer *l)
 int haplo_lexer_init(HaploLexer *l, char* input,
                      unsigned int input_size, HaploTokenChar *token_char)
 {
-  if (!l) return -HAPLO_ERROR_LEXER_NULL;
+  if (!l) return HAPLO_ERROR_LEXER_NULL;
 
   l->input = input;
   l->input_size = input_size;
@@ -102,8 +102,8 @@ int haplo_lexer_init(HaploLexer *l, char* input,
 
 int haplo_lexer_trim_left(HaploLexer *l)
 {
-  if (!l) return -HAPLO_ERROR_LEXER_NULL;
-  if (!l->input) return -HAPLO_ERROR_LEXER_INPUT_NULL;
+  if (!l) return HAPLO_ERROR_LEXER_NULL;
+  if (!l->input) return HAPLO_ERROR_LEXER_INPUT_NULL;
 
   int start = l->cursor;
   while(l->cursor < l->input_size &&
@@ -137,8 +137,8 @@ _Static_assert(_HAPLO_LEX_MAX == 7,
               "Number of tokens changed, maybe haplo_lexer_peek needs to be updated?");
 int haplo_lexer_peek(HaploLexer *l, HaploToken *tok, HaploAtom *atom)
 {
-  if (!l) return -HAPLO_ERROR_LEXER_NULL;
-  if (!l->input) return -HAPLO_ERROR_LEXER_INPUT_NULL;
+  if (!l) return HAPLO_ERROR_LEXER_NULL;
+  if (!l->input) return HAPLO_ERROR_LEXER_INPUT_NULL;
 
   haplo_lexer_trim_left(l);
 
@@ -172,7 +172,7 @@ int haplo_lexer_peek(HaploLexer *l, HaploToken *tok, HaploAtom *atom)
   {
     int ret = haplo_lexer_atom_len(l);
     if (ret < 0) return ret;
-    if (ret < 2) return -HAPLO_ERROR_LEXER_ATOM_STRING_SIZE;
+    if (ret < 2) return HAPLO_ERROR_LEXER_ATOM_STRING_SIZE;
 
     if (atom)
     {

@@ -164,7 +164,7 @@ HaploValue haplo_value_deep_copy(HaploValue value)
     return value;
   default:
     new_value.type = HAPLO_VAL_ERROR;
-    new_value.value.error = -HAPLO_ERROR_VALUE_TYPE_UNRECOGNIZED;
+    new_value.value.error = HAPLO_ERROR_VALUE_TYPE_UNRECOGNIZED;
     break;
   }
   return new_value;

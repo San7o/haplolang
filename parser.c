@@ -11,8 +11,8 @@
 
 int haplo_parser_init(HaploParser *parser, char *input, unsigned int len)
 {
-  if (!parser) return -HAPLO_ERROR_PARSER_NULL;
-  if (!input) return -HAPLO_ERROR_PARSER_INPUT_NULL;
+  if (!parser) return HAPLO_ERROR_PARSER_NULL;
+  if (!input) return HAPLO_ERROR_PARSER_INPUT_NULL;
 
   parser->error = 0;
   
@@ -23,7 +23,7 @@ int haplo_parser_init(HaploParser *parser, char *input, unsigned int len)
 
 int haplo_parser_dump(HaploParser *parser)
 {
-  if (!parser) return -HAPLO_ERROR_PARSER_NULL;
+  if (!parser) return HAPLO_ERROR_PARSER_NULL;
   
   fprintf(stderr, "Parser dump: error: %s, cursor: %d, line: %d, column: %d\n",
           haplo_error_string(parser->error), parser->lexer.cursor,
@@ -58,7 +58,7 @@ HaploExpr *haplo_parser_parse_rec(HaploParser *parser)
   {
     parser->error = ret;
     haplo_expr_free(expr);
-    if (parser->error == -HAPLO_ERROR_LEXER_END_OF_INPUT)
+    if (parser->error == HAPLO_ERROR_LEXER_END_OF_INPUT)
       return NULL;
     
     HAPLO_PARSER_ERROR();
@@ -80,14 +80,14 @@ HaploExpr *haplo_parser_parse_rec(HaploParser *parser)
     
     if (token != HAPLO_LEX_ATOM)
     {
-      parser->error = -HAPLO_ERROR_PARSER_UNEXPECTED_TOKEN;
+      parser->error = HAPLO_ERROR_PARSER_UNEXPECTED_TOKEN;
       haplo_expr_free(expr);
       HAPLO_PARSER_ERROR();
     }
     if (atom.type != HAPLO_ATOM_SYMBOL)
     {
       haplo_atom_free(&atom);
-      parser->error = -HAPLO_ERROR_PARSER_UNEXPECTED_TOKEN;
+      parser->error = HAPLO_ERROR_PARSER_UNEXPECTED_TOKEN;
       haplo_expr_free(expr);
       HAPLO_PARSER_ERROR();
     }
@@ -132,7 +132,7 @@ HaploExpr *haplo_parser_parse_rec(HaploParser *parser)
       haplo_expr_free(expr);
       if (token == HAPLO_LEX_ATOM)
         haplo_atom_free(&atom);
-      parser->error = -HAPLO_ERROR_MALFORMED_PARENTHESIS;
+      parser->error = HAPLO_ERROR_MALFORMED_PARENTHESIS;
       HAPLO_PARSER_ERROR();
     }
     ret = haplo_lexer_next(&parser->lexer, &token, &atom);
@@ -151,7 +151,7 @@ HaploExpr *haplo_parser_parse_rec(HaploParser *parser)
     return NULL;
   default:
     haplo_expr_free(expr);
-    parser->error = -HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED;
+    parser->error = HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED;
     HAPLO_PARSER_ERROR();
   }
 
@@ -211,7 +211,7 @@ HaploExpr *haplo_parser_parse(HaploParser *parser)
       haplo_expr_free(expr);
       if (token == HAPLO_LEX_ATOM)
         haplo_atom_free(&atom);
-      parser->error = -HAPLO_ERROR_MALFORMED_PARENTHESIS;
+      parser->error = HAPLO_ERROR_MALFORMED_PARENTHESIS;
       HAPLO_PARSER_ERROR();
     }
     ret = haplo_lexer_next(&parser->lexer, NULL, NULL);

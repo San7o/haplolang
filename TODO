@@ -1,6 +1,5 @@
   TODO
 =========
 
-- Make error macros negative
 - Replace readline with a custom implementation
 - Lexical scoping

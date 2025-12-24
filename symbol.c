@@ -58,7 +58,7 @@ HaploSymbolList *haplo_symbol_list_deep_copy(HaploSymbolList *list)
 
 int haplo_symbol_map_init(HaploSymbolMap *map, int capacity)
 {
-  if (!map) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
+  if (!map) return HAPLO_ERROR_SYMBOL_MAP_NULL;
 
   map->capacity = capacity;
   map->_map = (HaploSymbolList**) calloc(capacity, sizeof(HaploSymbolList*));
@@ -68,7 +68,7 @@ int haplo_symbol_map_init(HaploSymbolMap *map, int capacity)
 
 int haplo_symbol_map_destroy(HaploSymbolMap *map)
 {
-  if (!map) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
+  if (!map) return HAPLO_ERROR_SYMBOL_MAP_NULL;
   
   if (map->_map)
   {
@@ -152,13 +152,13 @@ int haplo_symbol_map_lookup(HaploSymbolMap *map,
                             HaploSymbolKey key,
                             HaploSymbol* symbol)
 {
-  if (!map) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
-  if (!map->_map) return -HAPLO_ERROR_SYMBOL_MAP_NOT_INITIALIZED;
+  if (!map) return HAPLO_ERROR_SYMBOL_MAP_NULL;
+  if (!map->_map) return HAPLO_ERROR_SYMBOL_MAP_NOT_INITIALIZED;
 
   unsigned int hash = haplo_symbol_hash(key, map->capacity);
 
   HaploSymbolList *symbol_list = map->_map[hash];
-  if (!symbol_list) return -HAPLO_ERROR_SYMBOL_MAP_LOOKUP_NOT_FOUND;
+  if (!symbol_list) return HAPLO_ERROR_SYMBOL_MAP_LOOKUP_NOT_FOUND;
 
   bool found = false;
   while (symbol_list)
@@ -177,15 +177,15 @@ int haplo_symbol_map_lookup(HaploSymbolMap *map,
     return 0;
   }
   
-  return -HAPLO_ERROR_SYMBOL_MAP_LOOKUP_NOT_FOUND;
+  return HAPLO_ERROR_SYMBOL_MAP_LOOKUP_NOT_FOUND;
 }
 
 int haplo_symbol_map_update(HaploSymbolMap *map,
                             HaploSymbolKey key,
                             HaploSymbol symbol)
 {
-  if (!map) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
-  if (!map->_map) return -HAPLO_ERROR_SYMBOL_MAP_NOT_INITIALIZED;
+  if (!map) return HAPLO_ERROR_SYMBOL_MAP_NULL;
+  if (!map->_map) return HAPLO_ERROR_SYMBOL_MAP_NOT_INITIALIZED;
 
   unsigned int hash = haplo_symbol_hash(key, map->capacity);
   
@@ -238,8 +238,8 @@ int haplo_symbol_map_update(HaploSymbolMap *map,
 int haplo_symbol_map_delete(HaploSymbolMap *map,
                             HaploSymbolKey key)
 {
-  if (!map) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
-  if (!map->_map) return -HAPLO_ERROR_SYMBOL_MAP_NOT_INITIALIZED;
+  if (!map) return HAPLO_ERROR_SYMBOL_MAP_NULL;
+  if (!map->_map) return HAPLO_ERROR_SYMBOL_MAP_NOT_INITIALIZED;
 
   unsigned int hash = haplo_symbol_hash(key, map->capacity);
   
