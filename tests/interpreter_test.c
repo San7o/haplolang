@@ -26,7 +26,7 @@ HAPLO_TEST(interpreter_test, simple_math)
   }
 
   Expr *expr = parser_parse(&parser);
-  if (expr == NULL)
+  if (!expr)
   {
     fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
@@ -102,7 +102,7 @@ HAPLO_TEST(interpreter_test, should_eval_head)
   }
 
   Expr *expr = parser_parse(&parser);
-  if (expr == NULL)
+  if (!expr)
   {
     fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
@@ -178,7 +178,7 @@ HAPLO_TEST(interpreter_test, simple_integer_val)
   }
 
   Expr *expr = parser_parse(&parser);
-  if (expr == NULL)
+  if (!expr)
   {
     fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
@@ -254,7 +254,7 @@ HAPLO_TEST(interpreter_test, simple_string_val)
   }
 
   Expr *expr = parser_parse(&parser);
-  if (expr == NULL)
+  if (!expr)
   {
     fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
@@ -333,7 +333,7 @@ HAPLO_TEST(interpreter_test, math)
   }
 
   Expr *expr = parser_parse(&parser);
-  if (expr == NULL)
+  if (!expr)
   {
     fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;

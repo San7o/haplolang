@@ -49,7 +49,7 @@ const char* haplo_lexer_token_string(HaploToken token)
 int haplo_lexer_atom_len(HaploLexer *l)
 {
   if (!l) return 0;
-  if (l->input == NULL || l->cursor >= l->input_size) return 0;
+  if (!l->input || l->cursor >= l->input_size) return 0;
 
   int len = 0;
   int i = 0;

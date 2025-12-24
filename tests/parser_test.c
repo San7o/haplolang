@@ -25,7 +25,7 @@ HAPLO_TEST(parser_test, simple1)
   }
 
   Expr *expr = parser_parse(&parser);
-  if (expr == NULL)
+  if (!expr)
   {
     fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
@@ -70,7 +70,7 @@ HAPLO_TEST(parser_test, no_parenthesis)
   }
 
   Expr *expr = parser_parse(&parser);
-  if (expr == NULL)
+  if (!expr)
   {
     fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
@@ -119,7 +119,7 @@ HAPLO_TEST(parser_test, malformed_parenthesis)
   }
 
   Expr *expr = parser_parse(&parser);
-  if (expr != NULL || parser.error == 0)
+  if (expr || parser.error == 0)
   {
     fprintf(stderr, "Error parser_parse should have returned an error\n");
     goto test_failed;
@@ -151,7 +151,7 @@ HAPLO_TEST(parser_test, simple2)
   }
   
   Expr *expr = parser_parse(&parser);  
-  if (expr == NULL)
+  if (!expr)
   {
     fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
@@ -227,7 +227,7 @@ HAPLO_TEST(parser_test, hello_world_no_parenthesis)
   }
 
   Expr *expr = parser_parse(&parser);
-  if (expr == NULL)
+  if (!expr)
   {
     fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
@@ -276,7 +276,7 @@ HAPLO_TEST(parser_test, comment)
   }
   
   Expr *expr = parser_parse(&parser);
-  if (expr != NULL)
+  if (expr)
   {
     fprintf(stderr, "Error parser_parse should return null\n");
     expr_free(expr);
@@ -310,7 +310,7 @@ HAPLO_TEST(parser_test, nested_expr)
   }
   
   Expr *expr = parser_parse(&parser);
-  if (expr == NULL)
+  if (!expr)
   {
     fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
@@ -359,7 +359,7 @@ HAPLO_TEST(parser_test, nested_head_expr)
   }
   
   Expr *expr = parser_parse(&parser);
-  if (expr == NULL)
+  if (!expr)
   {
     fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;
@@ -409,7 +409,7 @@ HAPLO_TEST(parser_test, quote)
   }
   
   Expr *expr = parser_parse(&parser);
-  if (expr == NULL)
+  if (!expr)
   {
     fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;

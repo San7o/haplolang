@@ -15,7 +15,7 @@
 
 int haplo_interpreter_init(HaploInterpreter *interpreter)
 {
-  if (interpreter == NULL) return -HAPLO_ERROR_INTERPRETER_NULL;
+  if (!interpreter) return -HAPLO_ERROR_INTERPRETER_NULL;
 
   interpreter->symbol_map = haplo_symbol_map_deep_copy(&__haplo_std_symbol_map);
   
@@ -24,10 +24,10 @@ int haplo_interpreter_init(HaploInterpreter *interpreter)
 
 void haplo_interpreter_destroy(HaploInterpreter *interpreter)
 {
-  if (interpreter == NULL) return;
+  if (!interpreter) return;
 
   haplo_symbol_map_destroy(interpreter->symbol_map);
-  if (interpreter->symbol_map != NULL)
+  if (interpreter->symbol_map)
   {
     free(interpreter->symbol_map);
     interpreter->symbol_map = NULL;
@@ -84,14 +84,14 @@ HaploValue haplo_interpreter_eval_atom(HaploAtom atom)
 HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
                                        HaploExpr *expr)
 {
-  if (interpreter == NULL)
+  if (!interpreter)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,
       .value.error = -HAPLO_ERROR_INTERPRETER_NULL,
     };
   }
-  if (expr == NULL)
+  if (!expr)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_EMPTY,
@@ -233,7 +233,7 @@ HaploValue haplo_interpreter_interpret(HaploInterpreter *interpreter,
 HaploValueList *haplo_interpreter_interpret_tail(HaploInterpreter *interpreter,
                                                    HaploExpr *expr)
 {
-  if (interpreter == NULL || expr == NULL)
+  if (!interpreter || !expr)
     return NULL;
 
   HaploValue head = haplo_interpreter_interpret(interpreter, expr->head);
@@ -256,7 +256,7 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
                                   HaploValue value,
                                   HaploValueList* args)
 {
-  if (interpreter == NULL)
+  if (!interpreter)
   {
     return (HaploValue) {
       .type = HAPLO_VAL_ERROR,

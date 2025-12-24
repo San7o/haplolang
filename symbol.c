@@ -33,7 +33,7 @@ const char* haplo_symbol_type_string(HaploSymbolType type)
 
 void haplo_symbol_list_free(HaploSymbolList *list)
 {
-  if (list == NULL) return;
+  if (!list) return;
 
   HaploSymbolList *next = list->next;
   haplo_symbol_list_free(next);
@@ -46,7 +46,7 @@ void haplo_symbol_list_free(HaploSymbolList *list)
 
 HaploSymbolList *haplo_symbol_list_deep_copy(HaploSymbolList *list)
 {
-  if (list == NULL) return NULL;
+  if (!list) return NULL;
 
   HaploSymbolList *new_list = malloc(sizeof(HaploSymbolList));
   new_list->val = haplo_symbol_deep_copy(list->val);
@@ -58,7 +58,7 @@ HaploSymbolList *haplo_symbol_list_deep_copy(HaploSymbolList *list)
 
 int haplo_symbol_map_init(HaploSymbolMap *map, int capacity)
 {
-  if (map == NULL) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
+  if (!map) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
 
   map->capacity = capacity;
   map->_map = (HaploSymbolList**) calloc(capacity, sizeof(HaploSymbolList*));
@@ -68,9 +68,9 @@ int haplo_symbol_map_init(HaploSymbolMap *map, int capacity)
 
 int haplo_symbol_map_destroy(HaploSymbolMap *map)
 {
-  if (map == NULL) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
+  if (!map) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
   
-  if (map->_map != NULL)
+  if (map->_map)
   {
     for (int i = 0; i < map->capacity; ++i)
     {
@@ -132,10 +132,7 @@ HaploSymbol haplo_symbol_deep_copy(HaploSymbol symbol)
 
 HaploSymbolMap* haplo_symbol_map_deep_copy(HaploSymbolMap *map)
 {
-  if (map == NULL)
-  {
-    return NULL;
-  }
+  if (!map) return NULL;
   
   HaploSymbolMap *map_copy = malloc(sizeof(HaploSymbolMap));
 
@@ -155,16 +152,16 @@ int haplo_symbol_map_lookup(HaploSymbolMap *map,
                             HaploSymbolKey key,
                             HaploSymbol* symbol)
 {
-  if (map == NULL) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
-  if (map->_map == NULL) return -HAPLO_ERROR_SYMBOL_MAP_NOT_INITIALIZED;
+  if (!map) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
+  if (!map->_map) return -HAPLO_ERROR_SYMBOL_MAP_NOT_INITIALIZED;
 
   unsigned int hash = haplo_symbol_hash(key, map->capacity);
 
   HaploSymbolList *symbol_list = map->_map[hash];
-  if (symbol_list == NULL) return -HAPLO_ERROR_SYMBOL_MAP_LOOKUP_NOT_FOUND;
+  if (!symbol_list) return -HAPLO_ERROR_SYMBOL_MAP_LOOKUP_NOT_FOUND;
 
   bool found = false;
-  while (symbol_list != NULL)
+  while (symbol_list)
   {
     if (strcmp(key, symbol_list->key) == 0)
     {
@@ -187,13 +184,13 @@ int haplo_symbol_map_update(HaploSymbolMap *map,
                             HaploSymbolKey key,
                             HaploSymbol symbol)
 {
-  if (map == NULL) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
-  if (map->_map == NULL) return -HAPLO_ERROR_SYMBOL_MAP_NOT_INITIALIZED;
+  if (!map) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
+  if (!map->_map) return -HAPLO_ERROR_SYMBOL_MAP_NOT_INITIALIZED;
 
   unsigned int hash = haplo_symbol_hash(key, map->capacity);
   
   HaploSymbolList *symbol_list = map->_map[hash];
-  if (symbol_list == NULL)
+  if (!symbol_list)
   {
     symbol_list = (HaploSymbolList*) malloc(sizeof(HaploSymbolList));
     symbol_list->next = NULL;
@@ -241,8 +238,8 @@ int haplo_symbol_map_update(HaploSymbolMap *map,
 int haplo_symbol_map_delete(HaploSymbolMap *map,
                             HaploSymbolKey key)
 {
-  if (map == NULL) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
-  if (map->_map == NULL) return -HAPLO_ERROR_SYMBOL_MAP_NOT_INITIALIZED;
+  if (!map) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
+  if (!map->_map) return -HAPLO_ERROR_SYMBOL_MAP_NOT_INITIALIZED;
 
   unsigned int hash = haplo_symbol_hash(key, map->capacity);
   

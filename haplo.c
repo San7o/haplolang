@@ -30,7 +30,7 @@ void process_line(Interpreter *interpreter, char* input, ssize_t len)
   }
 
   Expr *expr = parser_parse(&parser);
-  if (expr == NULL)
+  if (!expr)
   {
     if (parser.error != 0)
     {
@@ -70,56 +70,58 @@ void print_help(void)
 
 // Much faster than read(2) or fread since it does not copy the
 // contents in a new buffer. Not portable.
-char* mmap_file(const char* filename, size_t* out_size) {
-    int fd = open(filename, O_RDONLY);
-    if (fd == -1)
-    {
-        perror("open");
-        return NULL;
-    }
+char* mmap_file(const char* filename, size_t* out_size)
+{
+  int fd = open(filename, O_RDONLY);
+  if (fd == -1)
+  {
+    perror("open");
+    return NULL;
+  }
 
-    struct stat st;
-    if (fstat(fd, &st) == -1)
-    {
-        perror("fstat");
-        close(fd);
-        return NULL;
-    }
-
-    size_t size = st.st_size;
-    if (size == 0)
-    {
-        // empty file
-        close(fd);
-        if (out_size) *out_size = 0;
-        return NULL;
-    }
-
-    void* addr = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
+  struct stat st;
+  if (fstat(fd, &st) == -1)
+  {
+    perror("fstat");
     close(fd);
-    if (addr == MAP_FAILED)
-    {
-        perror("mmap");
-        return NULL;
-    }
+    return NULL;
+  }
 
-    if (out_size)
-    {
-        *out_size = size;
-    }
-    return (char*)addr;
+  size_t size = st.st_size;
+  if (size == 0)
+  {
+    // empty file
+    close(fd);
+    if (out_size) *out_size = 0;
+    return NULL;
+  }
+
+  void* addr = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
+  close(fd);
+  if (addr == MAP_FAILED)
+  {
+    perror("mmap");
+    return NULL;
+  }
+
+  if (out_size)
+  {
+    *out_size = size;
+  }
+  return (char*)addr;
 }
 
-void unmap_file(char* addr, size_t size) {
-    if (addr)
-        munmap(addr, size);
+void unmap_file(char* addr, size_t size)
+{
+  if (addr)
+    munmap(addr, size);
 }
 
 void interpret_file(Interpreter *interpreter, char* file)
 {
   size_t size;
   char* data = mmap_file(file, &size);
-  if (data == NULL)
+  if (!data)
   {
     fprintf(stderr, "Error opening file %s\n", file);
     return;
@@ -135,7 +137,8 @@ void interpret_cmdline(Interpreter *interpreter)
 {
   print_headline();
 
-  while(1) {
+  while(1)
+  {
     char *line = readline("> ");
     if (strcmp(line, "quit") == 0 || strcmp(line, "exit") == 0)
     {

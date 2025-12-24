@@ -14,7 +14,7 @@ HAPLO_STD_FUNC(list)
   HaploValueList* new_list = NULL;
   HaploValue new_value = {0};
   HaploValueList* this = args;
-  while (this != NULL)
+  while (this)
   {
     new_value = haplo_value_deep_copy(this->val);
     new_list = haplo_value_list_push_front(new_value, new_list);

@@ -25,7 +25,7 @@ HAPLO_TEST(defunc_test, declare_function)
   }
 
   Expr *expr = parser_parse(&parser);
-  if (expr == NULL)
+  if (!expr)
   {
     fprintf(stderr, "Error parser_parse returned a null expression\n");
     goto test_failed;

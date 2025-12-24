@@ -21,7 +21,7 @@ HAPLO_TEST(symbol_map_test, init_destroy)
     fprintf(stderr, "Symbol map init returned error %s\n", error_string(err));
     goto test_failed;
   }
-  if (map._map == NULL)
+  if (!map._map)
   {
     fprintf(stderr, "Error map is null\n");
     goto test_failed;
@@ -38,7 +38,7 @@ HAPLO_TEST(symbol_map_test, init_destroy)
     fprintf(stderr, "Symbol map destroy returned error %s\n", error_string(err));
     goto test_failed;
   }
-  if (map._map != NULL)
+  if (map._map)
   {
     fprintf(stderr, "Error destroy did not set the map to null");
     goto test_failed;
@@ -68,7 +68,7 @@ HAPLO_TEST(symbol_map_test, update_lookup)
     fprintf(stderr, "Symbol map init returned error %s\n", error_string(err));
     goto test_failed;
   }
-  if (map._map == NULL)
+  if (!map._map)
   {
     fprintf(stderr, "Error map is null\n");
     goto test_failed;
@@ -156,7 +156,7 @@ HAPLO_TEST(symbol_map_test, delete)
     fprintf(stderr, "Symbol map init returned error %s\n", error_string(err));
     goto test_failed;
   }
-  if (map._map == NULL)
+  if (!map._map)
   {
     fprintf(stderr, "Error map is null\n");
     goto test_failed;

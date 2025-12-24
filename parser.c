@@ -23,7 +23,7 @@ int haplo_parser_init(HaploParser *parser, char *input, unsigned int len)
 
 int haplo_parser_dump(HaploParser *parser)
 {
-  if (parser == NULL) return -HAPLO_ERROR_PARSER_NULL;
+  if (!parser) return -HAPLO_ERROR_PARSER_NULL;
   
   fprintf(stderr, "Parser dump: error: %s, cursor: %d, line: %d, column: %d\n",
           haplo_error_string(parser->error), parser->lexer.cursor,
@@ -34,7 +34,7 @@ int haplo_parser_dump(HaploParser *parser)
 
 bool haplo_parser_check_error(HaploParser *parser)
 {
-  if (parser == NULL) return false;
+  if (!parser) return false;
   return (parser->error < 0);
 }
 
@@ -42,7 +42,7 @@ _Static_assert(_HAPLO_LEX_MAX == 7,
               "Updated HaploToken, maybe update haplo_parser_parse_rec");
 HaploExpr *haplo_parser_parse_rec(HaploParser *parser)
 {
-  if (parser == NULL) return NULL;  
+  if (!parser) return NULL;  
   parser->error = 0;
 
   int ret;
@@ -162,8 +162,8 @@ HaploExpr *haplo_parser_parse_rec(HaploParser *parser)
 
 HaploExpr *haplo_parser_parse(HaploParser *parser)
 {
-  if (parser == NULL) return NULL;
-  if (parser->lexer.input == NULL) return NULL;
+  if (!parser) return NULL;
+  if (!parser->lexer.input) return NULL;
   if (parser->lexer.input_size == 0) return NULL;
   parser->error = 0;
 

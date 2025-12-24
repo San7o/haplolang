@@ -13,7 +13,7 @@
 
 void haplo_expr_free(HaploExpr *expr)
 {
-  if (expr == NULL) return;
+  if (!expr) return;
 
   if (expr->is_atom)
   {
@@ -28,7 +28,7 @@ void haplo_expr_free(HaploExpr *expr)
 
 void haplo_expr_print_rec(HaploExpr *expr)
 {
-  if (expr == NULL) return;
+  if (!expr) return;
   
   if (expr->is_atom)
   {
@@ -39,7 +39,7 @@ void haplo_expr_print_rec(HaploExpr *expr)
   else {
     printf("( ");
     haplo_expr_print_rec(expr->head);
-    if (expr->tail != NULL)
+    if (expr->tail)
     {
       printf(" ");
       haplo_expr_print_rec(expr->tail);
@@ -59,7 +59,7 @@ void haplo_expr_print(HaploExpr *expr)
 
 HaploExpr *haplo_expr_deep_copy(HaploExpr *expr)
 {
-  if (expr == NULL) return NULL;
+  if (!expr) return NULL;
 
   HaploExpr *new_expr = malloc(sizeof(HaploExpr));
   new_expr->is_atom = expr->is_atom;
@@ -76,14 +76,14 @@ HaploExpr *haplo_expr_deep_copy(HaploExpr *expr)
 
 int haplo_expr_depth(HaploExpr *expr)
 {
-  if (expr == NULL) return 0;
+  if (!expr) return 0;
   if (expr->is_atom) return 0;
   return 1 + haplo_expr_depth(expr->tail);
 }
 
 void haplo_expr_string_rec(HaploExpr *expr, char *str)
 {
-  if (expr == NULL) return;
+  if (!expr) return;
   
   if (expr->is_atom)
   {
@@ -94,7 +94,7 @@ void haplo_expr_string_rec(HaploExpr *expr, char *str)
   else {
     strcat(str, "( \0");
     haplo_expr_string_rec(expr->head, str);
-    if (expr->tail != NULL)
+    if (expr->tail)
     {
       strcat(str, " ");
       haplo_expr_string_rec(expr->tail, str);

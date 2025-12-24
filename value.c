@@ -30,13 +30,13 @@ HaploValueList *haplo_value_list_push_front(HaploValue value,
 
 int haplo_value_list_len(HaploValueList *list)
 {
-  if (list == NULL) return 0;
+  if (!list) return 0;
   return haplo_value_list_len(list->next) + 1;
 }
 
 void haplo_value_list_print(HaploValueList *list)
 {
-  if (list == NULL)
+  if (!list)
     return;
 
   char buf[1024] = {0};
@@ -49,7 +49,7 @@ void haplo_value_list_print(HaploValueList *list)
 
 HaploValueList *haplo_value_list_deep_copy(HaploValueList *list)
 {
-  if (list == NULL) return NULL;
+  if (!list) return NULL;
 
   HaploValueList *new_list = malloc(sizeof(HaploValueList));
   new_list->val = haplo_value_deep_copy(list->val);
@@ -59,7 +59,7 @@ HaploValueList *haplo_value_list_deep_copy(HaploValueList *list)
 
 void haplo_value_list_free(HaploValueList *list)
 {
-  if (list == NULL)
+  if (!list)
     return;
 
   haplo_value_free(list->val);
@@ -76,16 +76,16 @@ void haplo_value_free(HaploValue value)
   switch(value.type)
   {
   case HAPLO_VAL_STRING:
-    if (value.value.string != NULL) free(value.value.string);
+    if (value.value.string) free(value.value.string);
     break;
   case HAPLO_VAL_QUOTE:
-    if (value.value.quote != NULL) free(value.value.quote);
+    if (value.value.quote) free(value.value.quote);
     break;
   case HAPLO_VAL_SYMBOL:
-    if (value.value.symbol != NULL) free(value.value.symbol);
+    if (value.value.symbol) free(value.value.symbol);
     break;
   case HAPLO_VAL_LIST:
-    if (value.value.list != NULL) haplo_value_list_free(value.value.list);
+    if (value.value.list) haplo_value_list_free(value.value.list);
     break;
   default:
     break;
@@ -172,7 +172,7 @@ HaploValue haplo_value_deep_copy(HaploValue value)
 
 int haplo_value_list_string_rec(HaploValueList *this, char* buf, int buf_len, int offset)
 {
-  if (this == NULL) return offset;
+  if (!this) return offset;
   
   offset = haplo_value_list_string_rec(this->next, buf, buf_len, offset);
   

@@ -21,7 +21,7 @@ HAPLO_STD_FUNC_STR(logical_and, "and")
 
   HaploValueList *this = args;
   bool result = true;
-  while(this != NULL) {
+  while(this) {
 
     if (this->val.type != HAPLO_VAL_BOOL) {
       return (HaploValue) {
@@ -54,7 +54,7 @@ HAPLO_STD_FUNC_STR(logical_or, "or")
 
   HaploValueList *this = args;
   bool result = false;
-  while(this != NULL) {
+  while(this) {
 
     if (this->val.type != HAPLO_VAL_BOOL) {
       return (HaploValue) {
