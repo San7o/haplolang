@@ -17,7 +17,7 @@ void haplo_expr_free(HaploExpr *expr)
 
   if (expr->is_atom)
   {
-    haplo_atom_free(expr->atom);
+    haplo_atom_free(&expr->atom);
   } else {
     haplo_expr_free(expr->head);
     haplo_expr_free(expr->tail);

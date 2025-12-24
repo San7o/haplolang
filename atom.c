@@ -12,18 +12,21 @@
 
 _Static_assert(_HAPLO_ATOM_MAX == 6,
               "Updated HaploAtomType, maybe update haplo_atom_free");
-void haplo_atom_free(HaploAtom atom)
+void haplo_atom_free(HaploAtom *atom)
 {
-  switch(atom.type)
+  switch(atom->type)
   {
   case HAPLO_ATOM_STRING:
-    free(atom.value.string);
+    free(atom->value.string);
+    atom->value.string = NULL;
     return;
   case HAPLO_ATOM_SYMBOL:
-    free(atom.value.symbol);
+    free(atom->value.symbol);
+    atom->value.symbol = NULL;
     return;
   case HAPLO_ATOM_QUOTE:
-    free(atom.value.quote);
+    free(atom->value.quote);
+    atom->value.quote = NULL;
     return;
   default:
     return;

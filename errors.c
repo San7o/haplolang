@@ -59,6 +59,8 @@ const char* haplo_error_string(int error)
     return "ERROR_VALUE_TYPE_UNRECOGNIZED";
   case HAPLO_ERROR_PARSER_UNEXPECTED_TOKEN:
     return "ERROR_PARSER_UNEXPECTED_TOKEN";
+  case HAPLO_ERROR_LEXER_NULL:
+    return "ERROR_LEXER_NULL";
   }
   return "ERROR_UNKNOWN";
 }

@@ -15,7 +15,6 @@
 //
 
 #ifdef HAPLO_NO_PREFIX
-  #define Atom HaploAtom
   #define Expr HaploExpr
   #define expr_free haplo_expr_free
   #define expr_print haplo_expr_print

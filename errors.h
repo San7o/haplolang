@@ -37,6 +37,7 @@
 #define HAPLO_ERROR_INTERPRETER_UNKNOWN_SYMBOL_TYPE  24
 #define HAPLO_ERROR_VALUE_TYPE_UNRECOGNIZED          25
 #define HAPLO_ERROR_PARSER_UNEXPECTED_TOKEN          26
+#define HAPLO_ERROR_LEXER_NULL                       27
 
 #ifdef HAPLO_NO_PREFIX
   #define error_string haplo_error_string

@@ -11,7 +11,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-_Static_assert(_HAPLO_LEX_MAX == 6,
+_Static_assert(_HAPLO_LEX_MAX == 7,
               "Number of tokens changed, maybe defaults should be updated?");
 HaploTokenChar haplo_default_token_char = {
   [HAPLO_LEX_OPEN] = '(',
@@ -20,7 +20,7 @@ HaploTokenChar haplo_default_token_char = {
   [HAPLO_LEX_QUOTE] = '\'',
 };
 
-_Static_assert(_HAPLO_LEX_MAX == 6,
+_Static_assert(_HAPLO_LEX_MAX == 7,
                 "Number of tokens changed, maybe strings need to be updated?");
 const char* haplo_lexer_token_string(HaploToken token)
 {
@@ -38,42 +38,46 @@ const char* haplo_lexer_token_string(HaploToken token)
     return "QUOTE";
   case HAPLO_LEX_NONE:
     return "NONE";
+  case HAPLO_LEX_EOF:
+    return "EOF";
   default:
     break;
   }
   return "TOKEN_UNRECOGNIZED";
 }
 
-int haplo_lexer_atom_len(char* input, int input_size)
+int haplo_lexer_atom_len(HaploLexer *l)
 {
-  if (input == NULL || input_size == 0) return 0;
+  if (!l) return 0;
+  if (l->input == NULL || l->cursor >= l->input_size) return 0;
 
   int len = 0;
   int i = 0;
   
-  if (input[0] == '"') {
+  if (l->input[l->cursor] == '"') {
 
     i++;
     len++;
     
-    while (input[i] != '"' && i < input_size) {
+    while (l->input[l->cursor + i] != '"'
+           && l->cursor + i < l->input_size) {
       i++;
       len++;
     }
-    if (i == input_size)
+    if (l->cursor + i == l->input_size)
     {
       return -HAPLO_ERROR_PARSER_STRING_LITERAL_END;
     }
     len++;
   }
   else {
-    while (input[i] != ' ' &&
-           input[i] != '\n' &&
-           input[i] != '\t' &&
-           input[i] != '(' &&
-           input[i] != ')' &&
-           input[i] != '#' &&
-           i < input_size)
+    while (l->input[l->cursor + i] != ' ' &&
+           l->input[l->cursor + i] != '\n' &&
+           l->input[l->cursor + i] != '\t' &&
+           l->input[l->cursor + i] != '(' &&
+           l->input[l->cursor + i] != ')' &&
+           l->input[l->cursor + i] != '#' &&
+           l->cursor + i < l->input_size)
       {
         i++;
         len++;
@@ -82,124 +86,166 @@ int haplo_lexer_atom_len(char* input, int input_size)
   return len;
 }
 
-int haplo_lexer_trim_left(char* input, int input_size,
-                          unsigned int* line, unsigned int* column)
+int haplo_lexer_init(HaploLexer *l, char* input,
+                     unsigned int input_size, HaploTokenChar *token_char)
 {
-  if (input == NULL || input_size == 0) return 0;
+  if (!l) return -HAPLO_ERROR_LEXER_NULL;
 
-  int pos = 0;
-  while(pos < input_size &&
-        (input[pos] == ' ' ||
-         input[pos] == '\n' ||
-         input[pos] == '\t'))
-  {
-    if (input[pos] == '\n') {
-      if (line != NULL) *line += 1;
-      if (column != NULL) *column = 0;
-    } else {
-      if (column != NULL) *column += 1;
-    }
-    pos++;
-  }
-
-  return pos;
+  l->input = input;
+  l->input_size = input_size;
+  l->cursor = 0;
+  l->token_char = token_char;
+  l->line = 0;
+  l->column = 0;
+  return 0;
 }
 
-_Static_assert(_HAPLO_LEX_MAX == 6,
-              "Number of tokens changed, maybe haplo_lexer_next_token needs to be updated?");
-int haplo_lexer_next_token(char* input, int input_size,
-                           int *token_len, HaploAtom *atom,
-                           HaploTokenChar token_char)
+int haplo_lexer_trim_left(HaploLexer *l)
 {
-  if (input == NULL) return -HAPLO_ERROR_LEXER_INPUT_NULL;
-  if (input_size == 0) return -HAPLO_ERROR_LEXER_END_OF_INPUT;
+  if (!l) return -HAPLO_ERROR_LEXER_NULL;
+  if (!l->input) return -HAPLO_ERROR_LEXER_INPUT_NULL;
 
-  if (token_char == NULL) token_char = haplo_default_token_char;
+  int start = l->cursor;
+  while(l->cursor < l->input_size &&
+        (l->input[l->cursor] == ' ' ||
+         l->input[l->cursor] == '\n' ||
+         l->input[l->cursor] == '\t'))
+  {
+    if (l->input[l->cursor] == '\n') {
+      l->line += 1;
+      l->column = 0;
+    } else {
+      l->column += 1;
+    }
+    l->cursor++;
+  }
 
-  if (input[0] == token_char[HAPLO_LEX_OPEN])
+  return l->cursor - start;
+}
+
+int haplo_lexer_next(HaploLexer *l, HaploToken *tok, HaploAtom *atom)
+{
+  int ret = haplo_lexer_peek(l, tok, atom);
+  if (ret < 0) return ret;
+  
+  l->cursor += ret;
+  l->column += ret;
+  return ret;
+}
+
+_Static_assert(_HAPLO_LEX_MAX == 7,
+              "Number of tokens changed, maybe haplo_lexer_peek needs to be updated?");
+int haplo_lexer_peek(HaploLexer *l, HaploToken *tok, HaploAtom *atom)
+{
+  if (!l) return -HAPLO_ERROR_LEXER_NULL;
+  if (!l->input) return -HAPLO_ERROR_LEXER_INPUT_NULL;
+
+  haplo_lexer_trim_left(l);
+
+  if (l->cursor >= l->input_size)
   {
-    if (token_len != NULL) *token_len = 1;
-    return HAPLO_LEX_OPEN;
+    if (tok) *tok = HAPLO_LEX_EOF;
+    return 0;
   }
-  if (input[0] == token_char[HAPLO_LEX_CLOSE])
+  
+  if (l->input[l->cursor] == (*l->token_char)[HAPLO_LEX_OPEN])
   {
-    if (token_len != NULL) *token_len = 1;
-    return HAPLO_LEX_CLOSE;
+    if (tok) *tok = HAPLO_LEX_OPEN;
+    return 1;
   }
-  if (input[0] == token_char[HAPLO_LEX_COMMENT])
+  if (l->input[l->cursor] == (*l->token_char)[HAPLO_LEX_CLOSE])
   {
-    if (token_len != NULL) *token_len = 1;
-    return HAPLO_LEX_COMMENT;
+    if (tok) *tok = HAPLO_LEX_CLOSE;
+    return 1;
   }
-  if (input[0] == token_char[HAPLO_LEX_QUOTE])
+  if (l->input[l->cursor] == (*l->token_char)[HAPLO_LEX_COMMENT])
   {
-    if (token_len != NULL) *token_len = 1;
-    return HAPLO_LEX_QUOTE;
+    if (tok) *tok = HAPLO_LEX_COMMENT;
+    return 1;
   }
-  if (input[0] ==  '"') // Atom of type HAPLO_ATOM_STRING
+  if (l->input[l->cursor] == (*l->token_char)[HAPLO_LEX_QUOTE])
   {
-    int ret = haplo_lexer_atom_len(input, input_size);
+    if (tok) *tok = HAPLO_LEX_QUOTE;
+    return 1;
+  }
+  if (l->input[l->cursor] ==  '"') // Atom of type HAPLO_ATOM_STRING
+  {
+    int ret = haplo_lexer_atom_len(l);
     if (ret < 0) return ret;
     if (ret < 2) return -HAPLO_ERROR_LEXER_ATOM_STRING_SIZE;
-    if (token_len != NULL) *token_len = ret;
-    if (atom != NULL)
+
+    if (atom)
     {
       atom->type = HAPLO_ATOM_STRING;
       atom->value.string = (char *) malloc(ret);
-      strncpy(atom->value.string, input + 1, ret - 2); // Ignore the '"'
+      strncpy(atom->value.string, l->input + l->cursor + 1, ret - 2); // Ignore the '"'
       atom->value.string[ret-1] = '\0';
     }
-    return HAPLO_LEX_ATOM;
+    if (tok) *tok = HAPLO_LEX_ATOM;
+    return ret;
   }
 
   // Atom may be INTEGER, BOOL or SYMBOL
-  int ret = haplo_lexer_atom_len(input, input_size);
+  int ret = haplo_lexer_atom_len(l);
   if (ret < 0) return ret;
-  if (token_len != NULL) *token_len = ret;
 
   // Check for BOOL
-  if (strncmp(input, "true", ret) == 0)
+  if (strncmp(l->input + l->cursor, "true", ret) == 0)
   {
-    atom->type = HAPLO_ATOM_BOOL;
-    atom->value.boolean = true;
-    return HAPLO_LEX_ATOM;
+    if (atom)
+    {
+      atom->type = HAPLO_ATOM_BOOL;
+      atom->value.boolean = true;
+    }
+    if (tok) *tok = HAPLO_LEX_ATOM;
+    return ret;
   }
-  if (strncmp(input, "false", ret) == 0)
+  if (strncmp(l->input + l->cursor, "false", ret) == 0)
   {
-    atom->type = HAPLO_ATOM_BOOL;
-    atom->value.boolean = false;
-    return HAPLO_LEX_ATOM;
+    if (atom)
+    {
+      atom->type = HAPLO_ATOM_BOOL;
+      atom->value.boolean = false;
+    }
+    if (tok) *tok = HAPLO_LEX_ATOM;
+    return ret;
   }
   
   // Check for INTEGER
   char *endptr = NULL;
-  long integer = strtol(input, &endptr, 10);
-  if (endptr == input + ret)
+  long integer = strtol(l->input + l->cursor, &endptr, 10);
+  if (endptr == l->input + l->cursor + ret)
   {
-    atom->type = HAPLO_ATOM_INTEGER;
-    atom->value.integer = integer;
-    return HAPLO_LEX_ATOM;
+    if (atom)
+    {
+      atom->type = HAPLO_ATOM_INTEGER;
+      atom->value.integer = integer;
+    }
+    if (tok) *tok = HAPLO_LEX_ATOM;
+    return ret;
   }
 
   // Check for FLOAT
-  double floating_point = strtod(input, &endptr);
-  if (endptr == input + ret)
+  double floating_point = strtod(l->input + l->cursor, &endptr);
+  if (endptr == l->input + l->cursor + ret)
   {
-    atom->type = HAPLO_ATOM_FLOAT;
-    atom->value.floating_point = floating_point;
-    return HAPLO_LEX_ATOM;
+    if (atom)
+    {
+      atom->type = HAPLO_ATOM_FLOAT;
+      atom->value.floating_point = floating_point;
+    }
+    if (tok) *tok = HAPLO_LEX_ATOM;
+    return ret;
   }
 
   // Otherwise Atom is SYMBOL
-  atom->type = HAPLO_ATOM_SYMBOL;
-  if (atom != NULL)
+  if (atom)
   {
+    atom->type = HAPLO_ATOM_SYMBOL;
     atom->value.symbol = (char *) malloc(ret + 1);
-    strncpy(atom->value.symbol, input, ret);
+    strncpy(atom->value.symbol, l->input + l->cursor, ret);
     atom->value.symbol[ret] = '\0';
   }
-  return HAPLO_LEX_ATOM;
-
-  // Unreachable
-  return -HAPLO_ERROR_PARSER_TOKEN_UNRECOGNIZED;
+  if (tok) *tok = HAPLO_LEX_ATOM;
+  return ret;
 }

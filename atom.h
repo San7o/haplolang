@@ -16,6 +16,8 @@
   #define AtomType HaploAtomType
   #define Atom HaploAtom
   #define atom_free haplo_atom_free
+  #define atom_deep_copy haplo_atom_deep_copy
+  #define atom_string haplo_atom_string
 #endif // HAPLO_NO_PREFIX
 
 #define HAPLO_ATOM_MAX_STRING_LEN 1024
@@ -50,7 +52,7 @@ typedef struct {
 // Functions
 //
 
-void haplo_atom_free(HaploAtom atom);
+void haplo_atom_free(HaploAtom *atom);
 HaploAtom haplo_atom_deep_copy(HaploAtom atom);
 // Writes to buff the string representation of the atom.
 void haplo_atom_string(HaploAtom atom, char buf[HAPLO_ATOM_MAX_STRING_LEN]);
