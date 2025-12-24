@@ -3,14 +3,16 @@
 // Mail:    giovanni.santini@proton.me
 // Github:  @San7o
 
-#ifndef _HAPLO_SYMBOL_H_
-#define _HAPLO_SYMBOL_H_
+#ifndef HAPLO_SYMBOL_H
+#define HAPLO_SYMBOL_H
 
 #include "value.h"
 #include "expr.h"
 #include "function.h"
 
-// --- Macros ---
+//
+// Macros
+//
 
 #ifdef HAPLO_NO_PREFIX
   #define Symbol HaploSymbol
@@ -31,7 +33,9 @@
   #define symbol_hash haplo_symbol_hash
 #endif // HAPLO_NO_PREFIX
 
-// --- Types ---
+//
+// Types
+//
 
 typedef enum {
   HAPLO_SYMBOL_C_FUNCTION = 0,   // stdlib
@@ -63,7 +67,9 @@ struct HaploSymbolMap {
   int capacity;
 };
 
-// --- Functions ---
+//
+// Functions
+//
 
 const char* haplo_symbol_type_string(HaploSymbolType type);
 void haplo_symbol_list_free(HaploSymbolList *list);
@@ -93,4 +99,4 @@ int haplo_symbol_map_delete(HaploSymbolMap *map,
 // Return the hashed key
 unsigned int haplo_symbol_hash(HaploSymbolKey key, int max_value);
 
-#endif // _HAPLO_SYMBOL_H_
+#endif // HAPLO_SYMBOL_H

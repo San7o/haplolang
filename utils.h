@@ -3,13 +3,15 @@
 // Mail:    giovanni.santini@proton.me
 // Github:  @San7o
 
-#ifndef _HAPLO_UTILS_H_
-#define _HAPLO_UTILS_H_
+#ifndef HAPLO_UTILS_H
+#define HAPLO_UTILS_H
 
 #include <stdio.h>
 #include <stdlib.h>
 
-// --- Macros ----
+//
+// Macros
+//
 
 #define HAPLO_UNUSED(value) (void)(value)
 #define HAPLO_TODO(message) do { fprintf(stderr, "%s:%d: TODO: %s\n", __FILE__, __LINE__, message); abort(); } while(0)
@@ -25,10 +27,12 @@
  #define UNLIKELY(x)   (x)
 #endif
 
-// --- Functions ---
+//
+// Functions
+//
 
 static inline void cleanup_freep(void *p) {
     free(*(void **)p);
 }
 
-#endif // _HAPLO_UTILS_H_
+#endif // HAPLO_UTILS_H

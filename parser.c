@@ -107,7 +107,7 @@ HaploExpr *haplo_parser_parse_rec(HaploParser *parser)
   if (parser == NULL) return NULL;  
   parser->error = 0;
 
-  HaploExpr *expr = calloc(sizeof(HaploExpr), 1);
+  HaploExpr *expr = calloc(1, sizeof(HaploExpr));
   
   // Head expression
   

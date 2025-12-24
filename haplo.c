@@ -51,13 +51,13 @@ void process_line(Interpreter *interpreter, char* input, ssize_t len)
   return;
 }
 
-void print_headline()
+void print_headline(void)
 {
   printf("The Haplolang interpreter by Giovanni Santini\n");
   return;
 }
 
-void print_help()
+void print_help(void)
 {
   print_headline();
   printf("Usage:  haplo [options] [file]\n");

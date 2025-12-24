@@ -3,13 +3,15 @@
 // Mail:    giovanni.santini@proton.me
 // Github:  @San7o
 
-#ifndef _HAPLO_INTERPRETER_H_
-#define _HAPLO_INTERPRETER_H_
+#ifndef HAPLO_INTERPRETER_H
+#define HAPLO_INTERPRETER_H
 
 #include "expr.h"
 #include "value.h"
 
-// --- Macros ---
+//
+// Macros
+//
 
 #ifdef HAPLO_NO_PREFIX
   #define Interpreter HaploInterpreter
@@ -24,7 +26,9 @@
 #define HAPLO_INTERPRETER_SYMBOL_MAP_CAPACITY 1024
 #endif // HAPLO_INTERPRETER_SYMBOL_MAP_CAPACITY
 
-// --- Types ---
+//
+// Types
+//
 
 // Forward declaration to prevent circular dependency
 struct HaploSymbolMap;
@@ -34,7 +38,9 @@ typedef struct {
   HaploSymbolMap *symbol_map;
 } HaploInterpreter;
 
-// --- Functions ---
+//
+// Functions
+//
 
 int haplo_interpreter_init(HaploInterpreter *interpreter);
 void haplo_interpreter_destroy(HaploInterpreter *interpreter);
@@ -46,4 +52,4 @@ HaploValue haplo_interpreter_call(HaploInterpreter *interpreter,
                                   HaploValue value,
                                   HaploValueList *args);
   
-#endif // _HAPLO_INTERPRETER_H_
+#endif // HAPLO_INTERPRETER_H

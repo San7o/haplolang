@@ -3,14 +3,16 @@
 // Mail:    giovanni.santini@proton.me
 // Github:  @San7o
 
-#ifndef _HAPLO_EXPR_H_
-#define _HAPLO_EXPR_H_
+#ifndef HAPLO_EXPR_H
+#define HAPLO_EXPR_H
 
 #include "atom.h"
 
 #include <stdbool.h>
 
-// --- Macros ---
+//
+// Macros
+//
 
 #ifdef HAPLO_NO_PREFIX
   #define Atom HaploAtom
@@ -22,7 +24,9 @@
   #define expr_string haplo_expr_string
 #endif // HAPLO_NO_PREFIX
 
-// --- Types ---
+//
+// Types
+//
 
 struct HaploExpr;
 typedef struct HaploExpr HaploExpr;
@@ -34,7 +38,9 @@ struct HaploExpr {
   HaploExpr* tail;
 };
 
-// --- Functions ---
+//
+// Functions
+//
 
 void haplo_expr_free(HaploExpr *expr);
 void haplo_expr_print(HaploExpr *expr);
@@ -43,4 +49,4 @@ HaploExpr *haplo_expr_deep_copy(HaploExpr *expr);
 int haplo_expr_depth(HaploExpr *expr);
 void haplo_expr_string(HaploExpr *expr, char *str);
 
-#endif // _HAPLO_EXPR_H_
+#endif // HAPLO_EXPR_H

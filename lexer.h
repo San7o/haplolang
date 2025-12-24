@@ -3,12 +3,14 @@
 // Mail:    giovanni.santini@proton.me
 // Github:  @San7o
 
-#ifndef _HAPLO_LEXER_H_
-#define _HAPLO_LEXER_H_
+#ifndef HAPLO_LEXER_H
+#define HAPLO_LEXER_H
 
 #include "atom.h"
 
-// --- Macros ---
+//
+// Macros
+//
 
 #ifdef HAPLO_NO_PREFIX
   #define Token HaploToken
@@ -20,7 +22,9 @@
   #define lexer_next_token haplo_lexer_next_token
 #endif // HAPLO_NO_PREFIX
 
-// --- Types ---
+//
+// Types
+//
 
 typedef enum {
   HAPLO_LEX_OPEN = 0,  // '('
@@ -38,7 +42,9 @@ typedef const char HaploTokenChar[_HAPLO_LEX_MAX];
 // Default HaploToken to char mapping
 extern HaploTokenChar haplo_default_token_char;
 
-// --- Functions ---
+//
+// Functions
+//
 
 // Returns the string representation of a token enum
 const char* haplo_lexer_token_string(HaploToken token);
@@ -64,4 +70,4 @@ int haplo_lexer_next_token(char* input, int input_size,
                            int* token_len, HaploAtom *atom,
                            HaploTokenChar token_char);
 
-#endif // _HAPLO_LEXER_H_
+#endif // HAPLO_LEXER_H

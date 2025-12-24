@@ -3,10 +3,12 @@
 // Mail:    giovanni.santini@proton.me
 // Github:  @San7o
 
-#ifndef _HAPLO_HAPLO_H_
-#define _HAPLO_HAPLO_H_
+#ifndef HAPLO_HAPLO_H
+#define HAPLO_HAPLO_H
 
-// --- Headers ---
+//
+// Headers
+//
 
 #include "errors.h"
 #include "atom.h"
@@ -17,4 +19,4 @@
 #include "stdlib/stdlib.h"
 #include "interpreter.h"
 
-#endif // _HAPLO_HAPLO_H_
+#endif // HAPLO_HAPLO_H

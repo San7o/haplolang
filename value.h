@@ -3,12 +3,14 @@
 // Mail:    giovanni.santini@proton.me
 // Github:  @San7o
 
-#ifndef _HAPLO_VALUE_H_
-#define _HAPLO_VALUE_H_
+#ifndef HAPLO_VALUE_H
+#define HAPLO_VALUE_H
 
 #include <stdbool.h>
 
-// --- Macros ---
+//
+// Macros
+//
 
 #ifdef HAPLO_NO_PREFIX
   #define ValueType HaploValueType
@@ -24,7 +26,9 @@
   #define value_type_string haplo_value_type_string
 #endif
 
-// --- Types ---
+//
+// Types
+//
 
 typedef enum {
   HAPLO_VAL_INTEGER = 0,
@@ -61,7 +65,9 @@ struct HaploValueList {
   HaploValue val;
 };
 
-// --- Functions ---
+//
+// Functions
+//
 
 HaploValueList *haplo_value_list_push_front(HaploValue value,
                                             HaploValueList *list);
@@ -79,4 +85,4 @@ void haplo_value_free(HaploValue value);
 // will be written.
 int haplo_value_string(HaploValue value, char* buf, int buf_len);
 
-#endif // _HAPLO_VALUE_H_
+#endif // HAPLO_VALUE_H

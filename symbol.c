@@ -61,7 +61,7 @@ int haplo_symbol_map_init(HaploSymbolMap *map, int capacity)
   if (map == NULL) return -HAPLO_ERROR_SYMBOL_MAP_NULL;
 
   map->capacity = capacity;
-  map->_map = (HaploSymbolList**) calloc(sizeof(HaploSymbolList*), capacity);
+  map->_map = (HaploSymbolList**) calloc(capacity, sizeof(HaploSymbolList*));
   assert(map->_map != NULL);
   return 0;
 }
@@ -142,7 +142,7 @@ HaploSymbolMap* haplo_symbol_map_deep_copy(HaploSymbolMap *map)
   if (map->capacity == 0) return map_copy;
 
   map_copy->capacity = map->capacity;
-  map_copy->_map = (HaploSymbolList**) calloc(sizeof(HaploSymbolList*), map->capacity);
+  map_copy->_map = (HaploSymbolList**) calloc(map->capacity, sizeof(HaploSymbolList*));
   for (int i = 0; i < map->capacity; ++i)
   {
     map_copy->_map[i] = haplo_symbol_list_deep_copy(map->_map[i]);

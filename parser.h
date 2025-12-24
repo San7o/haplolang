@@ -3,8 +3,8 @@
 // Mail:    giovanni.santini@proton.me
 // Github:  @San7o
 
-#ifndef _HAPLO_PARSER_H_
-#define _HAPLO_PARSER_H_
+#ifndef HAPLO_PARSER_H
+#define HAPLO_PARSER_H
 
 #include "atom.h"
 #include "expr.h"
@@ -14,7 +14,9 @@
 #include <stdbool.h>
 #include <setjmp.h>
 
-// --- Macros ---
+//
+// Macros
+//
 
 #ifdef HAPLO_NO_PREFIX
   #define Parser HaploParser
@@ -32,7 +34,9 @@
     longjmp(parser->jump_buf, 1);                                            \
   } while(0)
 
-// --- Types ---
+//
+// Types
+//
 
 typedef struct {
   char* input;
@@ -46,7 +50,9 @@ typedef struct {
   jmp_buf jump_buf;
 } HaploParser;
 
-// -- Functions --
+//
+// Functions
+//
 
 int haplo_parser_init(HaploParser *parser, char *input, size_t len);
 int haplo_parser_dump(HaploParser *parser);
@@ -63,4 +69,4 @@ int haplo_parser_next_token(HaploParser *parser);
 int haplo_parser_peek_next_token(HaploParser *parser);
 HaploExpr *haplo_parser_parse(HaploParser *parser);
 
-#endif // _HAPLO_PARSER_H_
+#endif // HAPLO_PARSER_H

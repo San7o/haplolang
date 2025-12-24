@@ -3,10 +3,12 @@
 // Mail:    giovanni.santini@proton.me
 // Github:  @San7o
 
-#ifndef _HAPLO_ERRORS_H_
-#define _HAPLO_ERRORS_H_
+#ifndef HAPLO_ERRORS_H
+#define HAPLO_ERRORS_H
 
-// --- Errors ---
+//
+// Errors
+//
 
 // Remember to update haplo_error_string when adding a new error
 #define HAPLO_ERROR_LEXER_END_OF_INPUT               1
@@ -40,8 +42,10 @@
   #define error_string haplo_error_string
 #endif // HAPLO_NO_PREFIX
 
-// --- Functions ---
+//
+// Functions
+//
 
 const char* haplo_error_string(int error);
 
-#endif // _HAPLO_ERRORS_H_
+#endif // HAPLO_ERRORS_H

@@ -3,12 +3,14 @@
 // Mail:    giovanni.santini@proton.me
 // Github:  @San7o
 
-#ifndef _HAPLO_ATOM_H_
-#define _HAPLO_ATOM_H_
+#ifndef HAPLO_ATOM_H
+#define HAPLO_ATOM_H
 
 #include <stdbool.h>
 
-// --- Macros ---
+//
+// Macros
+//
 
 #ifdef HAPLO_NO_PREFIX
   #define AtomType HaploAtomType
@@ -17,7 +19,10 @@
 #endif // HAPLO_NO_PREFIX
 
 #define HAPLO_ATOM_MAX_STRING_LEN 1024
-// --- Types ---
+
+//
+// Types
+//
 
 typedef enum {
   HAPLO_ATOM_STRING = 0,    // "Hello World"
@@ -41,11 +46,13 @@ typedef struct {
   } value;
 } HaploAtom;
 
-// --- Functios ---
+//
+// Functions
+//
 
 void haplo_atom_free(HaploAtom atom);
 HaploAtom haplo_atom_deep_copy(HaploAtom atom);
 // Writes to buff the string representation of the atom.
 void haplo_atom_string(HaploAtom atom, char buf[HAPLO_ATOM_MAX_STRING_LEN]);
 
-#endif // _HAPLO_ATOM_H_
+#endif // HAPLO_ATOM_H
